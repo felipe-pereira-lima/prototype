@@ -11,17 +11,21 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@prisma/client": "^5.7.1",
     "@remix-run/css-bundle": "^2.4.0",
     "@remix-run/node": "^2.4.0",
     "@remix-run/react": "^2.4.0",
     "@remix-run/serve": "^2.4.0",
+    "bcrypt": "^5.1.1",
     "isbot": "^3.6.8",
-    "pnpm": "^8.12.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "remix-auth": "^3.6.0",
+    "remix-auth-form": "^1.4.0"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.4.0",
+    "@types/bcrypt": "^5.0.2",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.7.4",

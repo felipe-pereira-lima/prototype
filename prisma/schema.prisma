@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  username String   @unique
+  email    String   @unique
+  token    String   @unique
+  password String
+  role     UserRole @default(EMPLOYEE)
+  reviews  Review[] @relation("employeeReviews")
+  givenReviews Review[] @relation("supervisorReviews")
+}
+
+model Review {
+  id            Int      @id @default(autoincrement())
+  execution     Int
+  communication Int
+  commitment    Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  employee      User     @relation("employeeReviews", fields: [employeeId], references: [id])
+  employeeId    Int
+  supervisor    User     @relation("supervisorReviews", fields: [supervisorId], references: [id])
+  supervisorId  Int
+}
+
+enum UserRole {
+  EMPLOYEE
+  SUPERVISOR
+}
