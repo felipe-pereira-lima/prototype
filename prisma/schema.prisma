@@ -12,13 +12,12 @@ generator client {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  username String   @unique
-  email    String   @unique
-  token    String   @unique
-  password String
-  role     UserRole @default(EMPLOYEE)
-  reviews  Review[] @relation("employeeReviews")
+  id           Int      @id @default(autoincrement())
+  username     String   @unique @db.VarChar(255)
+  email        String   @unique
+  password     String
+  role         UserRole @default(EMPLOYEE)
+  reviews      Review[] @relation("employeeReviews")
   givenReviews Review[] @relation("supervisorReviews")
 }
 
