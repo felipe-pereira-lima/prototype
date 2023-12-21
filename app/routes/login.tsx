@@ -35,7 +35,7 @@ export const action: ActionFunction = async ({ request, context }) => {
 
 export default function LoginPage() {
   // if i got an error it will come back with the loader data
-  const loaderData = useLoaderData();
+  const loaderData = useLoaderData<typeof loader>();
   console.log(loaderData);
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
