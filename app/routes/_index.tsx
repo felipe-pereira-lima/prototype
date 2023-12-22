@@ -3,6 +3,7 @@ import { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { authenticator } from "../services/auth.server";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import { Button } from "~/components/ui/button";
+import { UserRole } from "@prisma/client";
 
 export const loader: LoaderFunction = async ({ request }) => {
   return await authenticator.isAuthenticated(request, {
@@ -19,17 +20,16 @@ export default function DashboardPage() {
 
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
-      <h1>Welcome to Remix Protected Dashboard</h1>
-      <p>
+      <h1>
         Welcome, {data.username}. Your role is {data.role.toLowerCase()}
-      </p>
-      {data?.role === "EMPLOYEE" && (
+      </h1>
+      {data?.role === UserRole.EMPLOYEE && (
         <Link to="/see-review">
           <Button>See Review</Button>
         </Link>
       )}
-      {data?.role === "SUPERVISOR" && (
-        <Link to="/manage">
+      {data?.role === UserRole.SUPERVISOR && (
+        <Link to="/supervisor/manage-employee">
           <Button>Manage</Button>
         </Link>
       )}
