@@ -1,5 +1,9 @@
 import stylesheet from "./tailwind.css";
-import type { LinksFunction } from "@remix-run/node";
+import type {
+  ActionFunction,
+  LinksFunction,
+  LoaderFunction,
+} from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -7,13 +11,38 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
+  useLocation,
 } from "@remix-run/react";
+import { authenticator } from "./services/auth.server";
+import ApplicationSidebar from "./components/side-bar";
+import { SnackbarProvider } from "notistack";
+import DashboardPage from "./routes/_index";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
 ];
 
+export const loader: LoaderFunction = async ({ request }) => {
+  try {
+    const user = await authenticator.isAuthenticated(request);
+    return user;
+  } catch (error) {
+    return { user: null };
+  }
+};
+
+export const action: ActionFunction = async ({ request }) => {
+  await authenticator.logout(request, { redirectTo: "/login" });
+};
+
 export default function App() {
+  const data = useLoaderData<typeof loader>();
+  const location = useLocation();
+  const isLoginRoute = location.pathname === "/login";
+
+  console.log(data);
+
   return (
     <html lang="en">
       <head>
@@ -23,10 +52,17 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
+        <SnackbarProvider
+          anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+          maxSnack={3}
+        >
+          {!isLoginRoute && <ApplicationSidebar user={data} />}
+
+          <Outlet />
+          <ScrollRestoration />
+          <Scripts />
+          <LiveReload />
+        </SnackbarProvider>
       </body>
     </html>
   );
