@@ -52,6 +52,9 @@ ChartJS.register(
 export default function SeeReview() {
   const { user, reviews } = useLoaderData<typeof loader>();
 
+  // TODO: implement context for user permissions - also with the navbar, etc.
+  // do not approach this component by component or it will become an ugly mess
+
   const data = {
     labels: ["commitment", "communication", "execution"],
     datasets: [
