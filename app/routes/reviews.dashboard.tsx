@@ -1,4 +1,4 @@
-// app/routes/see-review.tsx
+// app/routes/reviews.dashboard.tsx
 import { json, LoaderFunction } from "@remix-run/node";
 import {
   Chart as ChartJS,
