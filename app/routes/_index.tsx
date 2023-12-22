@@ -20,20 +20,18 @@ export default function DashboardPage() {
   const data = useLoaderData<typeof loader>();
 
   return (
-    <main className="lg:pl-72">
-      <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
-        <h1>
-          Welcome, {data?.username}. Your role is {data?.role.toLowerCase()}
-        </h1>
-        {data?.role === UserRole.SUPERVISOR && (
-          <Link to="/supervisor/manage-employee">
-            <Button>Manage</Button>
-          </Link>
-        )}
-        <Form method="post">
-          <button>Log Out</button>
-        </Form>
-      </div>
-    </main>
+    <div>
+      <h1>
+        Welcome, {data?.username}. Your role is {data?.role.toLowerCase()}
+      </h1>
+      {data?.role === UserRole.SUPERVISOR && (
+        <Link to="/manage/manage-employee">
+          <Button>Manage</Button>
+        </Link>
+      )}
+      <Form method="post">
+        <button>Log Out</button>
+      </Form>
+    </div>
   );
 }

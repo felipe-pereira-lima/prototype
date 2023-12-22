@@ -57,8 +57,11 @@ export default function App() {
           maxSnack={3}
         >
           {!isLoginRoute && <ApplicationSidebar user={data} />}
-
-          <Outlet />
+          <main className="lg:pl-72">
+            <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+              <Outlet />
+            </div>
+          </main>
           <ScrollRestoration />
           <Scripts />
           <LiveReload />
