@@ -29,23 +29,15 @@ export const action: ActionFunction = async ({ request, context }) => {
     throwOnError: true,
     context,
   });
-  console.log(resp);
   return resp;
 };
 
 export default function LoginPage() {
   // if i got an error it will come back with the loader data
   const loaderData = useLoaderData<typeof loader>();
-  console.log(loaderData);
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
-      <h1>Welcome to Remix-Auth Example</h1>
-      <p>
-        Based on the Form Strategy From{" "}
-        <a href="https://github.com/sergiodxa/remix-auth" target={"_window"}>
-          Remix-Auth Project
-        </a>
-      </p>
+      <h1>Welcome to Final Project Prototype - Web Development Template</h1>
       <Form method="post">
         <input type="email" name="email" placeholder="email" required />
         <input
