@@ -11,10 +11,21 @@ import {
 } from "chart.js";
 import { Radar } from "react-chartjs-2";
 
-import { useLoaderData } from "@remix-run/react";
+import { useFetcher, useLoaderData } from "@remix-run/react";
 import { prisma } from "~/db.server";
 import { getSession } from "~/services/session.server";
 import Card from "~/components/ui/card";
+import { useEffect, useState } from "react";
+import { Review } from "@prisma/client";
+
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
+);
 
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
@@ -43,36 +54,34 @@ export const loader: LoaderFunction = async ({ request }) => {
   }
 };
 
-ChartJS.register(
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend
-);
-
-export default function SeeReview() {
+export default function ReviewDashboard() {
   const { user, reviews } = useLoaderData<typeof loader>();
 
-  // TODO: implement context for user permissions - also with the navbar, etc.
-  // do not approach this component by component or it will become an ugly mess
+  console.log(reviews);
+
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(user?.id);
+  const fetcher = useFetcher();
+  const selectedReview = reviews.find(
+    (review: Review) => review.employeeId === selectedEmployeeId
+  );
 
   const data = {
-    labels: ["commitment", "communication", "execution"],
-    datasets: [
-      {
-        label: `${reviews[0].employee.username}'s skill matrix`,
-        data: [
-          reviews[0].commitment,
-          reviews[0].communication,
-          reviews[0].execution,
-        ],
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        borderColor: "rgba(255, 99, 132, 1)",
-        borderWidth: 1,
-      },
-    ],
+    labels: ["Commitment", "Communication", "Execution"],
+    datasets: selectedReview
+      ? [
+          {
+            label: `${selectedReview.employee.username}'s Skills`,
+            data: [
+              selectedReview.commitment,
+              selectedReview.communication,
+              selectedReview.execution,
+            ],
+            backgroundColor: "rgba(54, 162, 235, 0.2)",
+            borderColor: "rgba(54, 162, 235, 1)",
+            borderWidth: 1,
+          },
+        ]
+      : [],
   };
 
   const options = {
@@ -85,9 +94,69 @@ export default function SeeReview() {
     aspectRatio: 3,
   };
 
+  useEffect(() => {
+    // If the user is an employee, auto-select their ID for the radar chart
+    if (user.role === "EMPLOYEE") {
+      setSelectedEmployeeId(user.id);
+    }
+  }, [user]);
+
+  const handleSelectChange = (event: any) => {
+    setSelectedEmployeeId(Number(event.target.value));
+  };
+
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    formData.append("employeeId", selectedEmployeeId.toString());
+
+    fetcher.submit(formData, { method: "post" });
+  };
+
   return (
     <Card label="Reviews">
-      <Radar data={data} options={options} />
+      {user.role === "SUPERVISOR" ? (
+        <select onChange={handleSelectChange} defaultValue="">
+          <option value="" disabled>
+            Select an employee
+          </option>
+          {reviews.map(({ employee }: { employee: any }) => (
+            <option key={employee.id} value={employee.id}>
+              {employee.username}
+            </option>
+          ))}
+        </select>
+      ) : null}
+
+      {selectedReview ? (
+        <Radar data={data} options={options} />
+      ) : user.role === "SUPERVISOR" ? (
+        <fetcher.Form method="post" onSubmit={handleSubmit}>
+          <input
+            name="commitment"
+            type="number"
+            placeholder="Commitment"
+            required
+          />
+          <input
+            name="communication"
+            type="number"
+            placeholder="Communication"
+            required
+          />
+          <input
+            name="execution"
+            type="number"
+            placeholder="Execution"
+            required
+          />
+          <button type="submit">Submit Review</button>
+        </fetcher.Form>
+      ) : (
+        <p>You do not have any reviews yet.</p>
+      )}
     </Card>
   );
 }

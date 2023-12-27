@@ -1,6 +1,14 @@
+TODO prototype:
+
+if the user is a manager, and employee is unreviewed, he can see 3 inputs fields, 1 for execution, 1 for communication, 1 for commitment, after selection such employee 
+manager needs to send POST request with that submission
+now employee's matrix is shown if that employee is selected :)
+_____________________________________________
+
 TODO:
 
 data model:
+user needs to have a supervisor field
 more depth, change data model to allow also manager to write, not only grade
 have more than a graph - show the 3 competencies in detail, description, a 1-5 linear scale.
 expand data model... competencies, meetings, teams...
@@ -34,4 +42,5 @@ Compliance and Policy: Where the supervisor can ensure that team activities are 
 
 Possible features for employee:
 
+...
 
