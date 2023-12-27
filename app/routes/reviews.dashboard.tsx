@@ -13,7 +13,8 @@ import { Radar } from "react-chartjs-2";
 
 import { useLoaderData } from "@remix-run/react";
 import { prisma } from "~/db.server";
-import { commitSession, getSession } from "~/services/session.server";
+import { getSession } from "~/services/session.server";
+import Card from "~/components/ui/card";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
@@ -80,12 +81,13 @@ export default function SeeReview() {
         beginAtZero: true,
       },
     },
+    maintainAspectRatio: true,
+    aspectRatio: 3,
   };
 
   return (
-    <div>
-      <h1>Reviews</h1>
+    <Card label="Reviews">
       <Radar data={data} options={options} />
-    </div>
+    </Card>
   );
 }

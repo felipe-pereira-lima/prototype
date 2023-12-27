@@ -20,10 +20,8 @@ export default function DashboardPage() {
   const data = useLoaderData<typeof loader>();
 
   return (
-    <Card>
-      <h1>
-        Welcome, {data?.username} 👋. Your role is {data?.role.toLowerCase()}
-      </h1>
+    <Card label={`Welcome, ${data?.username} 👋`}>
+      <h1>Your role is {data?.role.toLowerCase()}</h1>
     </Card>
   );
 }

@@ -25,9 +25,11 @@ export default function Card({
           size === "small" && "w-20"
         )}
       >
-        <div className="flex items-start gap-x-1">
-          <span className="uppercase">{label}</span>
-        </div>
+        {label && (
+          <div className="flex items-start gap-x-1 pt-4">
+            <span className="text-xl font-medium">{label}</span>
+          </div>
+        )}
       </div>
       <div className="p-4">{children}</div>
     </div>

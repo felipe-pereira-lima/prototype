@@ -66,18 +66,20 @@ export default function App() {
             </div>
           )}
           <main
-            className={clsx("lg:pl-72", {
-              "flex justify-center items-center h-screen": isLoginRoute,
+            className={clsx({
+              "lg:pl-72": !isLoginRoute,
+              "flex justify-center items-center min-h-screen": isLoginRoute,
             })}
           >
             <div
               className={clsx("px-4 py-10 sm:px-6 lg:px-8 lg:py-6", {
-                "w-full": isLoginRoute,
+                "max-w-full": isLoginRoute,
               })}
             >
               <Outlet />
             </div>
           </main>
+
           <ScrollRestoration />
           <Scripts />
           <LiveReload />
