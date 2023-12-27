@@ -5,6 +5,7 @@ import type {
   LoaderFunction,
 } from "@remix-run/node";
 import {
+  Form,
   Links,
   LiveReload,
   Meta,
@@ -17,7 +18,9 @@ import {
 import { authenticator } from "./services/auth.server";
 import ApplicationSidebar from "./components/side-bar";
 import { SnackbarProvider } from "notistack";
-import DashboardPage from "./routes/_index";
+import clsx from "clsx";
+import Navbar from "./components/nav-bar";
+import { Button } from "./components/ui/button";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -51,14 +54,27 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="bg-blue-50">
         <SnackbarProvider
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
           maxSnack={3}
         >
-          {!isLoginRoute && <ApplicationSidebar user={data} />}
-          <main className="lg:pl-72">
-            <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+          {!isLoginRoute && (
+            <div>
+              <ApplicationSidebar />
+              <Navbar user={data} />
+            </div>
+          )}
+          <main
+            className={clsx("lg:pl-72", {
+              "flex justify-center items-center h-screen": isLoginRoute,
+            })}
+          >
+            <div
+              className={clsx("px-4 py-10 sm:px-6 lg:px-8 lg:py-6", {
+                "w-full": isLoginRoute,
+              })}
+            >
               <Outlet />
             </div>
           </main>

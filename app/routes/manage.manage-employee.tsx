@@ -1,13 +1,13 @@
 import React from "react";
-import { Input } from "~/components/ui/input";
+import { TextField } from "~/components/ui/text-field";
 
 export default function ManageEmployee() {
   return (
     <div>
       Manage
-      <Input />
-      <Input />
-      <Input />
+      {/* <TextField />
+      <TextField />
+      <TextField /> */}
     </div>
   );
 }
