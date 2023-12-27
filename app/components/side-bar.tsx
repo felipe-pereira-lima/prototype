@@ -3,8 +3,14 @@ import { Compass } from "@phosphor-icons/react";
 import { Link, useLocation } from "@remix-run/react";
 import clsx from "clsx";
 
+type NavigationItem = {
+  name: string;
+  href: string;
+  submenu?: NavigationItem[];
+};
+
 export default function ApplicationSidebar() {
-  const navigationEmployee = [
+  const navigationEmployee: NavigationItem[] = [
     { name: "Home", href: "/" },
     {
       name: "Meetings",
@@ -12,7 +18,6 @@ export default function ApplicationSidebar() {
       submenu: [
         { name: "My Meetings", href: "/meetings/list" },
         { name: "Action Items", href: "/meetings/action-items" },
-        { name: "Meeting Templates", href: "/meetings/templates" },
       ],
     },
     {
@@ -28,36 +33,56 @@ export default function ApplicationSidebar() {
 
   const location = useLocation();
   const [activeItem, setActiveItem] = useState<string>("Home");
-  const [submenuOpen, setSubmenuOpen] = useState<boolean>(false);
+  const [openedMenu, setOpenedMenu] = useState<string>("");
+  const [activeMainItem, setActiveMainItem] = useState<string>("Home");
+
+  const handleMenuClick = (item: NavigationItem) => {
+    if (item.submenu) {
+      setOpenedMenu(openedMenu === item.name ? "" : item.name);
+    } else {
+      setOpenedMenu("");
+    }
+    setActiveItem(item.name);
+    setActiveMainItem(item.name); // Set the active main menu item
+  };
+
+  // Update this in your submenu item click handler
+  const handleSubmenuItemClick = (
+    mainItemName: string,
+    subItemName: string
+  ) => {
+    setActiveItem(subItemName);
+    setActiveMainItem(mainItemName); // Set the active main menu item
+  };
 
   useEffect(() => {
-    let matchedItem = navigationEmployee.find(
-      (item) => item.href === location.pathname
-    );
+    const findActiveItem = (navItems: NavigationItem[]) => {
+      for (let item of navItems) {
+        // Check if the current location matches the main menu item
+        if (item.href === location.pathname) {
+          // If it has a submenu, return the name of the first submenu item
+          if (item.submenu && item.submenu.length > 0) {
+            return item.submenu[0].name;
+          }
+          // Otherwise, return the name of the main menu item
+          return item.name;
+        }
 
-    const reviewsSubmenuMatch = navigationEmployee
-      .find((item) => item.name === "Reviews")
-      ?.submenu?.find((subItem) => subItem.href === location.pathname);
+        // Check the submenu items
+        if (item.submenu) {
+          const submenuMatch = item.submenu.find(
+            (subItem) => subItem.href === location.pathname
+          );
+          if (submenuMatch) {
+            return submenuMatch.name;
+          }
+        }
+      }
+      return "Home"; // Default if no match is found
+    };
 
-    if (reviewsSubmenuMatch) {
-      setActiveItem(reviewsSubmenuMatch.name);
-    } else if (matchedItem) {
-      setActiveItem(matchedItem.name);
-    } else {
-      setActiveItem("Dashboard");
-    }
-  }, [location]);
-
-  const handleMenuClick = (item: any) => {
-    if (item.submenu) {
-      // If the item has a submenu, toggle it
-      setSubmenuOpen(item.name === "Reviews");
-    } else {
-      // If the item does not have a submenu, close any open submenu
-      setSubmenuOpen(false);
-      setActiveItem(item.name);
-    }
-  };
+    setActiveItem(findActiveItem(navigationEmployee));
+  }, [location, navigationEmployee]);
 
   return (
     <>
@@ -76,16 +101,18 @@ export default function ApplicationSidebar() {
                 {navigationEmployee.map((item) => (
                   <li
                     key={item.name}
-                    className={clsx(activeItem === item.name && "bg-gray-50")}
+                    className={clsx(
+                      activeMainItem === item.name && "bg-gray-100"
+                    )}
                   >
                     <Link
                       to={item.href}
-                      className="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-gray-700 hover:text-blue-500 hover:bg-gray-50"
+                      className="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-gray-700 hover:text-blue-500 hover:bg-gray-100"
                       onClick={() => handleMenuClick(item)}
                     >
                       {item.name}
                     </Link>
-                    {submenuOpen && item.submenu && item.name === "Reviews" && (
+                    {openedMenu === item.name && item.submenu && (
                       <ul role="list" className="pl-4 space-y-1">
                         {item.submenu.map((subItem) => (
                           <li key={subItem.name}>
@@ -94,7 +121,7 @@ export default function ApplicationSidebar() {
                               className={clsx(
                                 activeItem === subItem.name
                                   ? "text-blue-500"
-                                  : "text-gray-700 hover:text-blue-500 hover:bg-gray-50",
+                                  : "text-gray-700 hover:text-blue-500 hover:bg-gray-100",
                                 "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                               )}
                               onClick={() => setActiveItem(subItem.name)}
