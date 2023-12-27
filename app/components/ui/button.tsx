@@ -2,7 +2,7 @@ import clsx from "clsx";
 
 import { Size } from "./utils/types";
 
-export type ButtonColors = "primary" | "secondary";
+export type ButtonColors = "primary" | "secondary" | "ghost";
 
 export interface ButtonProps
   extends Omit<React.ComponentPropsWithoutRef<"button">, "className"> {
@@ -41,11 +41,12 @@ export interface ButtonProps
    * Defines the size of the button.
    */
   size?: Size;
+  hasHover?: boolean;
   tooltipTitle?: string | undefined;
   /**
    * Defines the variant of the button.
    */
-  variant?: "default" | "round" | "square";
+  variant?: "default" | "round" | "square" | "ghost";
 }
 
 /**
@@ -60,6 +61,7 @@ export function Button({
   fullWidth = false,
   hidden = false,
   isLoading,
+  hasHover,
   label,
   onClick,
   onTracking,
@@ -85,11 +87,21 @@ export function Button({
           // secondary style
           "border-gray-300 bg-white text-gray-700": color === "secondary",
 
-          "hover:bg-blue-600": color === "primary" && !isDisabled,
-          "hover:bg-gray-100": color === "secondary" && !isDisabled,
+          "hover:bg-blue-600": color === "primary" && !isDisabled && hasHover,
+          "hover:bg-gray-100": color === "secondary" && !isDisabled && hasHover,
           "p-1": size === "small" && variant !== "default",
           "p-2": size === "medium" && variant !== "default",
           "p-4": size === "large" && variant !== "default",
+
+          // ghost
+          "focus: border-transparent bg-transparent text-gray-700":
+            color === "ghost",
+          hidden,
+          "hover:bg-blue-500 hover:text-white":
+            color === "ghost" && !disabled && hasHover,
+          "p-1 ": size === "small" && variant !== "default",
+          "p-2 ": size === "medium" && variant !== "default",
+          "p-4 ": size === "large" && variant !== "default",
 
           // variant sizes
           "px-2 py-1 ": size === "small" && variant === "default",

@@ -4,7 +4,7 @@ import { authenticator } from "../services/auth.server";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import { Button } from "~/components/ui/button";
 import { UserRole } from "@prisma/client";
-import ApplicationSidebar from "~/components/side-bar";
+import Card from "~/components/ui/card";
 
 export const loader: LoaderFunction = async ({ request }) => {
   return await authenticator.isAuthenticated(request, {
@@ -20,18 +20,10 @@ export default function DashboardPage() {
   const data = useLoaderData<typeof loader>();
 
   return (
-    <div>
+    <Card>
       <h1>
-        Welcome, {data?.username}. Your role is {data?.role.toLowerCase()}
+        Welcome, {data?.username} 👋. Your role is {data?.role.toLowerCase()}
       </h1>
-      {data?.role === UserRole.SUPERVISOR && (
-        <Link to="/manage/manage-employee">
-          <Button>Manage</Button>
-        </Link>
-      )}
-      <Form method="post">
-        <button>Log Out</button>
-      </Form>
-    </div>
+    </Card>
   );
 }

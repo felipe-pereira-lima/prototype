@@ -3,6 +3,9 @@ import { ActionFunction, LoaderFunction, json } from "@remix-run/node";
 import { authenticator } from "../services/auth.server";
 import { Form, useLoaderData } from "@remix-run/react";
 import { sessionStorage } from "../services/session.server";
+import { TextField } from "~/components/ui/text-field";
+import { Button } from "~/components/ui/button";
+import Card from "~/components/ui/card";
 
 export const loader: LoaderFunction = async ({ request }) => {
   await authenticator.isAuthenticated(request, {
@@ -36,21 +39,22 @@ export default function LoginPage() {
   // if i got an error it will come back with the loader data
   const loaderData = useLoaderData<typeof loader>();
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
+    <Card size="small" customClassName="mx-auto my-0 max-w-md">
       <h1>Welcome to Final Project Prototype - Web Development Template</h1>
       <Form method="post">
-        <input type="email" name="email" placeholder="email" required />
-        <input
+        <TextField type="email" label="email" placeholder="email" required />
+        <TextField
           type="password"
-          name="password"
+          label="password"
           placeholder="password"
           autoComplete="current-password"
         />
-        <button>Sign In</button>
+
+        <Button type="submit">Sign In</Button>
       </Form>
       <div>
         {loaderData?.error ? <p>ERROR: {loaderData?.error?.message}</p> : null}
       </div>
-    </div>
+    </Card>
   );
 }
