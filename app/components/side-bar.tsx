@@ -9,7 +9,11 @@ export default function ApplicationSidebar() {
     {
       name: "Meetings",
       href: "/meetings/list",
-      submenu: [{ name: "My Meetings", href: "/meetings/list" }],
+      submenu: [
+        { name: "My Meetings", href: "/meetings/list" },
+        { name: "Action Items", href: "/meetings/action-items" },
+        { name: "Meeting Templates", href: "/meetings/templates" },
+      ],
     },
     {
       name: "Reviews",
