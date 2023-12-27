@@ -1,9 +1,22 @@
+TODO:
+
+data model:
 more depth, change data model to allow also manager to write, not only grade
 have more than a graph - show the 3 competencies in detail, description, a 1-5 linear scale.
-
 expand data model... competencies, meetings, teams...
+expand data model... peer reviews
 
+ui:
 error page for non authenticated user (trying to access route)
 roles context? user can't access /manage
-deployment not working (/login...?)
 for the manager, a place to manage? baseurl/manage? dont know
+
+backend:
+
+infrastructure:
+deployment not working (/login...?)
+
+
+
+
+

@@ -20,7 +20,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const user = session.get("sessionKey"); // Use the same key you've set in the authenticator
 
   if (!user) {
-    console.log("No user found in session"); // Debugging: Log when no user is found
+    console.log("No user found in session");
     return new Response("Unauthorized", { status: 401 });
   }
 
@@ -30,8 +30,10 @@ export const loader: LoaderFunction = async ({ request }) => {
         user.role === "EMPLOYEE"
           ? { employeeId: user.id }
           : { supervisorId: user.id },
-      include:
-        user.role === "EMPLOYEE" ? { supervisor: true } : { employee: true },
+      include: {
+        employee: true,
+        supervisor: user.role === "SUPERVISOR",
+      },
     });
     return json({ user, reviews });
   } catch (error) {
@@ -59,7 +61,7 @@ export default function SeeReview() {
     labels: ["commitment", "communication", "execution"],
     datasets: [
       {
-        label: `${user.username}'s skill matrix`,
+        label: `${reviews[0].employee.username}'s skill matrix`,
         data: [
           reviews[0].commitment,
           reviews[0].communication,
