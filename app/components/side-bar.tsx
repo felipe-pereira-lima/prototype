@@ -9,7 +9,7 @@ type NavigationItem = {
   submenu?: NavigationItem[];
 };
 
-export default function ApplicationSidebar() {
+export default function ApplicationSidebar(): JSX.Element {
   const navigationEmployee: NavigationItem[] = [
     { name: "Home", href: "/" },
     {
