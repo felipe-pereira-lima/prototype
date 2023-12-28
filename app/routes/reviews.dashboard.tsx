@@ -11,6 +11,56 @@ import { Review } from "@prisma/client";
 import { Button } from "~/components/ui/button";
 import { RadioButton } from "~/components/ui/radio-button";
 
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData();
+  const supervisorId = formData.get("supervisorId"); // Supervisor's ID
+  const employeeId = formData.get("employeeId"); // Employee's ID to be reviewed
+  const executionRating = formData.get("executionRating");
+  const communicationRating = formData.get("communicationRating");
+  const commitmentRating = formData.get("commitmentRating");
+
+  try {
+    // Check if there is an existing review for this employee by this supervisor
+    const existingReview = await prisma.review.findFirst({
+      where: {
+        employeeId: Number(employeeId),
+        supervisorId: Number(supervisorId),
+      },
+    });
+
+    let review;
+
+    if (existingReview) {
+      // Update the existing review
+      review = await prisma.review.update({
+        where: { id: existingReview.id },
+        data: {
+          execution: Number(executionRating),
+          communication: Number(communicationRating),
+          commitment: Number(commitmentRating),
+          updatedAt: new Date(), // Update the 'updatedAt' timestamp
+        },
+      });
+    } else {
+      // Create a new review
+      review = await prisma.review.create({
+        data: {
+          execution: Number(executionRating),
+          communication: Number(communicationRating),
+          commitment: Number(commitmentRating),
+          employeeId: Number(employeeId),
+          supervisorId: Number(supervisorId),
+        },
+      });
+    }
+
+    return json({ message: "Review processed successfully", review });
+  } catch (error) {
+    console.error("Failed to process review:", error);
+    return json({ message: "Failed to process review" }, { status: 500 });
+  }
+};
+
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
   const user = session.get("sessionKey");
@@ -52,36 +102,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   } catch (error) {
     console.error("Error fetching data:", error);
     throw new Response("Error fetching data", { status: 500 });
-  }
-};
-
-export const action: ActionFunction = async ({ request }) => {
-  const formData = await request.formData();
-  const reviewId = formData.get("reviewId");
-  console.log("Review ID:", reviewId); // Log the review ID
-
-  const executionRating = formData.get("executionRating");
-  const communicationRating = formData.get("communicationRating");
-  const commitmentRating = formData.get("commitmentRating");
-
-  try {
-    const updatedReview = await prisma.review.update({
-      where: { id: Number(reviewId) },
-      data: {
-        execution: Number(executionRating),
-        communication: Number(communicationRating),
-        commitment: Number(commitmentRating),
-      },
-    });
-
-    if (updatedReview) {
-      return json({ message: "Review updated successfully", updatedReview });
-    } else {
-      return json({ message: "Review not found" }, { status: 404 });
-    }
-  } catch (error) {
-    console.error("Failed to update review:", error);
-    return json({ message: "Failed to update review" }, { status: 500 });
   }
 };
 
@@ -141,6 +161,7 @@ export default function ReviewDashboard() {
     scales: {
       r: {
         beginAtZero: true,
+        suggestedMax: 5,
       },
     },
     maintainAspectRatio: true,
@@ -160,21 +181,14 @@ export default function ReviewDashboard() {
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    const form = event.currentTarget;
-    const formData = new FormData(form);
-
+    const formData = new FormData();
     formData.append("employeeId", selectedEmployeeId.toString());
+    formData.append("supervisorId", user.id.toString());
+    formData.append("executionRating", executionRating.toString());
+    formData.append("communicationRating", communicationRating.toString());
+    formData.append("commitmentRating", commitmentRating.toString());
 
     fetcher.submit(formData, { method: "post" });
-  };
-
-  // TODO: this can come from the db :P
-  const ratingScale = {
-    0: "Does not meet expectations.",
-    1: "Improvement required to meet expectations.",
-    2: "Meets expectations.",
-    3: "Sometimes exceeds expectations.",
-    4: "Consistently exceeds expectations",
   };
 
   return (
@@ -225,6 +239,7 @@ export default function ReviewDashboard() {
                 valueLabel={(num) => num.toString()}
                 onChange={(rating) => handleRatingChange("execution", rating)}
               />
+              <input type="hidden" name="supervisorId" value={user.id} />
             </div>
             <div className="flex justify-end mt-2">
               <Button type="submit">Submit Review</Button>

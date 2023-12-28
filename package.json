@@ -26,7 +26,8 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "remix-auth": "^3.6.0",
-    "remix-auth-form": "^1.4.0"
+    "remix-auth-form": "^1.4.0",
+    "rooks": "^7.14.1"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.4.0",
