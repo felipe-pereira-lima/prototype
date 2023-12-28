@@ -1,11 +1,17 @@
-// app/routes/index.ts
-import { ActionFunction, LoaderFunction, json } from "@remix-run/node";
+// app/routes/login.ts
+import {
+  ActionFunction,
+  LoaderFunction,
+  MetaFunction,
+  json,
+} from "@remix-run/node";
 import { authenticator } from "../services/auth.server";
 import { Form, useLoaderData } from "@remix-run/react";
 import { sessionStorage } from "../services/session.server";
 import { TextField } from "~/components/ui/text-field";
 import { Button } from "~/components/ui/button";
 import Card from "~/components/ui/card";
+import { Alert } from "~/components/ui/alert";
 
 export const loader: LoaderFunction = async ({ request }) => {
   await authenticator.isAuthenticated(request, {
@@ -35,8 +41,11 @@ export const action: ActionFunction = async ({ request, context }) => {
   return resp;
 };
 
+export const meta: MetaFunction = () => {
+  return [{ title: "Crescendo | Login" }];
+};
+
 export default function LoginPage() {
-  // if i got an error it will come back with the loader data
   const loaderData = useLoaderData<typeof loader>();
   return (
     <Card size="small" customClassName="mx-auto my-0 max-w-md w-full">
@@ -58,7 +67,11 @@ export default function LoginPage() {
         </div>
       </Form>
       <div>
-        {loaderData?.error ? <p>ERROR: {loaderData?.error?.message}</p> : null}
+        {loaderData?.error ? (
+          <div className="pt-2">
+            <Alert mode="danger" message={loaderData?.error?.message} />
+          </div>
+        ) : null}
       </div>
     </Card>
   );

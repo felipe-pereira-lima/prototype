@@ -49,9 +49,6 @@ export interface ButtonProps
   variant?: "default" | "round" | "square" | "ghost";
 }
 
-/**
- * `NumeraButton` extends the default html `button` element.
- */
 export function Button({
   children,
   color = "primary",
