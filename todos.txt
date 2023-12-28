@@ -21,8 +21,6 @@ manager needs to send POST request with that submission
 infrastructure:
 deployment not working (/login...?)
 
-
-
 Possible features for manager:
 
 Team Dashboard: This might provide an overview of the team's performance, goals, and upcoming reviews.
