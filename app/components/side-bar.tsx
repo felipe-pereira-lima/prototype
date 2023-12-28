@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Compass } from "@phosphor-icons/react";
+import { Compass } from "phosphor-react";
 import { Link, useLocation } from "@remix-run/react";
 import clsx from "clsx";
 import {

@@ -1,6 +1,6 @@
 import { useId } from "react";
 
-import { MagnifyingGlass } from "@phosphor-icons/react";
+import { MagnifyingGlass } from "phosphor-react";
 import clsx, { ClassValue } from "clsx";
 import { Size } from "./utils/types";
 

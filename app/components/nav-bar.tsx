@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bell, BracketsSquare, X } from "@phosphor-icons/react";
+import { Bell, BracketsSquare, X } from "phosphor-react";
 import { User } from "@prisma/client";
 import { Form } from "@remix-run/react";
 import { Button } from "./ui/button";
