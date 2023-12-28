@@ -1,12 +1,6 @@
 import { ReactNode } from "react";
 
-import {
-  CheckCircle,
-  IconProps,
-  Info,
-  Warning,
-  XCircle,
-} from "@phosphor-icons/react";
+import { CheckCircle, IconProps, Info, Warning, XCircle } from "phosphor-react";
 import clsx from "clsx";
 import { Indicator } from "./utils/types";
 
