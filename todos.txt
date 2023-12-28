@@ -1,9 +1,3 @@
-TODO prototype:
-
-if the user is a manager, and employee is unreviewed, he can see 3 inputs fields, 1 for execution, 1 for communication, 1 for commitment, after selection such employee 
-manager needs to send POST request with that submission
-now employee's matrix is shown if that employee is selected :)
-_____________________________________________
 
 TODO:
 
@@ -21,6 +15,8 @@ roles context? user can't access /manage
 for the manager, a place to manage? baseurl/manage? dont know
 
 backend:
+I am fetching all employees in the reviews, need a way to fetch only the ones from supervisor
+manager needs to send POST request with that submission
 
 infrastructure:
 deployment not working (/login...?)

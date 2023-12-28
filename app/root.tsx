@@ -20,7 +20,15 @@ import ApplicationSidebar from "./components/side-bar";
 import { SnackbarProvider } from "notistack";
 import clsx from "clsx";
 import Navbar from "./components/nav-bar";
-import { Button } from "./components/ui/button";
+import {
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+} from "chart.js";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -39,12 +47,19 @@ export const action: ActionFunction = async ({ request }) => {
   await authenticator.logout(request, { redirectTo: "/login" });
 };
 
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
+);
+
 export default function App() {
   const data = useLoaderData<typeof loader>();
   const location = useLocation();
   const isLoginRoute = location.pathname === "/login";
-
-  console.log(data);
 
   return (
     <html lang="en">

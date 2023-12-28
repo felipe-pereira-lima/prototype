@@ -9,7 +9,7 @@ export interface NavbarProps {
   user: User;
 }
 
-export default function Navbar({ user }: NavbarProps) {
+export default function Navbar({ user }: NavbarProps): JSX.Element {
   return (
     <Disclosure as="nav" className="bg-transparent">
       {({ open }) => (

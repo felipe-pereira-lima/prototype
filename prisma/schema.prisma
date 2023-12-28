@@ -19,6 +19,8 @@ model User {
   role         UserRole @default(EMPLOYEE)
   reviews      Review[] @relation("employeeReviews")
   givenReviews Review[] @relation("supervisorReviews")
+  team         Team?    @relation(fields: [teamId], references: [id])
+  teamId       Int?
 }
 
 model Review {
@@ -32,6 +34,12 @@ model Review {
   employeeId    Int
   supervisor    User     @relation("supervisorReviews", fields: [supervisorId], references: [id])
   supervisorId  Int
+}
+
+model Team {
+  id    Int    @id @default(autoincrement())
+  name  String
+  users User[]
 }
 
 enum UserRole {

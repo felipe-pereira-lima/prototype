@@ -4,7 +4,6 @@ import { MagnifyingGlass } from "@phosphor-icons/react";
 import clsx, { ClassValue } from "clsx";
 import { Size } from "./utils/types";
 
-// TODO: extend default html `input` props
 export interface BaseProps {
   autoComplete?: string;
   disabled?: boolean;
@@ -94,7 +93,6 @@ export function TextField({
                 "form-input rounded border focus-within:border-blue-500 focus-within:outline-none focus-within:ring-1 focus-within:ring-blue-500",
                 {
                   "bg-gray-100": disabled,
-
                   ...spacings,
                 }
               )}

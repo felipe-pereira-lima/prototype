@@ -14,7 +14,7 @@ export default function Card({
   label,
   size,
   customClassName,
-}: CardProps) {
+}: CardProps): JSX.Element {
   return (
     <div
       className={clsx("flex-grow rounded-md bg-white shadow", customClassName)}
