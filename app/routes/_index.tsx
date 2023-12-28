@@ -1,5 +1,5 @@
 // app/routes/index.ts
-import { ActionFunction, LoaderFunction } from "@remix-run/node";
+import { ActionFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
 import { authenticator } from "../services/auth.server";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import { Button } from "~/components/ui/button";
@@ -14,6 +14,10 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const action: ActionFunction = async ({ request }) => {
   await authenticator.logout(request, { redirectTo: "/login" });
+};
+
+export const meta: MetaFunction = () => {
+  return [{ title: "Home" }];
 };
 
 export default function DashboardPage() {

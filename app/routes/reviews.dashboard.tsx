@@ -1,5 +1,10 @@
 // app/routes/reviews.dashboard.tsx
-import { ActionFunction, json, LoaderFunction } from "@remix-run/node";
+import {
+  ActionFunction,
+  json,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/node";
 import { Radar } from "react-chartjs-2";
 
 import { useFetcher, useLoaderData } from "@remix-run/react";
@@ -103,6 +108,10 @@ export const loader: LoaderFunction = async ({ request }) => {
     console.error("Error fetching data:", error);
     throw new Response("Error fetching data", { status: 500 });
   }
+};
+
+export const meta: MetaFunction = () => {
+  return [{ title: "Reviews | Dashboard" }];
 };
 
 export default function ReviewDashboard() {
