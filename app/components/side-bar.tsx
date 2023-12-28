@@ -2,39 +2,16 @@ import { useState, useEffect } from "react";
 import { Compass } from "@phosphor-icons/react";
 import { Link, useLocation } from "@remix-run/react";
 import clsx from "clsx";
-
-type NavigationItem = {
-  name: string;
-  href: string;
-  submenu?: NavigationItem[];
-};
+import {
+  NavigationItem,
+  navigationList,
+} from "./utils/side-bar-navigation-list";
 
 export default function ApplicationSidebar(): JSX.Element {
-  const navigationEmployee: NavigationItem[] = [
-    { name: "Home", href: "/" },
-    {
-      name: "Meetings",
-      href: "/meetings/list",
-      submenu: [
-        { name: "My Meetings", href: "/meetings/list" },
-        { name: "Action Items", href: "/meetings/action-items" },
-      ],
-    },
-    {
-      name: "Reviews",
-      href: "/reviews/dashboard",
-      submenu: [
-        { name: "Dashboard", href: "/reviews/dashboard" },
-        { name: "All Reviews", href: "/reviews/all" },
-        { name: "Analytics", href: "/reviews/analytics" },
-      ],
-    },
-  ];
-
   const location = useLocation();
+  const [activeMainItem, setActiveMainItem] = useState<string>("Home");
   const [activeItem, setActiveItem] = useState<string>("Home");
   const [openedMenu, setOpenedMenu] = useState<string>("");
-  const [activeMainItem, setActiveMainItem] = useState<string>("Home");
 
   const handleMenuClick = (item: NavigationItem) => {
     if (item.submenu) {
@@ -42,17 +19,8 @@ export default function ApplicationSidebar(): JSX.Element {
     } else {
       setOpenedMenu("");
     }
-    setActiveItem(item.name);
     setActiveMainItem(item.name); // Set the active main menu item
-  };
-
-  // Update this in your submenu item click handler
-  const handleSubmenuItemClick = (
-    mainItemName: string,
-    subItemName: string
-  ) => {
-    setActiveItem(subItemName);
-    setActiveMainItem(mainItemName); // Set the active main menu item
+    setActiveItem(item.name);
   };
 
   useEffect(() => {
@@ -81,8 +49,8 @@ export default function ApplicationSidebar(): JSX.Element {
       return "Home"; // Default if no match is found
     };
 
-    setActiveItem(findActiveItem(navigationEmployee));
-  }, [location, navigationEmployee]);
+    setActiveItem(findActiveItem(navigationList));
+  }, [location, navigationList]);
 
   return (
     <>
@@ -98,11 +66,11 @@ export default function ApplicationSidebar(): JSX.Element {
 
             <nav className="flex flex-1 flex-col">
               <ul role="list" className="flex flex-1 flex-col gap-y-2">
-                {navigationEmployee.map((item) => (
+                {navigationList.map((item) => (
                   <li
                     key={item.name}
                     className={clsx(
-                      activeMainItem === item.name && "bg-gray-100"
+                      activeMainItem === item.name && "bg-gray-100 rounded-md"
                     )}
                   >
                     <Link
@@ -113,7 +81,7 @@ export default function ApplicationSidebar(): JSX.Element {
                       {item.name}
                     </Link>
                     {openedMenu === item.name && item.submenu && (
-                      <ul role="list" className="pl-4 space-y-1">
+                      <ul role="list" className="pl-4 space-y-1 rounded-md">
                         {item.submenu.map((subItem) => (
                           <li key={subItem.name}>
                             <Link

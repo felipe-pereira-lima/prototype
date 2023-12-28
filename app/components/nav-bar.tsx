@@ -37,7 +37,7 @@ export default function Navbar({ user }: NavbarProps): JSX.Element {
                   <Menu as="div" className="relative ml-4 flex-shrink-0">
                     <div>
                       <Menu.Button className="relative flex rounded-full items-center gap-x-2 text-sm text-black focus:outline-none">
-                        <span className="h-8 w-8 rounded-full flex items-center justify-center bg-gray-400">
+                        <span className="h-8 w-8 rounded-full flex items-center justify-center bg-indigo-300">
                           {user?.username[0] ?? ""}
                         </span>
                         <span className="sr-only">Your profile</span>

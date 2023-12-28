@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { Review } from "@prisma/client";
 import { Button } from "~/components/ui/button";
 import { RadioButton } from "~/components/ui/radio-button";
+import { ComboBox } from "~/components/ui/combo-box";
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
@@ -203,16 +204,20 @@ export default function ReviewDashboard() {
   return (
     <Card label="Reviews">
       {user.role === "SUPERVISOR" && (
-        <select onChange={handleSelectChange} defaultValue="">
-          <option value="" disabled>
-            Select an employee
-          </option>
-          {employees.map((employee: any) => (
-            <option key={employee.id} value={employee.id}>
-              {employee?.username ?? ""}
-            </option>
-          ))}
-        </select>
+        <div className="pb-2">
+          <ComboBox
+            options={employees.map((employee: any) => ({
+              id: employee.id,
+              label: employee.username,
+            }))}
+            valueKey={(option: any) => option.id}
+            valueLabel={(option) => option.label}
+            onSelection={(newValue) => {
+              setSelectedEmployeeId(newValue ? newValue.id : undefined);
+            }}
+            placeholder="Select an employee"
+          />
+        </div>
       )}
 
       {isReviewSelected && <Radar data={data} options={options} />}
