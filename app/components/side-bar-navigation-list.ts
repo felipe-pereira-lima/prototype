@@ -1,8 +1,4 @@
-export type NavigationItem = {
-  name: string;
-  href: string;
-  submenu?: NavigationItem[];
-};
+import { NavigationItem } from "~/utils/types";
 
 export const navigationList: NavigationItem[] = [
   { name: "Home", href: "/" },

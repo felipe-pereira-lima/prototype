@@ -7,3 +7,9 @@ export interface BaseInputElementProps {
    */
   size?: Size;
 }
+
+export type NavigationItem = {
+  name: string;
+  href: string;
+  submenu?: NavigationItem[];
+};
