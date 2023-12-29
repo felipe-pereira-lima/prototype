@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Compass } from "phosphor-react";
 import { Link, useLocation } from "@remix-run/react";
 import clsx from "clsx";
-import { navigationList } from "./side-bar-navigation-list";
+import { navigationList } from "./ui/utils/side-bar-navigation-list";
 import { NavigationItem } from "~/utils/types";
 
 export default function ApplicationSidebar(): JSX.Element {
