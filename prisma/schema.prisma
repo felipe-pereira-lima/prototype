@@ -32,45 +32,44 @@ model User {
 
 // Company Model
 model Company {
-  id              Int              @id @default(autoincrement())
-  name            String
-  users           User[]           // Users belonging to the company
-  teams           Team[]           // Teams within the company
-  meetings        Meeting[]        // Meetings scheduled by the company
-  reviews         Review[]         // Performance reviews conducted by the company
-  departments     Department[]     // Departments within the company
+  id          Int          @id @default(autoincrement())
+  name        String
+  users       User[] // Users belonging to the company
+  teams       Team[] // Teams within the company
+  meetings    Meeting[] // Meetings scheduled by the company
+  reviews     Review[] // Performance reviews conducted by the company
+  departments Department[] // Departments within the company
 }
-
 
 // Department Model - Represents a department within a company
 model Department {
-  id           Int         @id @default(autoincrement())
+  id           Int          @id @default(autoincrement())
   name         String
   companyId    Int
-  company      Company     @relation(fields: [companyId], references: [id])
-  teams        Team[]      // Teams within the department
+  company      Company      @relation(fields: [companyId], references: [id])
+  teams        Team[] // Teams within the department
   competencies Competency[] // Competencies associated with the department
 }
 
 // Team Model - Represents a team within a company
 model Team {
-  id            Int       @id @default(autoincrement())
-  name          String
-  departmentId  Int       // Reference to Department
-  department    Department @relation(fields: [departmentId], references: [id])
-  companyId     Int       // Reference to Company
-  company       Company   @relation(fields: [companyId], references: [id]) // Back-relation to Company
-  members       User[]    // Members of the team
+  id           Int        @id @default(autoincrement())
+  name         String
+  departmentId Int // Reference to Department
+  department   Department @relation(fields: [departmentId], references: [id])
+  companyId    Int // Reference to Company
+  company      Company    @relation(fields: [companyId], references: [id]) // Back-relation to Company
+  members      User[] // Members of the team
 }
 
 // Competency Model - Represents a specific skill or attribute
 model Competency {
-  id             Int                @id @default(autoincrement())
-  name           String
-  description    String
-  departmentId   Int                // Reference to Department
-  department     Department         @relation(fields: [departmentId], references: [id]) // Department associated with the competency
-  levels         CompetencyLevel[]
+  id                 Int                @id @default(autoincrement())
+  name               String
+  description        String
+  departmentId       Int // Reference to Department
+  department         Department         @relation(fields: [departmentId], references: [id]) // Department associated with the competency
+  levels             CompetencyLevel[]
   reviewCompetencies ReviewCompetency[]
 }
 
@@ -83,21 +82,20 @@ model CompetencyLevel {
   competency   Competency    @relation(fields: [competencyId], references: [id])
 }
 
-
 // Review Model (linked to a Company)
 model Review {
-  id           Int            @id @default(autoincrement())
+  id           Int                @id @default(autoincrement())
   companyId    Int
-  company      Company        @relation(fields: [companyId], references: [id])
+  company      Company            @relation(fields: [companyId], references: [id])
   competencies ReviewCompetency[]
   feedbackText String?
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  employee     User           @relation("employeeReviews", fields: [employeeId], references: [id])
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  employee     User               @relation("employeeReviews", fields: [employeeId], references: [id])
   employeeId   Int
-  supervisor   User           @relation("supervisorReviews", fields: [supervisorId], references: [id])
+  supervisor   User               @relation("supervisorReviews", fields: [supervisorId], references: [id])
   supervisorId Int
-  reviewType   ReviewType     // Indicates if it's a self-assessment or a review
+  reviewType   ReviewType // Indicates if it's a self-assessment or a review
 }
 
 // ReviewCompetency Model
@@ -112,29 +110,28 @@ model ReviewCompetency {
 
 // PeerReview Model
 model PeerReview {
-id Int @id @default(autoincrement())
-appreciatedText String
-improvementText String
-createdAt DateTime @default(now())
-reviewedById Int
-reviewerId Int
-reviewer User @relation("reviewer", fields: [reviewerId], references: [id])
-reviewedBy User @relation("reviewedBy", fields: [reviewedById], references: [id])
+  id              Int      @id @default(autoincrement())
+  appreciatedText String
+  improvementText String
+  createdAt       DateTime @default(now())
+  reviewedById    Int
+  reviewerId      Int
+  reviewer        User     @relation("reviewer", fields: [reviewerId], references: [id])
+  reviewedBy      User     @relation("reviewedBy", fields: [reviewedById], references: [id])
 }
 
 // Meeting Model (linked to a Company)
 model Meeting {
-id Int @id @default(autoincrement())
-title String
-description String?
-scheduledAt DateTime
-companyId Int
-company Company @relation(fields: [companyId], references: [id])
-createdBy User @relation(fields: [createdById], references: [id])
-createdById Int
-attendees MeetingAttendee[]
+  id          Int               @id @default(autoincrement())
+  title       String
+  description String?
+  scheduledAt DateTime
+  companyId   Int
+  company     Company           @relation(fields: [companyId], references: [id])
+  createdBy   User              @relation(fields: [createdById], references: [id])
+  createdById Int
+  attendees   MeetingAttendee[]
 }
-
 
 enum UserRole {
   EMPLOYEE
@@ -157,14 +154,12 @@ enum EmployeeLevel {
   CEO
 }
 
-
 // Many-to-many relation for Meeting attendees
 model MeetingAttendee {
-meeting Meeting @relation(fields: [meetingId], references: [id])
-meetingId Int
-user User @relation(fields: [userId], references: [id])
-userId Int
-@@id([meetingId, userId])
+  meeting   Meeting @relation(fields: [meetingId], references: [id])
+  meetingId Int
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int
+
+  @@id([meetingId, userId])
 }
-
-
