@@ -27,6 +27,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   try {
     // Check if there is an existing review for this employee by this supervisor
+    console.log("ads", formData);
     const existingReview = await prisma.review.findFirst({
       where: {
         employeeId: Number(employeeId),
