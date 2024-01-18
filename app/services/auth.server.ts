@@ -38,8 +38,13 @@ authenticator.use(
         id: user.id,
         username: user.username,
         email: user.email,
-        password: user.password, // Consider omitting the password in production for security
+        firstName: user.firstName,
+        lastName: user.lastName,
+        fullName: user.fullName,
+        password: user.password,
         role: user.role,
+        companyId: user.companyId,
+        teamId: user.teamId ?? null,
       };
     } else {
       throw new AuthorizationError("Bad Credentials");

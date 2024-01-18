@@ -1,15 +1,13 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bell, BracketsSquare, X } from "phosphor-react";
-import { User } from "@prisma/client";
 import { Form } from "@remix-run/react";
 import { Button } from "./ui/button";
+import { useUser } from "~/context/user-context";
 
-export interface NavbarProps {
-  user: User;
-}
+export default function Navbar(): JSX.Element {
+  const user = useUser();
 
-export default function Navbar({ user }: NavbarProps): JSX.Element {
   return (
     <Disclosure as="nav" className="bg-transparent">
       {({ open }) => (
@@ -38,10 +36,10 @@ export default function Navbar({ user }: NavbarProps): JSX.Element {
                     <div>
                       <Menu.Button className="relative flex rounded-full items-center gap-x-2 text-sm text-black focus:outline-none">
                         <span className="h-8 w-8 rounded-full flex items-center justify-center bg-indigo-300">
-                          {user?.username[0] ?? ""}
+                          {user?.username[0]?.toUpperCase() ?? ""}
                         </span>
                         <span className="sr-only">Your profile</span>
-                        <span aria-hidden="true">{user?.username}</span>
+                        <span aria-hidden="true">{user?.fullName}</span>
                       </Menu.Button>
                     </div>
                     <Transition
