@@ -15,6 +15,7 @@ export const navigationList: NavigationItem[] = [
     href: "/reviews/dashboard",
     submenu: [
       { name: "Dashboard", href: "/reviews/dashboard" },
+      { name: "Test", href: "/reviews/$userId" },
       { name: "All Reviews", href: "/reviews/all" },
       { name: "Analytics", href: "/reviews/analytics" },
     ],

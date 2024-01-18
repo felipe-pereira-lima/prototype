@@ -31,7 +31,7 @@ export default function Card({
           </div>
         )}
       </div>
-      <div className="p-4">{children}</div>
+      <div className="p-4 ">{children}</div>
     </div>
   );
 }
