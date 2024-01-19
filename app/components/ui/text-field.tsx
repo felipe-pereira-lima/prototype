@@ -101,7 +101,7 @@ export function TextField({
               <textarea
                 aria-describedby="required-error"
                 className={clsx(
-                  "flex w-full rounded-md border px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+                  "flex w-full rounded-md px-3 text-sm placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
                   { ...textSizes }
                 )}
                 data-testid="textfield-text-test-id"
