@@ -15,6 +15,16 @@ export const getManagedEmployees: LoaderFunction = async ({ request }) => {
       companyId: user.companyId,
       role: "EMPLOYEE",
     },
+    include: {
+      reviews: {
+        where: {
+          supervisorId: user.id,
+        },
+        include: {
+          competencies: true,
+        },
+      },
+    },
   });
 
   return json({ managedEmployees });
