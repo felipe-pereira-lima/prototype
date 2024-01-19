@@ -8,17 +8,13 @@ import {
   Links,
   LiveReload,
   Meta,
-  Outlet,
   Scripts,
   ScrollRestoration,
   useLoaderData,
   useLocation,
 } from "@remix-run/react";
 import { authenticator } from "./services/auth.server";
-import ApplicationSidebar from "./components/side-bar";
 import { SnackbarProvider } from "notistack";
-import clsx from "clsx";
-import Navbar from "./components/nav-bar";
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -29,6 +25,7 @@ import {
   Legend,
 } from "chart.js";
 import { UserContext } from "./context/user-context";
+import ApplicationLayout from "./components/application-layout";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -75,27 +72,7 @@ export default function App() {
             anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
             maxSnack={3}
           >
-            {!isLoginRoute && (
-              <div>
-                <ApplicationSidebar />
-                <Navbar />
-              </div>
-            )}
-            <main
-              className={clsx({
-                "lg:pl-72": !isLoginRoute,
-                "flex justify-center items-center min-h-screen": isLoginRoute,
-              })}
-            >
-              <div
-                className={clsx("px-4 py-10 sm:px-6 lg:px-8 lg:py-6", {
-                  "max-w-full": isLoginRoute,
-                })}
-              >
-                <Outlet />
-              </div>
-            </main>
-
+            <ApplicationLayout isLoginRoute={isLoginRoute} />
             <ScrollRestoration />
             <Scripts />
             <LiveReload />
