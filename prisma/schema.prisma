@@ -85,6 +85,7 @@ model CompetencyLevel {
 // Review Model (linked to a Company)
 model Review {
   id           Int                @id @default(autoincrement())
+  name         String?
   companyId    Int
   company      Company            @relation(fields: [companyId], references: [id])
   competencies ReviewCompetency[]
@@ -95,7 +96,8 @@ model Review {
   employeeId   Int
   supervisor   User               @relation("supervisorReviews", fields: [supervisorId], references: [id])
   supervisorId Int
-  reviewType   ReviewType // Indicates if it's a self-assessment or a review
+  reviewType   ReviewType         // Indicates if it's a self-assessment or a review
+  isComplete   Boolean            @default(false) // New field indicating if the review is complete
 }
 
 // ReviewCompetency Model
