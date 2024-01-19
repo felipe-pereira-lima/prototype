@@ -1,8 +1,8 @@
 // app/routes/reviews.dashboard.tsx
 import { useLoaderData } from "@remix-run/react";
 import { ReviewDashboardCard } from "~/components/reviews/review-dashboard-list";
+import { getManagedEmployees } from "~/services/user/get-managed-employees.server";
 
-import { getManagedEmployees } from "~/services/user/get-managed-employees";
 import { ManagedEmployee } from "~/utils/types";
 
 export const loader = getManagedEmployees;
@@ -10,7 +10,7 @@ export const loader = getManagedEmployees;
 export default function ReviewDashboard() {
   const { managedEmployees } = useLoaderData<typeof loader>();
 
-  const managedEmployeesWithReview = managedEmployees.filter(
+  const managedEmployeesWithReview = managedEmployees?.filter(
     (employee: ManagedEmployee) =>
       employee.reviews && employee.reviews.length > 0
   );
@@ -20,6 +20,7 @@ export default function ReviewDashboard() {
       <ReviewDashboardCard
         label="Ongoing Assessments"
         managedEmployeesWithReview={managedEmployeesWithReview}
+        // reviewedEmployee?={isSupervisor ? managedEmployeesWithReview : 'Hey employee :)'}
         isReviewComplete={false}
       />
       <ReviewDashboardCard
