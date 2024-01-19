@@ -16,7 +16,7 @@ export function ReviewDashboardCard({
   return (
     <Card label={label} customClassName="my-8">
       <ul>
-        {managedEmployeesWithReview.map((employee) =>
+        {managedEmployeesWithReview?.map((employee) =>
           employee.reviews
             .filter((review: Review) => review.isComplete === isReviewComplete)
             .map((review: Review) => (
