@@ -20,4 +20,8 @@ export const navigationList: NavigationItem[] = [
       { name: "Analytics", href: "/reviews/analytics" },
     ],
   },
+  {
+    name: "Competencies",
+    href: "/competencies",
+  },
 ];

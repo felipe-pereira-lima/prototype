@@ -1,4 +1,4 @@
-import { Review, User } from "@prisma/client";
+import { Competency, Department, Review, User } from "@prisma/client";
 
 export type NavigationItem = {
   name: string;
@@ -8,4 +8,7 @@ export type NavigationItem = {
 
 export interface ManagedEmployee extends User {
   reviews: Review[];
+}
+export interface DepartmentTest extends Department {
+  competencies: Competency[];
 }
