@@ -26,7 +26,6 @@ import {
 } from "chart.js";
 import { UserContext } from "./context/user-context";
 import ApplicationLayout from "./components/application-layout";
-// Import the CSS files for ag-Grid
 import agGridCSS from "ag-grid-community/styles/ag-grid.css";
 import agThemeMaterialCSS from "ag-grid-community/styles/ag-theme-material.css";
 import agThemeQuartzCSS from "ag-grid-community/styles/ag-theme-quartz.css";
