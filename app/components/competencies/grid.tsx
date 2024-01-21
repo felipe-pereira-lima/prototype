@@ -20,11 +20,12 @@ export default function CompetenciesGrid({
       headerName: "Description",
       sortable: true,
       filter: true,
+      flex: 1,
     },
   ] as any;
 
   return (
-    <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
+    <div className="ag-theme-quartz" style={{ height: 400, width: "100%" }}>
       <AgGridReact columnDefs={columns} rowData={competencies} />
     </div>
   );
