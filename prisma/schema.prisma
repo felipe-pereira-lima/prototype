@@ -75,12 +75,14 @@ model Competency {
 
 // CompetencyLevel Model
 model CompetencyLevel {
-  id           Int           @id @default(autoincrement())
-  level        EmployeeLevel
-  description  String
-  competencyId Int
-  competency   Competency    @relation(fields: [competencyId], references: [id])
+  id             Int                @id @default(autoincrement())
+  level          EmployeeLevel
+  description    String
+  competencyId   Int
+  competency     Competency         @relation(fields: [competencyId], references: [id])
+  reviewCompetencies ReviewCompetency[]
 }
+
 
 // Review Model (linked to a Company)
 model Review {
@@ -101,14 +103,18 @@ model Review {
 }
 
 // ReviewCompetency Model
+// ReviewCompetency Model
 model ReviewCompetency {
-  id           Int        @id @default(autoincrement())
+  id           Int             @id @default(autoincrement())
   score        Int
   competencyId Int
-  competency   Competency @relation(fields: [competencyId], references: [id])
+  competency   Competency      @relation(fields: [competencyId], references: [id])
   reviewId     Int
-  review       Review     @relation(fields: [reviewId], references: [id])
+  review       Review          @relation(fields: [reviewId], references: [id])
+  levelId      Int?            // Optional field to link directly to a CompetencyLevel
+  level        CompetencyLevel? @relation(fields: [levelId], references: [id])
 }
+
 
 // PeerReview Model
 model PeerReview {

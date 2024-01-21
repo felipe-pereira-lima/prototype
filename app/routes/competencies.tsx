@@ -12,6 +12,7 @@ export const loader = getDepartmentsOfCompany;
 export default function Competencies() {
   const departments = useLoaderData<typeof loader>();
   const [selectedDepartmentId, setSelectedDepartmentId] = useState(
+    // TODO: add deparment of user as default - might require change in data model
     departments[0]?.id
   );
 

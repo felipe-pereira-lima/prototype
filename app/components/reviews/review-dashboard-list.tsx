@@ -2,6 +2,8 @@ import { ManagedEmployee } from "~/utils/types";
 import Card from "../ui/card";
 import { formatDate } from "~/helpers/format-date";
 import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
+import { Review, User } from "@prisma/client";
 
 export interface ReviewDashboardCardProps {
   label: string;
@@ -14,53 +16,65 @@ export function ReviewDashboardCard({
   isReviewComplete,
   managedEmployees,
 }: ReviewDashboardCardProps) {
-  // Function to render the appropriate element based on review status
-  const renderReviewElement = (
-    employee: ManagedEmployee,
-    isReviewComplete: boolean
-  ) => {
-    if (!isReviewComplete) {
-      // For ongoing reviews
-      if (
-        employee.reviews.length === 0 ||
-        employee.reviews.every((review) => review.isComplete)
-      ) {
-        return <Button>Start</Button>; // Start button for not started reviews
-      } else {
-        return <Button>Continue</Button>; // Continue button for ongoing reviews
-      }
-    } else {
-      // For past reviews, return a paragraph with the date of the last review
+  const navigate = useNavigate();
+
+  const navigateToReview = (employeeId: string, reviewId: string) => {
+    navigate(`/reviews/employee/${employeeId}/review/${reviewId}`);
+  };
+
+  // TODO: fix reviews does not exist in User
+  const renderOngoingReviewButton = (employee: any) => {
+    const ongoingReview = employee.reviews.find(
+      (review: Review) => !review.isComplete
+    );
+    const buttonLabel = employee.reviews.length === 0 ? "Start" : "Continue";
+    return (
+      <Button onClick={() => navigateToReview(employee.id, ongoingReview?.id)}>
+        {buttonLabel}
+      </Button>
+    );
+  };
+
+  const renderPastReviewDate = (lastReview: Review) => (
+    <p>{formatDate(lastReview?.updatedAt)}</p>
+  );
+
+  // TODO: fix reviews does not exist in User
+  const renderEmployeeReview = (employee: any) => {
+    if (isReviewComplete) {
       const lastReview = employee.reviews[employee.reviews.length - 1];
-      return <p>{formatDate(lastReview.updatedAt)}</p>;
+      return renderPastReviewDate(lastReview);
+    } else {
+      return renderOngoingReviewButton(employee);
     }
   };
 
-  return (
-    <Card label={label} customClassName="my-8">
-      <ul>
-        {managedEmployees.map((employee) => {
-          const finishedReviews = employee.reviews.filter(
-            (review) => review.isComplete === isReviewComplete
-          );
+  // TODO: fix reviews does not exist in User
+  const renderEmployeeCard = (employee: any) => {
+    const userReview = employee.reviews.filter(
+      (review: Review) => review.isComplete === isReviewComplete
+    );
 
-          return finishedReviews.length > 0 ? (
-            <li key={employee.id}>
-              <Card customClassName="border">
-                {employee.fullName} - {finishedReviews[0].name}
-                {renderReviewElement(employee, isReviewComplete)}
-              </Card>
-            </li>
-          ) : !isReviewComplete && employee.reviews.length === 0 ? (
-            <li key={employee.id}>
-              <Card customClassName="border">
-                {employee.fullName} - No Reviews
-                {renderReviewElement(employee, isReviewComplete)}
-              </Card>
-            </li>
-          ) : null;
-        })}
-      </ul>
+    if (isReviewComplete && userReview.length === 0) {
+      return null;
+    }
+
+    const reviewInfo =
+      userReview.length > 0 ? userReview[0].name : "No Reviews";
+
+    return (
+      <li key={employee.id}>
+        <Card customClassName="border">
+          {employee.fullName} - {reviewInfo}
+          {renderEmployeeReview(employee)}
+        </Card>
+      </li>
+    );
+  };
+
+  return (
+    <Card label={label} customClassName="mb-8">
+      <ul>{managedEmployees.map(renderEmployeeCard)}</ul>
     </Card>
   );
 }
