@@ -26,9 +26,25 @@ import {
 } from "chart.js";
 import { UserContext } from "./context/user-context";
 import ApplicationLayout from "./components/application-layout";
+// Import the CSS files for ag-Grid
+import agGridCSS from "ag-grid-community/styles/ag-grid.css";
+import agThemeMaterialCSS from "ag-grid-community/styles/ag-theme-material.css";
+import agThemeQuartzCSS from "ag-grid-community/styles/ag-theme-quartz.css";
+
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
+);
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
+  { rel: "stylesheet", href: agGridCSS },
+  { rel: "stylesheet", href: agThemeMaterialCSS },
+  { rel: "stylesheet", href: agThemeQuartzCSS },
 ];
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -43,15 +59,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 export const action: ActionFunction = async ({ request }) => {
   await authenticator.logout(request, { redirectTo: "/login" });
 };
-
-ChartJS.register(
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend
-);
 
 export default function App() {
   const data = useLoaderData<typeof loader>();
