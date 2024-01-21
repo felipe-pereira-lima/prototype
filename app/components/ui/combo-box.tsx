@@ -115,7 +115,7 @@ export function ComboBox<T>({
           "min-w-[120px]": !fullWidth,
           "w-full": fullWidth,
         },
-        "z-1 relative space-y-1"
+        "z-50 relative space-y-1"
       )}
     >
       {label && (

@@ -10,6 +10,7 @@ import { LinksFunction } from "@remix-run/node";
 // Import the CSS files for ag-Grid
 import agGridCSS from "ag-grid-community/styles/ag-grid.css";
 import agThemeAlpineCSS from "ag-grid-community/styles/ag-theme-alpine.css";
+import { useState } from "react";
 
 export const links: LinksFunction = () => {
   return [
@@ -23,8 +24,23 @@ export const loader = getDepartmentsOfCompany;
 
 export default function Competencies() {
   const departments = useLoaderData<typeof loader>();
+  const [selectedDepartmentId, setSelectedDepartmentId] = useState(
+    departments[0]?.id
+  );
+
+  console.log("deede", departments[0]);
 
   console.log(departments);
+
+  const filteredCompetencies = selectedDepartmentId
+    ? departments.find(
+        (department: Department) => department.id === selectedDepartmentId
+      )?.competencies || []
+    : [];
+
+  const selectedDepartment = departments.find(
+    (department: Department) => department.id === selectedDepartmentId
+  );
 
   return (
     <div>
@@ -36,17 +52,18 @@ export default function Competencies() {
         valueKey={(option: any) => option.id}
         valueLabel={(option) => option.label}
         onSelection={(newValue) => {
-          // setSelectedDepartmentId(newValue ? newValue.id : undefined);
+          setSelectedDepartmentId(newValue ? newValue.id : undefined);
           console.log(newValue);
         }}
         placeholder="Select a department"
+        initialValue={
+          selectedDepartment
+            ? { id: selectedDepartment.id, label: selectedDepartment.name }
+            : null
+        }
       />
       <div className="mt-4">
-        <CompetenciesGrid
-          competencies={departments.map((department: any) =>
-            department.competencies.map((competency: any) => competency)
-          )}
-        />
+        <CompetenciesGrid competencies={filteredCompetencies} />
       </div>
     </div>
   );
