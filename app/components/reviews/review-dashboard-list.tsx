@@ -3,7 +3,7 @@ import Card from "../ui/card";
 import { formatDate } from "~/helpers/format-date";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
-import { Review, User } from "@prisma/client";
+import { Review } from "@prisma/client";
 
 export interface ReviewDashboardCardProps {
   label: string;
@@ -18,10 +18,19 @@ export function ReviewDashboardCard({
 }: ReviewDashboardCardProps) {
   const navigate = useNavigate();
 
-  const navigateToReview = (employeeId: string, reviewId: string) => {
-    if (reviewId)
-      navigate(`/reviews/employee/${employeeId}/review/${reviewId}`);
-    else navigate(`/reviews/employee/${employeeId}/review/latest`);
+  const navigateToReview = (
+    employeeId: string,
+    reviewId: string,
+    isComplete: boolean
+  ) => {
+    if (isComplete)
+      navigate(`/reviews/employee/${employeeId}/review/isComplete/${reviewId}`);
+
+    if (!isComplete) {
+      if (reviewId)
+        navigate(`/reviews/employee/${employeeId}/review/${reviewId}`);
+      else navigate(`/reviews/employee/${employeeId}/review/latest`);
+    }
   };
 
   const renderOngoingReviewButton = (employee: any) => {
@@ -29,20 +38,32 @@ export function ReviewDashboardCard({
       (review: Review) => !review.isComplete
     );
     return (
-      <Button onClick={() => navigateToReview(employee.id, ongoingReview?.id)}>
-        {!ongoingReview ? "Start" : "Continue"}
+      <Button
+        onClick={() => navigateToReview(employee.id, ongoingReview?.id, false)}
+      >
+        {!ongoingReview ? "New Review" : "Continue"}
       </Button>
     );
   };
 
-  const renderPastReviewDate = (lastReview: Review) => (
-    <p>{formatDate(lastReview?.updatedAt)}</p>
-  );
-
   const renderEmployeeReview = (employee: any) => {
     if (isReviewComplete) {
-      const lastReview = employee.reviews[employee.reviews.length - 1];
-      return renderPastReviewDate(lastReview);
+      return employee.reviews
+        .filter((review: Review) => review.isComplete)
+        .map((completedReview: any) => (
+          <div key={completedReview.id}>
+            <p>
+              {formatDate(completedReview.updatedAt)} - {completedReview.name}
+            </p>
+            <Button
+              onClick={() =>
+                navigateToReview(employee.id, completedReview.id, true)
+              }
+            >
+              View Details
+            </Button>
+          </div>
+        ));
     } else {
       return renderOngoingReviewButton(employee);
     }

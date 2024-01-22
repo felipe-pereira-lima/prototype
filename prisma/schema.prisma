@@ -107,15 +107,20 @@ model Review {
 
 // ReviewCompetency Model
 model ReviewCompetency {
-  id           Int              @id @default(autoincrement())
-  score        Int
-  competencyId Int
-  competency   Competency       @relation(fields: [competencyId], references: [id])
-  reviewId     Int
-  review       Review           @relation(fields: [reviewId], references: [id])
-  levelId      Int? // Optional field to link directly to a CompetencyLevel
-  level        CompetencyLevel? @relation(fields: [levelId], references: [id])
+  id                    Int                @id @default(autoincrement())
+  score                 Int
+  competencyId          Int
+  competency            Competency         @relation(fields: [competencyId], references: [id])
+  reviewId              Int
+  review                Review             @relation(fields: [reviewId], references: [id])
+  // might discard
+  levelId               Int?               // Optional field to link directly to a CompetencyLevel
+  // might discard
+  level                 CompetencyLevel?   @relation(fields: [levelId], references: [id])
+  employeeAssessment    String?            // Textual self-assessment by the employee
+  supervisorAssessment  String?            // Textual assessment by the supervisor
 }
+
 
 // PeerReview Model
 model PeerReview {

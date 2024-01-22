@@ -92,7 +92,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 // Component
-export default function ReviewDetails() {
+export default function ReviewCreateDetails() {
   const data = useLoaderData<typeof loader>();
   return (
     <CreateReviewForm
