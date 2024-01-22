@@ -35,9 +35,8 @@ export default function Competencies() {
         }))}
         valueKey={(option: any) => option.id}
         valueLabel={(option) => option.label}
-        onSelection={(newValue) => {
-          setSelectedDepartmentId(newValue ? newValue.id : undefined);
-          console.log(newValue);
+        onSelection={(value) => {
+          setSelectedDepartmentId(value ? value.id : undefined);
         }}
         placeholder="Select a department"
         initialValue={
