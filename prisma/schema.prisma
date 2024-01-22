@@ -28,6 +28,7 @@ model User {
   team              Team?             @relation(fields: [teamId], references: [id])
   meetings          Meeting[]
   meetingAttendance MeetingAttendee[]
+  competencies      Competency[]      @relation("userCompetencies")
 }
 
 // Company Model
@@ -53,13 +54,14 @@ model Department {
 
 // Team Model - Represents a team within a company
 model Team {
-  id           Int        @id @default(autoincrement())
+  id           Int          @id @default(autoincrement())
   name         String
   departmentId Int // Reference to Department
-  department   Department @relation(fields: [departmentId], references: [id])
+  department   Department   @relation(fields: [departmentId], references: [id])
   companyId    Int // Reference to Company
-  company      Company    @relation(fields: [companyId], references: [id]) // Back-relation to Company
+  company      Company      @relation(fields: [companyId], references: [id]) // Back-relation to Company
   members      User[] // Members of the team
+  competencies Competency[] @relation("teamCompetencies")
 }
 
 // Competency Model - Represents a specific skill or attribute
@@ -71,18 +73,19 @@ model Competency {
   department         Department         @relation(fields: [departmentId], references: [id]) // Department associated with the competency
   levels             CompetencyLevel[]
   reviewCompetencies ReviewCompetency[]
+  teams              Team[]             @relation("teamCompetencies")
+  users              User[]             @relation("userCompetencies")
 }
 
 // CompetencyLevel Model
 model CompetencyLevel {
-  id             Int                @id @default(autoincrement())
-  level          EmployeeLevel
-  description    String
-  competencyId   Int
-  competency     Competency         @relation(fields: [competencyId], references: [id])
+  id                 Int                @id @default(autoincrement())
+  level              EmployeeLevel
+  description        String
+  competencyId       Int
+  competency         Competency         @relation(fields: [competencyId], references: [id])
   reviewCompetencies ReviewCompetency[]
 }
-
 
 // Review Model (linked to a Company)
 model Review {
@@ -98,23 +101,21 @@ model Review {
   employeeId   Int
   supervisor   User               @relation("supervisorReviews", fields: [supervisorId], references: [id])
   supervisorId Int
-  reviewType   ReviewType         // Indicates if it's a self-assessment or a review
+  reviewType   ReviewType // Indicates if it's a self-assessment or a review
   isComplete   Boolean            @default(false) // New field indicating if the review is complete
 }
 
 // ReviewCompetency Model
-// ReviewCompetency Model
 model ReviewCompetency {
-  id           Int             @id @default(autoincrement())
+  id           Int              @id @default(autoincrement())
   score        Int
   competencyId Int
-  competency   Competency      @relation(fields: [competencyId], references: [id])
+  competency   Competency       @relation(fields: [competencyId], references: [id])
   reviewId     Int
-  review       Review          @relation(fields: [reviewId], references: [id])
-  levelId      Int?            // Optional field to link directly to a CompetencyLevel
+  review       Review           @relation(fields: [reviewId], references: [id])
+  levelId      Int? // Optional field to link directly to a CompetencyLevel
   level        CompetencyLevel? @relation(fields: [levelId], references: [id])
 }
-
 
 // PeerReview Model
 model PeerReview {

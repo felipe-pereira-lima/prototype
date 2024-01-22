@@ -19,18 +19,18 @@ export function ReviewDashboardCard({
   const navigate = useNavigate();
 
   const navigateToReview = (employeeId: string, reviewId: string) => {
-    navigate(`/reviews/employee/${employeeId}/review/${reviewId}`);
+    if (reviewId)
+      navigate(`/reviews/employee/${employeeId}/review/${reviewId}`);
+    else navigate(`/reviews/employee/${employeeId}/review/latest`);
   };
 
-  // TODO: fix reviews does not exist in User
   const renderOngoingReviewButton = (employee: any) => {
     const ongoingReview = employee.reviews.find(
       (review: Review) => !review.isComplete
     );
-    const buttonLabel = employee.reviews.length === 0 ? "Start" : "Continue";
     return (
       <Button onClick={() => navigateToReview(employee.id, ongoingReview?.id)}>
-        {buttonLabel}
+        {!ongoingReview ? "Start" : "Continue"}
       </Button>
     );
   };
@@ -39,7 +39,6 @@ export function ReviewDashboardCard({
     <p>{formatDate(lastReview?.updatedAt)}</p>
   );
 
-  // TODO: fix reviews does not exist in User
   const renderEmployeeReview = (employee: any) => {
     if (isReviewComplete) {
       const lastReview = employee.reviews[employee.reviews.length - 1];
@@ -49,18 +48,19 @@ export function ReviewDashboardCard({
     }
   };
 
-  // TODO: fix reviews does not exist in User
   const renderEmployeeCard = (employee: any) => {
-    const userReview = employee.reviews.filter(
+    const finishedReviewsOfSupervisor = employee.reviews.filter(
       (review: Review) => review.isComplete === isReviewComplete
     );
 
-    if (isReviewComplete && userReview.length === 0) {
+    if (isReviewComplete && finishedReviewsOfSupervisor.length === 0) {
       return null;
     }
 
     const reviewInfo =
-      userReview.length > 0 ? userReview[0].name : "No Reviews";
+      finishedReviewsOfSupervisor.length > 0
+        ? finishedReviewsOfSupervisor[0].name
+        : "Not published";
 
     return (
       <li key={employee.id}>
