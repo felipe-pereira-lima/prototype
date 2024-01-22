@@ -1,6 +1,8 @@
 import { User } from "@prisma/client";
 import { MetaFunction } from "@remix-run/node";
-import Card from "~/components/ui/card";
+import ProfileCard from "~/components/ui/home/profile-card";
+import UpcomingMeetingsCard from "~/components/ui/home/upcoming-meetings-card";
+import WelcomeCard from "~/components/ui/home/welcome-card";
 
 export interface HomeProps {
   data: User;
@@ -16,21 +18,13 @@ export default function Home({ data }: HomeProps) {
       <div className="flex-grow">
         <div className="grid grid-cols-4 gap-4">
           <div className="col-span-4">
-            <Card label={`Welcome, ${data?.fullName} 👋`}>
-              <h1>Your role is {data?.role.toLowerCase()}</h1>
-            </Card>
+            <WelcomeCard data={data} />
           </div>
-
           <div className="col-span-3">
-            <Card label={`Next meetings`}>
-              <h1>tbd</h1>
-            </Card>
+            <UpcomingMeetingsCard />
           </div>
-
           {/* TODO: add position to data model, e.g, web developer */}
-          <Card label={`Profile`}>
-            <h1 className="truncate"> {data?.email}</h1>
-          </Card>
+          <ProfileCard data={data} />
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { MetaFunction } from "@remix-run/node";
-import Card from "~/components/ui/card";
+import { Card } from "~/components/ui/card";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Reviews | All Reviews" }];
@@ -7,7 +7,7 @@ export const meta: MetaFunction = () => {
 
 export default function AllReviews() {
   return (
-    <Card label="All Reviews">
+    <Card title="All Reviews">
       <div>TBD</div>
     </Card>
   );

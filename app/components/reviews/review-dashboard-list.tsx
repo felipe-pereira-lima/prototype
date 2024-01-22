@@ -1,9 +1,9 @@
 import { ManagedEmployee } from "~/utils/types";
-import Card from "../ui/card";
 import { formatDate } from "~/helpers/format-date";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import { Review } from "@prisma/client";
+import { Card } from "../ui/card";
 
 export interface ReviewDashboardCardProps {
   label: string;
@@ -85,7 +85,7 @@ export function ReviewDashboardCard({
 
     return (
       <li key={employee.id}>
-        <Card customClassName="border">
+        <Card>
           {employee.fullName} - {reviewInfo}
           {renderEmployeeReview(employee)}
         </Card>
@@ -94,8 +94,8 @@ export function ReviewDashboardCard({
   };
 
   return (
-    <Card label={label} customClassName="mb-8">
-      <ul>{managedEmployees.map(renderEmployeeCard)}</ul>
+    <Card title={label}>
+      <ul>{managedEmployees?.map(renderEmployeeCard)}</ul>
     </Card>
   );
 }

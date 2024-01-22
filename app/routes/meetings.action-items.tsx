@@ -1,6 +1,6 @@
 import { MetaFunction } from "@remix-run/node";
 import React from "react";
-import Card from "~/components/ui/card";
+import { Card } from "~/components/ui/card";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Meetings | Action Items" }];
@@ -8,7 +8,7 @@ export const meta: MetaFunction = () => {
 
 export default function ActionItems() {
   return (
-    <Card label="Action Items">
+    <Card title="Action Items">
       <div>TBD</div>
     </Card>
   );
