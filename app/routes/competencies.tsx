@@ -1,10 +1,10 @@
 import { Department } from "@prisma/client";
 import { useLoaderData } from "@remix-run/react";
 import CompetenciesGrid from "~/components/competencies/grid";
-import { ComboBox } from "~/components/ui/combo-box";
 import { getDepartmentsOfCompany } from "~/services/departments/get-departments-of-company.server";
 
 import { useState, useEffect } from "react";
+import { ComboBox } from "~/components/ui/combo-box";
 
 export const loader = getDepartmentsOfCompany;
 
