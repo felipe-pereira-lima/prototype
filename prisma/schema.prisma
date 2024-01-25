@@ -35,11 +35,11 @@ model User {
 model Company {
   id          Int          @id @default(autoincrement())
   name        String
-  users       User[] // Users belonging to the company
-  teams       Team[] // Teams within the company
-  meetings    Meeting[] // Meetings scheduled by the company
-  reviews     Review[] // Performance reviews conducted by the company
-  departments Department[] // Departments within the company
+  users       User[] 
+  teams       Team[] 
+  meetings    Meeting[] 
+  reviews     Review[] 
+  departments Department[] 
 }
 
 // Department Model - Represents a department within a company
@@ -48,19 +48,19 @@ model Department {
   name         String
   companyId    Int
   company      Company      @relation(fields: [companyId], references: [id])
-  teams        Team[] // Teams within the department
-  competencies Competency[] // Competencies associated with the department
+  teams        Team[] 
+  competencies Competency[] 
 }
 
 // Team Model - Represents a team within a company
 model Team {
   id           Int          @id @default(autoincrement())
   name         String
-  departmentId Int // Reference to Department
+  departmentId Int 
   department   Department   @relation(fields: [departmentId], references: [id])
-  companyId    Int // Reference to Company
+  companyId    Int 
   company      Company      @relation(fields: [companyId], references: [id]) // Back-relation to Company
-  members      User[] // Members of the team
+  members      User[] 
   competencies Competency[] @relation("teamCompetencies")
 }
 
@@ -69,7 +69,7 @@ model Competency {
   id                 Int                @id @default(autoincrement())
   name               String
   description        String
-  departmentId       Int // Reference to Department
+  departmentId       Int 
   department         Department         @relation(fields: [departmentId], references: [id]) // Department associated with the competency
   levels             CompetencyLevel[]
   reviewCompetencies ReviewCompetency[]
@@ -101,8 +101,11 @@ model Review {
   employeeId   Int
   supervisor   User               @relation("supervisorReviews", fields: [supervisorId], references: [id])
   supervisorId Int
-  reviewType   ReviewType // Indicates if it's a self-assessment or a review
-  isComplete   Boolean            @default(false) // New field indicating if the review is complete
+  reviewType   ReviewType 
+  isComplete   Boolean            @default(false) 
+  reflection          Reflection?           
+  developmentOutlook  DevelopmentOutlook?   
+  careerDevelopment   CareerDevelopment?    
 }
 
 // ReviewCompetency Model
@@ -121,6 +124,35 @@ model ReviewCompetency {
   supervisorAssessment  String?            // Textual assessment by the supervisor
 }
 
+// Reflection Model
+model Reflection {
+  id                  Int      @id @default(autoincrement())
+  employeeReflection  String   
+  managerReflection   String   
+  reviewId            Int      @unique
+  review              Review   @relation(fields: [reviewId], references: [id])
+}
+
+
+// Development Outlook Model
+model DevelopmentOutlook {
+  id                      Int      @id @default(autoincrement())
+  employeeDevelopment     String   
+  managerDevelopment      String   
+  reviewId                Int      @unique
+  review                  Review   @relation(fields: [reviewId], references: [id])
+}
+
+
+
+// Career Development Model
+model CareerDevelopment {
+  id                      Int      @id @default(autoincrement())
+  employeeCareerGoals     String   
+  managerCareerAssessment String   
+  reviewId                Int      @unique
+  review                  Review   @relation(fields: [reviewId], references: [id])
+}
 
 // PeerReview Model
 model PeerReview {
