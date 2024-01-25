@@ -133,7 +133,6 @@ model Reflection {
   review              Review   @relation(fields: [reviewId], references: [id])
 }
 
-
 // Development Outlook Model
 model DevelopmentOutlook {
   id                      Int      @id @default(autoincrement())
@@ -142,8 +141,6 @@ model DevelopmentOutlook {
   reviewId                Int      @unique
   review                  Review   @relation(fields: [reviewId], references: [id])
 }
-
-
 
 // Career Development Model
 model CareerDevelopment {

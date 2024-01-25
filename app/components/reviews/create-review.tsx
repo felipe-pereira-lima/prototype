@@ -1,38 +1,52 @@
-// CreateReviewForm.tsx
+// CreateReview.tsx
 
 import { Competency, User } from "@prisma/client";
 import { Form } from "@remix-run/react";
 
-interface CreateReviewFormProps {
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import Competencies from "./competencies-section";
+import { Separator } from "../ui/separator";
+
+interface CreateReviewProps {
   competencies: Competency[];
   employee: User;
 }
 
-export function CreateReviewForm({
-  competencies,
-  employee,
-}: CreateReviewFormProps) {
+export function CreateReview({ competencies, employee }: CreateReviewProps) {
   return (
-    <Form method="post" action="/reviews/employee/1/review/latest">
-      <h1>Review for Employee ID: {employee?.fullName}</h1>
-      {competencies?.map((competency) => (
-        <div key={competency.id}>
-          <label htmlFor={`competency-${competency?.id}`}>
-            {competency.name}
-          </label>
-          <input
-            type="number"
-            id={`competency-${competency?.id}`}
-            name={`competency-${competency?.id}`}
-            min="1"
-            max="5"
-            required
-          />
-        </div>
-      ))}
-
-      <input type="hidden" name="employeeId" value={employee?.id} />
-      <button type="submit">Submit Review</button>
-    </Form>
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle>Your assessment</CardTitle>
+        <CardDescription>Contributors: ... </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Separator />
+        <h1 className="text-xl font-bold">Reflections</h1>
+        <Separator />
+        <Competencies competencies={competencies} />
+      </CardContent>
+      <CardFooter className="flex justify-between">
+        <Button variant="outline">Back</Button>
+        <Button>Submit</Button>
+      </CardFooter>
+    </Card>
   );
 }
