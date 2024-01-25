@@ -17,7 +17,6 @@ type CompetenciesProps = {
 export default function Competencies({
   competencies,
 }: CompetenciesProps): JSX.Element {
-  console.log(competencies);
   return (
     <div className="my-4">
       <h1 className="text-xl font-bold">Competencies</h1>

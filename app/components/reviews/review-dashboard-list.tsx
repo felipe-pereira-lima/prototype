@@ -33,6 +33,8 @@ export function ReviewDashboardCard({
     }
   };
 
+  console.log({ label, isReviewComplete, managedEmployees });
+
   const renderOngoingReviewButton = (employee: any) => {
     const ongoingReview = employee.reviews.find(
       (review: Review) => !review.isComplete

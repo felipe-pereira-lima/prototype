@@ -33,16 +33,6 @@ export default function Reflections({
               placeholder="Enter your reflection here"
             />
           </AccordionContent>
-          <AccordionContent>
-            <Label htmlFor="employeeReflection">Employee's Reflection</Label>
-            <Textarea
-              id="employeeReflection"
-              name="employeeReflection"
-              className="m-2"
-              defaultValue={reflections?.employeeReflection || ""}
-              placeholder="Enter your reflection here"
-            />
-          </AccordionContent>
         </AccordionItem>
       </Accordion>
     </div>
