@@ -14,16 +14,16 @@ export function CreateReviewForm({
 }: CreateReviewFormProps) {
   return (
     <Form method="post" action="/reviews/employee/1/review/latest">
-      <h1>Review for Employee ID: {employee.fullName}</h1>
-      {competencies.map((competency) => (
+      <h1>Review for Employee ID: {employee?.fullName}</h1>
+      {competencies?.map((competency) => (
         <div key={competency.id}>
-          <label htmlFor={`competency-${competency.id}`}>
+          <label htmlFor={`competency-${competency?.id}`}>
             {competency.name}
           </label>
           <input
             type="number"
-            id={`competency-${competency.id}`}
-            name={`competency-${competency.id}`}
+            id={`competency-${competency?.id}`}
+            name={`competency-${competency?.id}`}
             min="1"
             max="5"
             required
@@ -31,7 +31,7 @@ export function CreateReviewForm({
         </div>
       ))}
 
-      <input type="hidden" name="employeeId" value={employee.id} />
+      <input type="hidden" name="employeeId" value={employee?.id} />
       <button type="submit">Submit Review</button>
     </Form>
   );
