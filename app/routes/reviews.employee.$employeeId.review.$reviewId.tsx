@@ -1,6 +1,6 @@
 import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { CreateReviewForm } from "~/components/reviews/create-review";
+import { CreateReview } from "~/components/reviews/create-review";
 import { prisma } from "~/db.server";
 import { getAllCompetenciesFromDepartmentByTeamId } from "~/services/competencies/get-all-competencies-of-department-by-team-id.server";
 import { getUserById } from "~/services/user/get-user-by-id.server";
@@ -95,9 +95,6 @@ export const action: ActionFunction = async ({ request }) => {
 export default function ReviewCreateDetails() {
   const data = useLoaderData<typeof loader>();
   return (
-    <CreateReviewForm
-      competencies={data.competencies}
-      employee={data.employee}
-    />
+    <CreateReview competencies={data.competencies} employee={data.employee} />
   );
 }
