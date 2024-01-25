@@ -3,16 +3,16 @@ import { formatDate } from "~/helpers/format-date";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import { Review } from "@prisma/client";
-import { Card } from "../ui/card";
+import { Card, CardContent } from "../ui/card";
+import { Bell } from "phosphor-react";
+import Avatar from "../ui/avatar";
 
 export interface ReviewDashboardCardProps {
-  label: string;
   isReviewComplete: boolean;
   managedEmployees: ManagedEmployee[];
 }
 
 export function ReviewDashboardCard({
-  label,
   isReviewComplete,
   managedEmployees,
 }: ReviewDashboardCardProps) {
@@ -41,7 +41,7 @@ export function ReviewDashboardCard({
       <Button
         onClick={() => navigateToReview(employee.id, ongoingReview?.id, false)}
       >
-        {!ongoingReview ? "New Review" : "Continue"}
+        {!ongoingReview ? "Start" : "Continue"}
       </Button>
     );
   };
@@ -51,10 +51,8 @@ export function ReviewDashboardCard({
       return employee.reviews
         .filter((review: Review) => review.isComplete)
         .map((completedReview: any) => (
-          <div key={completedReview.id}>
-            <p>
-              {formatDate(completedReview.updatedAt)} - {completedReview.name}
-            </p>
+          <div key={completedReview.id} className="flex space-x-4 items-center">
+            <p className="text-xs">{formatDate(completedReview.updatedAt)}</p>
             <Button
               onClick={() =>
                 navigateToReview(employee.id, completedReview.id, true)
@@ -81,22 +79,30 @@ export function ReviewDashboardCard({
     const reviewName =
       finishedReviewsOfSupervisor.length > 0
         ? finishedReviewsOfSupervisor[0].name
-        : "Not published";
+        : "Submit a new review";
 
     console.log(finishedReviewsOfSupervisor);
     return (
-      <li key={employee.id}>
-        <Card>
-          {employee.fullName} - {reviewName}
-          {renderEmployeeReview(employee)}
-        </Card>
+      <li key={employee.id} className="!pt-6">
+        <CardContent className="grid gap-4">
+          <div className=" flex items-center space-x-4 rounded-md border p-4">
+            <Avatar string={employee?.fullName} />
+            <div className="flex-1 space-y-1">
+              <p className="text-sm font-medium leading-none">
+                {employee.fullName}
+              </p>
+              <p className="text-sm text-muted-foreground">{reviewName}</p>
+            </div>
+            {renderEmployeeReview(employee)}
+          </div>
+        </CardContent>
       </li>
     );
   };
 
   return (
-    <Card title={label}>
+    <div className="bg-white py-2 rounded-md border">
       <ul>{managedEmployees?.map(renderEmployeeCard)}</ul>
-    </Card>
+    </div>
   );
 }

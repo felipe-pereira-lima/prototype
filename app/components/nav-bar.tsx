@@ -4,6 +4,7 @@ import { Bell, BracketsSquare, X } from "phosphor-react";
 import { Form } from "@remix-run/react";
 import { Button } from "./ui/button";
 import { useUser } from "~/context/user-context";
+import Avatar from "./ui/avatar";
 
 export default function Navbar(): JSX.Element {
   const user = useUser();
@@ -35,9 +36,7 @@ export default function Navbar(): JSX.Element {
                   <Menu as="div" className="relative ml-4 flex-shrink-0">
                     <div>
                       <Menu.Button className="relative flex rounded-full items-center gap-x-2 text-sm text-black focus:outline-none">
-                        <span className="h-8 w-8 rounded-full flex items-center justify-center bg-indigo-300">
-                          {user?.username[0]?.toUpperCase() ?? ""}
-                        </span>
+                        <Avatar string={user?.fullName} />
                         <span className="sr-only">Your profile</span>
                         <span aria-hidden="true">{user?.fullName}</span>
                       </Menu.Button>
@@ -51,7 +50,7 @@ export default function Navbar(): JSX.Element {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                      <Menu.Items className="absolute text-center right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg focus:outline-none">
+                      <Menu.Items className="absolute text-right right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg focus:outline-none">
                         <Menu.Item>
                           <Form method="post">
                             <Button type="submit" variant="link">
@@ -66,81 +65,6 @@ export default function Navbar(): JSX.Element {
               </div>
             </div>
           </div>
-
-          {/* mobile */}
-          <Disclosure.Panel className="lg:hidden">
-            <div className="space-y-1 px-2 pb-3 pt-2">
-              {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
-              <Disclosure.Button
-                as="a"
-                href="#"
-                className="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white"
-              >
-                Dashboard
-              </Disclosure.Button>
-              <Disclosure.Button
-                as="a"
-                href="#"
-                className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-              >
-                Team
-              </Disclosure.Button>
-              <Disclosure.Button
-                as="a"
-                href="#"
-                className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-              >
-                Projects
-              </Disclosure.Button>
-              <Disclosure.Button
-                as="a"
-                href="#"
-                className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-              >
-                Calendar
-              </Disclosure.Button>
-            </div>
-            <div className="border-t border-gray-700 pb-3 pt-4">
-              <div className="flex items-center px-5">
-                <span className="h-8 w-8 rounded-full flex items-center justify-center bg-blue-100">
-                  {user?.username[0] ?? ""}
-                </span>
-                <span className="sr-only">Your profile</span>
-                <span aria-hidden="true">{user?.username}</span>
-                <button
-                  type="button"
-                  className="relative ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                >
-                  <span className="absolute -inset-1.5" />
-                  <span className="sr-only">View notifications</span>
-                  <Bell className="h-6 w-6" aria-hidden="true" />
-                </button>
-              </div>
-              <div className="mt-3 space-y-1 px-2">
-                <Disclosure.Button
-                  as="a"
-                  href="#"
-                  className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-                >
-                  Your Profile
-                </Disclosure.Button>
-                <Disclosure.Button
-                  as="a"
-                  href="#"
-                  className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-                >
-                  Settings
-                </Disclosure.Button>
-                <Disclosure.Button
-                  as="a"
-                  href="#"
-                  className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-                >
-                  Sign out
-                </Disclosure.Button>
-              </div>
-            </div>
-          </Disclosure.Panel>
         </>
       )}
     </Disclosure>
