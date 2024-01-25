@@ -1,5 +1,5 @@
 import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useParams } from "@remix-run/react";
 import { CreateReview } from "~/components/reviews/create-review";
 import { prisma } from "~/db.server";
 import { getAllCompetenciesFromDepartmentByTeamId } from "~/services/competencies/get-all-competencies-of-department-by-team-id.server";
@@ -49,20 +49,37 @@ export const loader: LoaderFunction = async ({ params }) => {
   return { review, employee, competencies };
 };
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({ request, params }) => {
   const formData = await request.formData();
-  const employeeId = formData.get("employeeId");
+  const employeeId = params.employeeId;
+  const reviewName = formData.get("name");
+
+  // Ensure reviewName is a string
+  const reviewNameString =
+    typeof reviewName === "string" ? reviewName : "Default Review Name";
+
+  const reflectionText = formData.get("reflection");
+
+  console.log(reviewNameString);
+  const developmentOutlookText = formData.get("developmentOutlook");
+  const careerDevelopmentText = formData.get("careerDevelopment");
 
   // Create a new Review record
   const createdReview = await prisma.review.create({
     data: {
-      name: "2024 review",
+      name: reviewNameString,
       employeeId: Number(employeeId),
       companyId: 1,
       supervisorId: 2,
       reviewType: "REVIEW",
       isComplete: true,
-      feedbackText: "You did well!",
+      reflection: {
+        create: {
+          managerReflection:
+            typeof reflectionText === "string" ? reflectionText : "",
+          employeeReflection: "",
+        },
+      },
     },
   });
 
@@ -88,7 +105,7 @@ export const action: ActionFunction = async ({ request }) => {
   // Run the ReviewCompetency creation in a transaction
   await prisma.$transaction(reviewCompetencyPromises);
 
-  return redirect("/to-do-success-page");
+  return redirect("/reviews/dashboard");
 };
 
 // Component

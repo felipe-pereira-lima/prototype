@@ -1,6 +1,5 @@
 // app/routes/reviews/completed/$reviewId.tsx
 
-import { Competency } from "@prisma/client";
 import { useLoaderData } from "@remix-run/react";
 import { getReviewById } from "~/services/reviews/get-review-by-id.server";
 import { Radar } from "react-chartjs-2";
@@ -9,8 +8,6 @@ export const loader = getReviewById;
 
 export default function CompletedReviewDetails() {
   const reviewDetails = useLoaderData<typeof loader>();
-
-  console.log(reviewDetails);
 
   const labels = reviewDetails.competencies.map((c: any) => c.competency.name);
   const scores = reviewDetails.competencies.map((c: any) => c.score);
@@ -39,7 +36,6 @@ export default function CompletedReviewDetails() {
     aspectRatio: 3,
   };
 
-  console.log(reviewDetails);
   return (
     <div>
       <h1>Completed Review for {reviewDetails?.employee?.fullName}</h1>

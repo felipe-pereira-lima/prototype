@@ -94,7 +94,6 @@ model Review {
   companyId    Int
   company      Company            @relation(fields: [companyId], references: [id])
   competencies ReviewCompetency[]
-  feedbackText String?
   createdAt    DateTime           @default(now())
   updatedAt    DateTime           @updatedAt
   employee     User               @relation("employeeReviews", fields: [employeeId], references: [id])
@@ -116,13 +115,10 @@ model ReviewCompetency {
   competency            Competency         @relation(fields: [competencyId], references: [id])
   reviewId              Int
   review                Review             @relation(fields: [reviewId], references: [id])
-  // might discard
-  levelId               Int?               // Optional field to link directly to a CompetencyLevel
-  // might discard
-  level                 CompetencyLevel?   @relation(fields: [levelId], references: [id])
-  employeeAssessment    String?            // Textual self-assessment by the employee
-  supervisorAssessment  String?            // Textual assessment by the supervisor
+  competencyLevelId     Int?               // Add this line
+  competencyLevel       CompetencyLevel?   @relation(fields: [competencyLevelId], references: [id]) // Add this line
 }
+
 
 // Reflection Model
 model Reflection {

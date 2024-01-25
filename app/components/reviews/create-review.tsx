@@ -14,8 +14,10 @@ import { Button } from "../ui/button";
 
 import Competencies from "./competencies-section";
 import { Separator } from "../ui/separator";
-import Reflections from "./reflections.section";
+import Reflections from "./reflections-section";
 import { Form } from "@remix-run/react";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 interface CreateReviewProps {
   competencies: Competency[];
@@ -23,14 +25,16 @@ interface CreateReviewProps {
 }
 
 export function CreateReview({ competencies, employee }: CreateReviewProps) {
-  console.log(employee);
   return (
     <Card className="w-full">
       <CardHeader>
         <CardTitle>{employee.fullName}'s assessment</CardTitle>
-        <CardDescription> something here </CardDescription>
+        <CardDescription className="mt-2">
+          <Label htmlFor="managerReflection">Review name</Label>
+          <Input required name="name" className="w-50 mt-1" />
+        </CardDescription>
       </CardHeader>
-      <Form method="post" action={`/reviews/${employee.id}/1/review/latest}`}>
+      <Form method="post">
         <CardContent>
           <Separator />
           <Reflections />

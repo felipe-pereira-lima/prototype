@@ -33,8 +33,6 @@ export function ReviewDashboardCard({
     }
   };
 
-  console.log({ label, isReviewComplete, managedEmployees });
-
   const renderOngoingReviewButton = (employee: any) => {
     const ongoingReview = employee.reviews.find(
       (review: Review) => !review.isComplete
@@ -80,15 +78,16 @@ export function ReviewDashboardCard({
       return null;
     }
 
-    const reviewInfo =
+    const reviewName =
       finishedReviewsOfSupervisor.length > 0
         ? finishedReviewsOfSupervisor[0].name
         : "Not published";
 
+    console.log(finishedReviewsOfSupervisor);
     return (
       <li key={employee.id}>
         <Card>
-          {employee.fullName} - {reviewInfo}
+          {employee.fullName} - {reviewName}
           {renderEmployeeReview(employee)}
         </Card>
       </li>
