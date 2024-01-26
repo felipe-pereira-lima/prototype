@@ -115,8 +115,9 @@ model ReviewCompetency {
   competency            Competency         @relation(fields: [competencyId], references: [id])
   reviewId              Int
   review                Review             @relation(fields: [reviewId], references: [id])
-  competencyLevelId     Int?               // Add this line
-  competencyLevel       CompetencyLevel?   @relation(fields: [competencyLevelId], references: [id]) // Add this line
+  competencyLevelId     Int?
+  competencyLevel       CompetencyLevel?   @relation(fields: [competencyLevelId], references: [id])
+  feedbackText          String?  
 }
 
 

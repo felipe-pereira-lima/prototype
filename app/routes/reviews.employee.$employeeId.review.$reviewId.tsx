@@ -83,18 +83,20 @@ export const action: ActionFunction = async ({ request, params }) => {
     },
   });
 
-  // Prepare ReviewCompetency records
   const reviewCompetencyPromises = [];
   for (const [key, value] of formData.entries()) {
-    if (key.startsWith("competency-")) {
+    if (key.startsWith("competency-") && !key.includes("feedbackText")) {
       const competencyId = parseInt(key.split("-")[1], 10);
       const score = parseInt(value.toString(), 10);
+      const feedbackTextKey = `competency-feedbackText-${competencyId}`;
+      const feedbackText = formData.get(feedbackTextKey) || "";
 
       const reviewCompetencyPromise = prisma.reviewCompetency.create({
         data: {
           reviewId: createdReview.id,
           competencyId: competencyId,
           score: score,
+          feedbackText: typeof feedbackText === "string" ? feedbackText : "",
         },
       });
 

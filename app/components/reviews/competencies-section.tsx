@@ -9,6 +9,7 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { Separator } from "../ui/separator";
+import { Textarea } from "../ui/textarea";
 
 type CompetenciesProps = {
   competencies: Competency[];
@@ -70,6 +71,14 @@ export default function Competencies({
               </Label>
             </div>
           </RadioGroup>
+          <div className="mt-4">
+            <Textarea
+              name={`competency-feedbackText-${competency.id}`}
+              className="w-full mt-1"
+              placeholder="Enter your feedback"
+            />
+          </div>
+          <Separator className="bg-gray-100 mt-4" />
         </div>
       ))}
     </div>
