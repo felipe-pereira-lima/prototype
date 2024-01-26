@@ -23,6 +23,7 @@ import DevelopmentOutlook from "./development-outlook-section";
 import { useForm } from "react-hook-form";
 import clsx from "clsx";
 import { useSnackbar } from "notistack";
+import AlertFormError from "../ui/alert-form-error";
 
 export function CreateReview() {
   const data = useLoaderData() as any;
@@ -73,9 +74,7 @@ export function CreateReview() {
               />
             </div>
             {hasTitleError && (
-              <span className="text-sm text-red-500 mt-1">
-                Review name is required.
-              </span>
+              <AlertFormError message="Review name is required." />
             )}
           </CardDescription>
         </CardHeader>
