@@ -22,8 +22,6 @@ export const loader: LoaderFunction = async ({ params }) => {
       employee.teamId
     );
 
-  console.log(employee);
-
   if (!competencies) {
     throw new Error("User is not assigned to a department");
   }

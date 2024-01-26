@@ -50,7 +50,6 @@ export function CreateReview() {
     });
   };
 
-  console.log(data);
   return (
     <Card className="w-full">
       <Form method="post" onSubmit={handleSubmit(onSubmit)}>

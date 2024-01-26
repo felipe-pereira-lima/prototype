@@ -2,7 +2,7 @@ import { Authenticator, AuthorizationError } from "remix-auth";
 import { FormStrategy } from "remix-auth-form";
 import { sessionStorage } from "../services/session.server";
 
-import { User } from "@prisma/client";
+import { User, EmployeeLevel } from "@prisma/client";
 import { prisma } from "../db.server";
 
 export const authenticator = new Authenticator<User | Error | null>(
@@ -22,21 +22,33 @@ authenticator.use(
       where: {
         email: email,
       },
+      include: {
+        roles: {
+          include: {
+            role: true, // This includes the Role data in the query
+          },
+        },
+      },
     });
 
     // Verify password
     if (user && user.password === password) {
+      const roles = user.roles.map(
+        (userRoleRelation) => userRoleRelation.role.name
+      );
+
       return {
         id: user.id,
-        username: user.username,
+        companyId: user.companyId,
         email: user.email,
         employeeLevel: user.employeeLevel,
         firstName: user.firstName,
         lastName: user.lastName,
         fullName: user.fullName,
         password: user.password,
-        companyId: user.companyId,
+        roles: roles,
         teamId: user.teamId ?? null,
+        username: user.username,
       };
     } else {
       throw new AuthorizationError("Bad Credentials");

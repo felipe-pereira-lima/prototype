@@ -33,7 +33,6 @@ export function SupervisorReviewDashboardCard({
   };
 
   const renderOngoingReviewButton = (employee: any) => {
-    console.log(employee);
     const ongoingReview = employee.reviews.find(
       (review: Review) => !review.isComplete
     );
