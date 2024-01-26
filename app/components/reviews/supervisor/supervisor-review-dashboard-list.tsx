@@ -1,20 +1,20 @@
 import { ManagedEmployee } from "~/utils/types";
 import { formatDate } from "~/helpers/format-date";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { useNavigate } from "react-router-dom";
 import { Review } from "@prisma/client";
-import { CardContent } from "../ui/card";
-import Avatar from "../ui/avatar";
+import { CardContent } from "../../ui/card";
+import Avatar from "../../ui/avatar";
 
-export interface ReviewDashboardCardProps {
+export interface SupervisorReviewDashboardCardProps {
   isReviewComplete: boolean;
   managedEmployees: ManagedEmployee[];
 }
 
-export function ReviewDashboardCard({
+export function SupervisorReviewDashboardCard({
   isReviewComplete,
   managedEmployees,
-}: ReviewDashboardCardProps) {
+}: SupervisorReviewDashboardCardProps) {
   const navigate = useNavigate();
 
   const navigateToReview = (

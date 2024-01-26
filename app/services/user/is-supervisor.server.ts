@@ -1,7 +1,7 @@
 import { LoaderFunction } from "@remix-run/node";
 import { getSession } from "~/services/session.server";
 
-export const isSupervisor: LoaderFunction = async ({ request }) => {
+export const getIsSupervisor: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
   const user = session.get("sessionKey");
 

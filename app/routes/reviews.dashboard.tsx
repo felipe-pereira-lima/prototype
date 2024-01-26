@@ -1,8 +1,7 @@
 // app/routes/reviews.dashboard.tsx
 import { MetaFunction, useLoaderData } from "@remix-run/react";
-import { ReviewDashboardCard } from "~/components/reviews/review-dashboard-list";
-import { Card, CardDescription, CardTitle } from "~/components/ui/card";
-import { Separator } from "~/components/ui/separator";
+import { SupervisorReviewDashboardCard } from "~/components/reviews/supervisor/supervisor-review-dashboard-list";
+import { CardDescription, CardTitle } from "~/components/ui/card";
 import { getManagedEmployees } from "~/services/user/get-managed-employees.server";
 
 export const loader = getManagedEmployees;
@@ -18,7 +17,7 @@ export default function ReviewDashboard() {
     <div className="space-y-2">
       <CardTitle>Ongoing Assessments</CardTitle>
       <CardDescription>Submit a new review.</CardDescription>
-      <ReviewDashboardCard
+      <SupervisorReviewDashboardCard
         managedEmployees={managedEmployees}
         isReviewComplete={false}
       />
@@ -27,7 +26,7 @@ export default function ReviewDashboard() {
       <CardDescription>
         Check previous reviews from your managed employees.
       </CardDescription>
-      <ReviewDashboardCard
+      <SupervisorReviewDashboardCard
         managedEmployees={managedEmployees}
         isReviewComplete={true}
       />

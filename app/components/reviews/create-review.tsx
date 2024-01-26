@@ -21,11 +21,8 @@ import { Label } from "../ui/label";
 import DevelopmentOutlook from "./development-outlook-section";
 
 import { useForm } from "react-hook-form";
-import AlertFormError from "../ui/alert-form-error";
 import clsx from "clsx";
 import { useSnackbar } from "notistack";
-import { LoaderFunction } from "@remix-run/node";
-import { getEmployeeLevel } from "~/services/user/get-user-level";
 
 export function CreateReview() {
   const data = useLoaderData() as any;
