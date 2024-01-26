@@ -22,7 +22,7 @@ export default function DevelopmentOutlook(): JSX.Element {
       </CardDescription>
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="item-1">
-          <AccordionTrigger>
+          <AccordionTrigger className="text-left">
             Based on the evaluation above: What are the two most important
             development goals that your employee should work on?
           </AccordionTrigger>
@@ -33,7 +33,7 @@ export default function DevelopmentOutlook(): JSX.Element {
             <Textarea
               id="managerDevelopment"
               name="managerDevelopment"
-              className="m-2"
+              className="w-full mt-1"
               placeholder="Enter your employee's development outlook here"
             />
           </AccordionContent>

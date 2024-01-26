@@ -3,6 +3,12 @@
 import { useLoaderData } from "@remix-run/react";
 import { getReviewById } from "~/services/reviews/get-review-by-id.server";
 import { Radar } from "react-chartjs-2";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "~/components/ui/card";
 
 export const loader = getReviewById;
 
@@ -38,36 +44,37 @@ export default function CompletedReviewDetails() {
     aspectRatio: 3,
   };
 
+  console.log(reviewDetails);
+
   return (
-    <div>
-      <h1>Completed Review for {reviewDetails?.employee?.fullName}</h1>
-      <p>General feedback: {reviewDetails?.feedbackText}</p>
+    <Card className="max-w-4xl mx-auto my-8 p-4">
+      <CardHeader>
+        <h1 className="text-2xl font-semibold">
+          Completed Review for {reviewDetails?.employee?.fullName}
+        </h1>
+      </CardHeader>
+      <CardContent>
+        <p className="mb-4">Review name: {reviewDetails.name}</p>
+        <div className=" flex items-center space-x-4 rounded-md border p-4">
+          <div className="flex-1 space-y-1">
+            <Radar data={data} options={options} />
+          </div>
+        </div>
 
-      <Radar data={data} options={options} />
-
-      <ul>
-        {reviewDetails?.competencies.map(
-          ({
-            competency,
-            score,
-            supervisorAssessment,
-            employeeAssessment,
-          }: {
-            competency: any;
-            score: any;
-            supervisorAssessment: any;
-            employeeAssessment: any;
-          }) => (
-            <li key={competency.id}>
-              <h1>
-                {competency.name}: {score}
-              </h1>
-              <p>What your supervisor said: {supervisorAssessment}</p>
-              <p>What you said: {employeeAssessment}</p>
-            </li>
-          )
-        )}
-      </ul>
-    </div>
+        <ul className="list-disc pl-5 mt-4">
+          {reviewDetails?.competencies.map(
+            ({ competency, score, feedbackText }: any) => (
+              <li key={competency.id} className="mt-2">
+                <h2 className="font-semibold">
+                  {competency.name}: {score}
+                </h2>
+                <p>Feedback: {feedbackText}</p>
+              </li>
+            )
+          )}
+        </ul>
+      </CardContent>
+      <CardFooter></CardFooter>
+    </Card>
   );
 }

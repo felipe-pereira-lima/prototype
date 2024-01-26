@@ -45,9 +45,7 @@ export default function Competencies({
                   <TooltipTrigger>
                     <Question />
                   </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{competency.description}</p>
-                  </TooltipContent>
+                  <TooltipContent>{competency.description}</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             </div>
