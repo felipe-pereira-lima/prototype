@@ -33,7 +33,7 @@ export default function Reflections({
         <AccordionItem value="item-1">
           <AccordionTrigger>Reflections on the past 6 months</AccordionTrigger>
           <AccordionContent>
-            <Label htmlFor="managerReflection">Manager's Reflection</Label>
+            <Label>Manager's Reflection</Label>
             <Textarea
               {...register("managerReflection", { required: true })}
               id="managerReflection"

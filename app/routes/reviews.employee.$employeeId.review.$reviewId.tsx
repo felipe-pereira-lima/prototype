@@ -4,6 +4,7 @@ import { CreateReview } from "~/components/reviews/create-review";
 import { prisma } from "~/db.server";
 import { getAllCompetenciesFromDepartmentByTeamId } from "~/services/competencies/get-all-competencies-of-department-by-team-id.server";
 import { getUserById } from "~/services/user/get-user-by-id.server";
+import { getEmployeeLevel } from "~/services/user/get-user-level";
 
 export const loader: LoaderFunction = async ({ params }) => {
   const { reviewId, employeeId } = params;
@@ -21,8 +22,16 @@ export const loader: LoaderFunction = async ({ params }) => {
       employee.teamId
     );
 
+  console.log(employee);
+
   if (!competencies) {
-    throw new Error("No competencies for this company");
+    throw new Error("User is not assigned to a department");
+  }
+
+  const employeeLevel = await getEmployeeLevel(employee.id);
+
+  if (!employeeLevel) {
+    throw new Error("User has no skill level");
   }
 
   let review = null;
@@ -46,7 +55,7 @@ export const loader: LoaderFunction = async ({ params }) => {
     });
   }
 
-  return { review, employee, competencies };
+  return { review, employee, competencies, employeeLevel };
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -118,7 +127,5 @@ export const action: ActionFunction = async ({ request, params }) => {
 // Component
 export default function ReviewCreateDetails() {
   const data = useLoaderData<typeof loader>();
-  return (
-    <CreateReview competencies={data.competencies} employee={data.employee} />
-  );
+  return <CreateReview />;
 }

@@ -11,67 +11,68 @@ generator client {
 // User Model (linked to a Company)
 model User {
   id                Int               @id @default(autoincrement())
-  username          String            @unique @db.VarChar(255)
-  email             String            @unique
-  firstName         String
-  lastName          String
-  fullName          String
-  password          String
-  role              UserRole          @default(EMPLOYEE)
-  companyId         Int
   company           Company           @relation(fields: [companyId], references: [id])
-  reviews           Review[]          @relation("employeeReviews")
-  givenReviews      Review[]          @relation("supervisorReviews")
-  peerReviews       PeerReview[]      @relation("reviewedBy")
-  givenPeerReviews  PeerReview[]      @relation("reviewer")
-  teamId            Int?
-  team              Team?             @relation(fields: [teamId], references: [id])
-  meetings          Meeting[]
-  meetingAttendance MeetingAttendee[]
+  companyId         Int
   competencies      Competency[]      @relation("userCompetencies")
+  email             String            @unique
+  employeeLevel     EmployeeLevel     @default(INTERN)
+  firstName         String
+  fullName          String
+  givenPeerReviews  PeerReview[]      @relation("reviewer")
+  givenReviews      Review[]          @relation("supervisorReviews")
+  lastName          String
+  meetingAttendance MeetingAttendee[]
+  meetings          Meeting[]
+  password          String
+  peerReviews       PeerReview[]      @relation("reviewedBy")
+  reviews           Review[]          @relation("employeeReviews")
+  role              UserRole          @default(EMPLOYEE)
+  team              Team?             @relation(fields: [teamId], references: [id])
+  teamId            Int
+  username          String            @unique @db.VarChar(255)
 }
 
 // Company Model
 model Company {
   id          Int          @id @default(autoincrement())
+  departments Department[]
+  meetings    Meeting[]
   name        String
-  users       User[] 
-  teams       Team[] 
-  meetings    Meeting[] 
-  reviews     Review[] 
-  departments Department[] 
+  reviews     Review[]
+  teams       Team[]
+  users       User[]
 }
 
 // Department Model - Represents a department within a company
 model Department {
   id           Int          @id @default(autoincrement())
-  name         String
-  companyId    Int
   company      Company      @relation(fields: [companyId], references: [id])
-  teams        Team[] 
-  competencies Competency[] 
+  companyId    Int
+  competencies Competency[]
+  name         String
+  teams        Team[]
 }
 
 // Team Model - Represents a team within a company
 model Team {
   id           Int          @id @default(autoincrement())
-  name         String
-  departmentId Int 
-  department   Department   @relation(fields: [departmentId], references: [id])
-  companyId    Int 
   company      Company      @relation(fields: [companyId], references: [id]) // Back-relation to Company
-  members      User[] 
+  companyId    Int
   competencies Competency[] @relation("teamCompetencies")
+  department   Department   @relation(fields: [departmentId], references: [id])
+  departmentId Int
+  members      User[]
+  name         String
 }
 
 // Competency Model - Represents a specific skill or attribute
 model Competency {
   id                 Int                @id @default(autoincrement())
-  name               String
-  description        String
-  departmentId       Int 
   department         Department         @relation(fields: [departmentId], references: [id]) // Department associated with the competency
+  departmentId       Int
+  description        String
   levels             CompetencyLevel[]
+  name               String
   reviewCompetencies ReviewCompetency[]
   teams              Team[]             @relation("teamCompetencies")
   users              User[]             @relation("userCompetencies")
@@ -80,73 +81,72 @@ model Competency {
 // CompetencyLevel Model
 model CompetencyLevel {
   id                 Int                @id @default(autoincrement())
-  level              EmployeeLevel
-  description        String
-  competencyId       Int
   competency         Competency         @relation(fields: [competencyId], references: [id])
+  competencyId       Int
+  description        String
+  level              EmployeeLevel
   reviewCompetencies ReviewCompetency[]
 }
 
 // Review Model (linked to a Company)
 model Review {
-  id           Int                @id @default(autoincrement())
-  name         String?
-  companyId    Int
-  company      Company            @relation(fields: [companyId], references: [id])
-  competencies ReviewCompetency[]
-  createdAt    DateTime           @default(now())
-  updatedAt    DateTime           @updatedAt
-  employee     User               @relation("employeeReviews", fields: [employeeId], references: [id])
-  employeeId   Int
-  supervisor   User               @relation("supervisorReviews", fields: [supervisorId], references: [id])
-  supervisorId Int
-  reviewType   ReviewType 
-  isComplete   Boolean            @default(false) 
-  reflection          Reflection?           
-  developmentOutlook  DevelopmentOutlook?   
-  careerDevelopment   CareerDevelopment?    
+  id                 Int                 @id @default(autoincrement())
+  careerDevelopment  CareerDevelopment?
+  company            Company             @relation(fields: [companyId], references: [id])
+  companyId          Int
+  competencies       ReviewCompetency[]
+  createdAt          DateTime            @default(now())
+  developmentOutlook DevelopmentOutlook?
+  employee           User                @relation("employeeReviews", fields: [employeeId], references: [id])
+  employeeId         Int
+  isComplete         Boolean             @default(false)
+  name               String?
+  reflection         Reflection?
+  reviewType         ReviewType
+  supervisor         User                @relation("supervisorReviews", fields: [supervisorId], references: [id])
+  supervisorId       Int
+  updatedAt          DateTime            @updatedAt
 }
 
 // ReviewCompetency Model
 model ReviewCompetency {
-  id                    Int                @id @default(autoincrement())
-  score                 Int
-  competencyId          Int
-  competency            Competency         @relation(fields: [competencyId], references: [id])
-  reviewId              Int
-  review                Review             @relation(fields: [reviewId], references: [id])
-  competencyLevelId     Int?
-  competencyLevel       CompetencyLevel?   @relation(fields: [competencyLevelId], references: [id])
-  feedbackText          String?  
+  id                Int              @id @default(autoincrement())
+  competency        Competency       @relation(fields: [competencyId], references: [id])
+  competencyId      Int
+  competencyLevel   CompetencyLevel? @relation(fields: [competencyLevelId], references: [id])
+  competencyLevelId Int?
+  feedbackText      String?
+  review            Review           @relation(fields: [reviewId], references: [id])
+  reviewId          Int
+  score             Int
 }
-
 
 // Reflection Model
 model Reflection {
-  id                  Int      @id @default(autoincrement())
-  employeeReflection  String   
-  managerReflection   String   
-  reviewId            Int      @unique
-  review              Review   @relation(fields: [reviewId], references: [id])
+  id                 Int    @id @default(autoincrement())
+  employeeReflection String
+  managerReflection  String
+  reviewId           Int    @unique
+  review             Review @relation(fields: [reviewId], references: [id])
 }
 
 // Development Outlook Model
 model DevelopmentOutlook {
-  id                      Int      @id @default(autoincrement())
-  employeeDevelopment     String   
-  managerDevelopment      String   
-  reviewId                Int      @unique
-  review                  Review   @relation(fields: [reviewId], references: [id])
+  id                  Int    @id @default(autoincrement())
+  employeeDevelopment String
+  managerDevelopment  String
+  reviewId            Int    @unique
+  review              Review @relation(fields: [reviewId], references: [id])
 }
 
 // Career Development Model
 model CareerDevelopment {
-  id                      Int      @id @default(autoincrement())
-  employeeCareerGoals     String   
+  id                      Int    @id @default(autoincrement())
+  employeeCareerGoals     String
   // TODO: managerCareerAssessment can go..., this should an employee self review
-  managerCareerAssessment String   
-  reviewId                Int      @unique
-  review                  Review   @relation(fields: [reviewId], references: [id])
+  managerCareerAssessment String
+  reviewId                Int    @unique
+  review                  Review @relation(fields: [reviewId], references: [id])
 }
 
 // PeerReview Model

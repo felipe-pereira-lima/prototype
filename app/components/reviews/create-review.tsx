@@ -15,7 +15,7 @@ import { Button } from "../ui/button";
 import Competencies from "./competencies-section";
 import { Separator } from "../ui/separator";
 import Reflections from "./reflections-section";
-import { Form, useNavigate } from "@remix-run/react";
+import { Form, useLoaderData, useNavigate } from "@remix-run/react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import DevelopmentOutlook from "./development-outlook-section";
@@ -24,22 +24,19 @@ import { useForm } from "react-hook-form";
 import AlertFormError from "../ui/alert-form-error";
 import clsx from "clsx";
 import { useSnackbar } from "notistack";
+import { LoaderFunction } from "@remix-run/node";
+import { getEmployeeLevel } from "~/services/user/get-user-level";
 
-interface CreateReviewProps {
-  competencies: Competency[];
-  employee: User;
-}
+export function CreateReview() {
+  const data = useLoaderData() as any;
 
-export function CreateReview({ competencies, employee }: CreateReviewProps) {
   const navigate = useNavigate();
-
   const { enqueueSnackbar } = useSnackbar();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
   } = useForm();
 
   const hasTitleError = Boolean(errors.name);
@@ -48,9 +45,6 @@ export function CreateReview({ competencies, employee }: CreateReviewProps) {
     // Prevent default form submission initially
     event.preventDefault();
 
-    // Perform client-side validation
-    console.log(data);
-
     // If validation passes, proceed with the Remix form submission
     event.target.submit();
 
@@ -58,21 +52,34 @@ export function CreateReview({ competencies, employee }: CreateReviewProps) {
       variant: "success",
     });
   };
+
+  console.log(data);
   return (
     <Card className="w-full">
       <Form method="post" onSubmit={handleSubmit(onSubmit)}>
         <CardHeader>
-          <CardTitle>{employee.fullName}'s assessment</CardTitle>
-          <CardDescription className="mt-2">
-            <Label htmlFor="managerReflection">Review name</Label>
-            <Input
-              className={clsx("mt-2 w-50", {
-                "border-red-500": hasTitleError,
-              })}
-              {...register("name", { required: true })}
-            />
+          <CardTitle>{data.employee.fullName}'s Assessment</CardTitle>
+          <CardDescription className="mt-4">
+            <div className="flex flex-col space-y-2">
+              <Label className="text-lg font-medium">
+                Seniority level - {data.employeeLevel.toLowerCase()}
+              </Label>
+              <Label className="pt-2 text-black">Review's name</Label>
+              <Input
+                id="managerReflection"
+                className={clsx(
+                  "p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
+                  {
+                    "border-red-500": hasTitleError,
+                  }
+                )}
+                {...register("name", { required: true })}
+              />
+            </div>
             {hasTitleError && (
-              <AlertFormError message="Review name is required." />
+              <span className="text-sm text-red-500 mt-1">
+                Review name is required.
+              </span>
             )}
           </CardDescription>
         </CardHeader>
@@ -80,7 +87,7 @@ export function CreateReview({ competencies, employee }: CreateReviewProps) {
           <Separator />
           <Reflections register={register} errors={errors} />
           <Competencies
-            competencies={competencies}
+            competencies={data.competencies}
             register={register}
             errors={errors}
           />

@@ -33,6 +33,7 @@ export function ReviewDashboardCard({
   };
 
   const renderOngoingReviewButton = (employee: any) => {
+    console.log(employee);
     const ongoingReview = employee.reviews.find(
       (review: Review) => !review.isComplete
     );
@@ -80,7 +81,6 @@ export function ReviewDashboardCard({
         ? finishedReviewsOfSupervisor[0].name
         : "Submit a new review";
 
-    console.log(finishedReviewsOfSupervisor);
     return (
       <li key={employee.id} className="!pt-6">
         <CardContent className="grid gap-4">
