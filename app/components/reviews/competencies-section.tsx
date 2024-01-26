@@ -10,6 +10,7 @@ import {
 } from "../ui/tooltip";
 import { Separator } from "../ui/separator";
 import { Textarea } from "../ui/textarea";
+import { CardDescription } from "../ui/card";
 
 type CompetenciesProps = {
   competencies: Competency[];
@@ -21,7 +22,19 @@ export default function Competencies({
   return (
     <div className="my-4">
       <h1 className="text-xl font-bold">Competencies</h1>
-      <Separator className="bg-gray-100 mt-4" />
+      <CardDescription>
+        <ul className="my-1">
+          <li>Please evaluate yourself / your employee based on:</li>
+          <li>(1) the seniority level and</li>
+          <li>(2) the current role / job description.</li>
+          <li>
+            If the rating differs from "Meets the expectations for current
+            position", please include remarks on:
+          </li>
+          <li>(+) what is going well and</li>
+          <li>(!) where you see room for improvement.</li>
+        </ul>
+      </CardDescription>
       {competencies?.map((competency, index) => (
         <div key={competency.id} className="my-4">
           <div className="flex flex-row space-x-1 items-center">
@@ -78,9 +91,9 @@ export default function Competencies({
               placeholder="Enter your feedback"
             />
           </div>
-          <Separator className="bg-gray-100 mt-4" />
         </div>
       ))}
+      <Separator className="mt-4" />
     </div>
   );
 }

@@ -9,6 +9,8 @@ export const loader = getReviewById;
 export default function CompletedReviewDetails() {
   const reviewDetails = useLoaderData<typeof loader>();
 
+  console.log(reviewDetails);
+
   const labels = reviewDetails.competencies.map((c: any) => c.competency.name);
   const scores = reviewDetails.competencies.map((c: any) => c.score);
 

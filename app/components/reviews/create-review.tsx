@@ -18,6 +18,7 @@ import Reflections from "./reflections-section";
 import { Form, useNavigate } from "@remix-run/react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import DevelopmentOutlook from "./development-outlook-section";
 
 interface CreateReviewProps {
   competencies: Competency[];
@@ -40,6 +41,7 @@ export function CreateReview({ competencies, employee }: CreateReviewProps) {
           <Separator />
           <Reflections />
           <Competencies competencies={competencies} />
+          <DevelopmentOutlook />
         </CardContent>
         <CardFooter className="flex justify-between">
           <Button variant="outline" onClick={() => navigate(-1)}>

@@ -143,6 +143,7 @@ model DevelopmentOutlook {
 model CareerDevelopment {
   id                      Int      @id @default(autoincrement())
   employeeCareerGoals     String   
+  // TODO: managerCareerAssessment can go..., this should an employee self review
   managerCareerAssessment String   
   reviewId                Int      @unique
   review                  Review   @relation(fields: [reviewId], references: [id])

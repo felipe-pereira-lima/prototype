@@ -54,15 +54,11 @@ export const action: ActionFunction = async ({ request, params }) => {
   const employeeId = params.employeeId;
   const reviewName = formData.get("name");
 
-  // Ensure reviewName is a string
   const reviewNameString =
     typeof reviewName === "string" ? reviewName : "Default Review Name";
 
   const reflectionText = formData.get("reflection");
-
-  console.log(reviewNameString);
   const developmentOutlookText = formData.get("developmentOutlook");
-  const careerDevelopmentText = formData.get("careerDevelopment");
 
   // Create a new Review record
   const createdReview = await prisma.review.create({
@@ -78,6 +74,15 @@ export const action: ActionFunction = async ({ request, params }) => {
           managerReflection:
             typeof reflectionText === "string" ? reflectionText : "",
           employeeReflection: "",
+        },
+      },
+      developmentOutlook: {
+        create: {
+          managerDevelopment:
+            typeof developmentOutlookText === "string"
+              ? developmentOutlookText
+              : "",
+          employeeDevelopment: "",
         },
       },
     },
