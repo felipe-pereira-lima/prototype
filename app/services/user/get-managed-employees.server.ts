@@ -37,11 +37,9 @@ export const getManagedEmployees: LoaderFunction = async ({ request }) => {
     return json({ managedEmployees: [] });
   }
 
-  // Fetch the managed employees
   const managedEmployees = await prisma.user.findMany({
     where: {
       companyId: sessionUser.companyId,
-      // Assuming you want to fetch employees that are not supervisors or admins
       roles: {
         none: {
           role: {
