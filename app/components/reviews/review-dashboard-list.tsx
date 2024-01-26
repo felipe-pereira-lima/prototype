@@ -3,8 +3,7 @@ import { formatDate } from "~/helpers/format-date";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import { Review } from "@prisma/client";
-import { Card, CardContent } from "../ui/card";
-import { Bell } from "phosphor-react";
+import { CardContent } from "../ui/card";
 import Avatar from "../ui/avatar";
 
 export interface ReviewDashboardCardProps {

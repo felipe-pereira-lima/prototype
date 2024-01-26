@@ -11,28 +11,38 @@ import {
 import { Separator } from "../ui/separator";
 import { Textarea } from "../ui/textarea";
 import { CardDescription } from "../ui/card";
+import AlertFormError from "../ui/alert-form-error";
+import clsx from "clsx";
+import { UseFormRegister, FieldValues, FieldErrors } from "react-hook-form";
 
 type CompetenciesProps = {
   competencies: Competency[];
+  register: UseFormRegister<FieldValues>;
+  errors: FieldErrors<FieldValues>;
 };
+
+const cardDescription = [
+  "Please evaluate yourself / your employee based on:",
+  "(1) the seniority level and",
+  "(2) the current role / job description.",
+  'If the rating differs from "Meets the expectations for current position", please include remarks on:',
+  "(+) what is going well and",
+  "(!) where you see room for improvement.",
+];
 
 export default function Competencies({
   competencies,
+  register,
+  errors,
 }: CompetenciesProps): JSX.Element {
   return (
     <div className="my-4">
       <h1 className="text-xl font-bold">Competencies</h1>
       <CardDescription>
         <ul className="my-1">
-          <li>Please evaluate yourself / your employee based on:</li>
-          <li>(1) the seniority level and</li>
-          <li>(2) the current role / job description.</li>
-          <li>
-            If the rating differs from "Meets the expectations for current
-            position", please include remarks on:
-          </li>
-          <li>(+) what is going well and</li>
-          <li>(!) where you see room for improvement.</li>
+          {cardDescription.map((item, index) => (
+            <li key={index}>{item}</li>
+          ))}
         </ul>
       </CardDescription>
       {competencies?.map((competency, index) => (
@@ -84,10 +94,19 @@ export default function Competencies({
           </RadioGroup>
           <div className="mt-4">
             <Textarea
+              {...register(`competency-feedbackText-${competency.id}`, {
+                required: true,
+              })}
               name={`competency-feedbackText-${competency.id}`}
-              className="w-full mt-1"
-              placeholder="Enter your feedback"
+              className={clsx("w-full mt-1", {
+                "border-red-500":
+                  errors[`competency-feedbackText-${competency.id}`],
+              })}
+              placeholder={`Enter your feedback for '${competency.name.toLowerCase()}' here`}
             />
+            {errors[`competency-feedbackText-${competency.id}`] && (
+              <AlertFormError message={`${competency.name} is required.`} />
+            )}
           </div>
         </div>
       ))}

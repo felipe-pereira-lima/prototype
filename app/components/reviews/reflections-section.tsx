@@ -1,4 +1,3 @@
-import { Separator } from "../ui/separator";
 import {
   Accordion,
   AccordionContent,
@@ -7,24 +6,46 @@ import {
 } from "../ui/accordion";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
+import clsx from "clsx";
+import AlertFormError from "../ui/alert-form-error";
+import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
 
-type ReflectionsProps = {};
+type ReflectionsProps = {
+  register: UseFormRegister<FieldValues>;
+  errors: FieldErrors<FieldValues>;
+};
 
-export default function Reflections({}: ReflectionsProps): JSX.Element {
+export default function Reflections({
+  register,
+  errors,
+}: ReflectionsProps): JSX.Element {
+  const hasError = Boolean(errors.managerReflection);
+
   return (
     <div className="my-4">
       <h1 className="text-xl font-bold">Reflections</h1>
-      <Accordion type="single" collapsible className="w-full">
+      <Accordion
+        type="single"
+        collapsible
+        className="w-full"
+        defaultValue="item-1"
+      >
         <AccordionItem value="item-1">
           <AccordionTrigger>Reflections on the past 6 months</AccordionTrigger>
           <AccordionContent>
             <Label htmlFor="managerReflection">Manager's Reflection</Label>
             <Textarea
+              {...register("managerReflection", { required: true })}
               id="managerReflection"
               name="managerReflection"
-              className="m-2"
+              className={clsx("mt-2", {
+                "border-red-500": hasError,
+              })}
               placeholder="Enter your reflection here"
             />
+            {hasError && (
+              <AlertFormError message="Manager reflection is required." />
+            )}
           </AccordionContent>
         </AccordionItem>
       </Accordion>
