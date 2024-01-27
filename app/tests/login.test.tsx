@@ -45,10 +45,6 @@ describe("LoginPage", () => {
 
     // Simulate form submission
     fireEvent.click(submitButton);
-
-    // Assert expected behavior for successful login
-    // Example: Check if redirected to the homepage or a success message is shown
-    // This part depends on how your component handles redirection or success indication
   });
 
   it("shows an error message with incorrect credentials", async () => {
@@ -67,9 +63,6 @@ describe("LoginPage", () => {
     fireEvent.click(submitButton);
 
     // Assert expected behavior for failed login
-    // Check for the presence of an error message
     expect(await screen.findByText(/error/i)).toBeInTheDocument();
   });
-
-  // Additional tests can be written for other scenarios like empty fields, etc.
 });
