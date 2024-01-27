@@ -2,7 +2,6 @@ module.exports = {
   root: true,
   ignorePatterns: ["**/*"],
   plugins: [
-    "@nx",
     "@typescript-eslint",
     "react",
     "import",
@@ -14,21 +13,6 @@ module.exports = {
   overrides: [
     {
       files: ["*.ts", "*.tsx", "*.js", "*.jsx"],
-      rules: {
-        "@nx/enforce-module-boundaries": [
-          "warn",
-          {
-            enforceBuildableLibDependency: true,
-            allow: [],
-            depConstraints: [
-              {
-                sourceTag: "*",
-                onlyDependOnLibsWithTags: ["*"],
-              },
-            ],
-          },
-        ],
-      },
     },
     {
       files: ["*.ts", "*.tsx"],
@@ -36,11 +20,8 @@ module.exports = {
         project: ["tsconfig.*?.json"],
       },
       extends: [
-        "plugin:@nx/typescript",
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
-        // "plugin:@typescript-eslint/recommended-requiring-type-checking",
-        // "plugin:@typescript-eslint/strict",
         "plugin:react/recommended",
         "plugin:react/jsx-runtime",
       ],
@@ -53,7 +34,7 @@ module.exports = {
             selector: "variable",
             modifiers: ["const"],
             format: ["PascalCase", "camelCase", "UPPER_CASE"],
-          },
+          }, // allows const to be UPPER_CASE
           { selector: "function", format: ["camelCase", "PascalCase"] },
           { selector: "typeLike", format: ["PascalCase"] },
           {
@@ -88,11 +69,56 @@ module.exports = {
             allowAny: true,
           },
         ],
+        "import/no-default-export": "error",
+        "no-unreachable": "warn",
+        "react/forbid-component-props": [
+          "warn",
+          {
+            forbid: [
+              {
+                propName: "style",
+                allowedFor: ["ReactDataGrid"],
+                message:
+                  "style prop should only be used on DOM elements. Component styles are preferable controlled by custom props",
+              },
+            ],
+          },
+        ],
+        "react/function-component-definition": [
+          "warn",
+          {
+            namedComponents: ["function-declaration"],
+          },
+        ],
+        "react/hook-use-state": "warn",
+        "react/no-array-index-key": "error",
+        "react/no-danger": "error",
+        "react/no-multi-comp": ["warn", { ignoreStateless: true }],
+        "react-refresh/only-export-components": "warn",
+        "react/prop-types": "off",
+        "react/jsx-sort-props": [
+          "warn",
+          {
+            callbacksLast: true,
+            shorthandFirst: true,
+            reservedFirst: true,
+          },
+        ],
+        "typescript-sort-keys/interface": "warn",
+        "typescript-sort-keys/string-enum": "warn",
+        "sort-destructure-keys/sort-destructure-keys": "warn",
+        "sort-keys": "off", // disable default eslint sort-keys for plugin
+        "sort-keys/sort-keys-fix": "warn",
+
+        "react/jsx-no-constructed-context-values": "warn",
+        "react/jsx-no-target-blank": "error",
+        "react/jsx-no-useless-fragment": "warn",
+        "object-shorthand": "warn",
+        "no-console": ["error", { allow: ["warn", "error"] }],
       },
     },
     {
       files: ["*.js", "*.jsx"],
-      extends: ["plugin:@nx/javascript"],
       rules: {},
     },
     {
