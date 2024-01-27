@@ -1,7 +1,4 @@
 // CreateReview.tsx
-
-import { Competency, User } from "@prisma/client";
-
 import {
   Card,
   CardContent,
@@ -24,6 +21,8 @@ import { useForm } from "react-hook-form";
 import clsx from "clsx";
 import { useSnackbar } from "notistack";
 import AlertFormError from "../ui/alert-form-error";
+import { useState } from "react";
+import ConfirmationDialog from "../ui/review/confirmation-dialog";
 
 export function CreateReview() {
   const data = useLoaderData() as any;
@@ -38,22 +37,31 @@ export function CreateReview() {
   } = useForm();
 
   const hasTitleError = Boolean(errors.name);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const onSubmit = (data: any, event: any) => {
-    // Prevent default form submission initially
     event.preventDefault();
+    setIsDialogOpen(true);
+  };
 
-    // If validation passes, proceed with the Remix form submission
-    event.target.submit();
+  const handleDialogConfirm = () => {
+    setIsDialogOpen(false);
+
+    const form = document.getElementById("create-form") as HTMLFormElement;
+    form?.submit();
 
     enqueueSnackbar("Success", {
       variant: "success",
     });
   };
 
+  const handleDialogCancel = () => {
+    setIsDialogOpen(false);
+  };
+
   return (
     <Card className="w-full">
-      <Form method="post" onSubmit={handleSubmit(onSubmit)}>
+      <Form id="create-form" method="post" onSubmit={handleSubmit(onSubmit)}>
         <CardHeader>
           <CardTitle>{data.employee.fullName}'s Assessment</CardTitle>
           <CardDescription className="mt-4">
@@ -95,6 +103,15 @@ export function CreateReview() {
           <Button>Submit</Button>
         </CardFooter>
       </Form>
+      {isDialogOpen && (
+        <ConfirmationDialog
+          isOpen={isDialogOpen}
+          onConfirm={handleDialogConfirm}
+          onCancel={handleDialogCancel}
+          title="Confirm Submission"
+          description="Are you sure you want to submit this form?"
+        />
+      )}
     </Card>
   );
 }

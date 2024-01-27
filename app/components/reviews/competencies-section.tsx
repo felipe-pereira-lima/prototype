@@ -30,6 +30,14 @@ const cardDescription = [
   "(!) where you see room for improvement.",
 ];
 
+const competencyLevels = {
+  1: "Does not meet expectations for current position",
+  2: "Improvement required to meet expectations for current position.",
+  3: "Meets expectations for current position.",
+  4: "Sometimes exceeds expectations for current position.",
+  5: "Consistently exceeds expectations for current position.",
+};
+
 export default function Competencies({
   competencies,
   register,
@@ -45,6 +53,7 @@ export default function Competencies({
           ))}
         </ul>
       </CardDescription>
+
       {competencies?.map((competency, index) => (
         <div key={competency.id} className="my-4">
           <div className="flex flex-row space-x-1 items-center">
@@ -60,38 +69,22 @@ export default function Competencies({
               </TooltipProvider>
             </div>
           </div>
+
           <RadioGroup name={`competency-${competency.id}`}>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="1" id={`competency-${competency.id}-1`} />
-              <Label htmlFor={`competency-${competency.id}-1`}>
-                Does not meet expectations for current position.
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="2" id={`competency-${competency.id}-2`} />
-              <Label htmlFor={`competency-${competency.id}-2`}>
-                Improvement required to meet expectations for current position.
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="3" id={`competency-${competency.id}-3`} />
-              <Label htmlFor={`competency-${competency.id}-3`}>
-                Meets expectations for current position.
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="4" id={`competency-${competency.id}-4`} />
-              <Label htmlFor={`competency-${competency.id}-4`}>
-                Sometimes exceeds expectations for current position.
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="5" id={`competency-${competency.id}-5`} />
-              <Label htmlFor={`competency-${competency.id}-5`}>
-                Consistently exceeds expectations for current position.
-              </Label>
-            </div>
+            {Object.entries(competencyLevels).map(([value, label]) => (
+              <div key={value} className="flex items-center space-x-2">
+                <RadioGroupItem
+                  value={value}
+                  id={`competency-${competency.id}-${value}`}
+                  {...register(`competency-${competency.id}`)}
+                />
+                <Label htmlFor={`competency-${competency.id}-${value}`}>
+                  {label}
+                </Label>
+              </div>
+            ))}
           </RadioGroup>
+
           <div className="mt-4">
             <Textarea
               {...register(`competency-feedbackText-${competency.id}`, {
@@ -104,6 +97,7 @@ export default function Competencies({
               })}
               placeholder={`Enter your feedback for '${competency.name.toLowerCase()}' here`}
             />
+
             {errors[`competency-feedbackText-${competency.id}`] && (
               <AlertFormError message={`${competency.name} is required.`} />
             )}
