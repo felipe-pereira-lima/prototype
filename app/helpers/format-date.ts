@@ -18,11 +18,11 @@ interface FormatDateOptions {
 
 export function formatDate(
   date: DateInput,
-  { locales = "en-UK", showTime = true }: FormatDateOptions = {}
+  { locales, showTime = true }: FormatDateOptions = {}
 ): string {
   if (!date || isNaN(new Date(date).getTime())) return "";
 
-  return new Intl.DateTimeFormat(locales, {
+  return new Intl.DateTimeFormat(locales || "en-UK", {
     dateStyle: "short",
     ...(showTime && { timeStyle: "medium" }),
   }).format(new Date(date));
