@@ -4,7 +4,6 @@ export interface WelcomeCardProps {
   data: any;
 }
 export default function WelcomeCard({ data }: WelcomeCardProps): JSX.Element {
-  console.log(data);
   return (
     <Card>
       <CardHeader>

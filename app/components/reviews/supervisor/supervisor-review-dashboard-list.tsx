@@ -109,10 +109,6 @@ export function SupervisorReviewDashboardCard({
       return null;
     }
 
-    const selectedReview = employee.reviews.find((review: any) =>
-      console.log(review)
-    );
-
     return (
       <li key={employee.id} className="!pt-6">
         <CardContent className="grid gap-4">
