@@ -103,3 +103,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Wrap and break text for ag-grid cells */
+.ag-cell-wrapper {
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 30px;
+}
