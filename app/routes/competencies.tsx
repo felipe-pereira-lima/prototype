@@ -1,6 +1,6 @@
 import { Department } from "@prisma/client";
 import { useLoaderData } from "@remix-run/react";
-import CompetenciesGrid from "~/components/reviews/competencies/grid";
+import CompetenciesGrid from "~/components/competencies/grid";
 import { getDepartmentsOfCompany } from "~/services/departments/get-departments-of-company.server";
 
 import { useState, useEffect } from "react";

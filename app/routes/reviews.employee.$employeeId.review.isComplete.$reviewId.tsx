@@ -11,11 +11,10 @@ import {
 } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
 import { Label } from "~/components/ui/label";
-import Reflections from "~/components/reviews/reflections/create-reflections-section";
-import { Textarea } from "~/components/ui/textarea";
-import ViewReflections from "~/components/reviews/reflections/view-reflections-section";
-import DevelopmentOutlook from "~/components/reviews/development-outlook/create-development-outlook-section";
-import ViewDevelopmentOutlook from "~/components/reviews/development-outlook/view-development-outlook-section";
+
+import ViewDevelopmentOutlook from "~/components/reviews/development-outlook/view-development-outlook";
+import ViewReflections from "~/components/reviews/reflection/view-reflection";
+import ViewCompetencies from "~/components/reviews/competencies/view-competencies";
 
 export const loader = getReviewById;
 
@@ -50,7 +49,6 @@ export default function CompletedReviewDetails() {
   };
 
   console.log(reviewDetails);
-
   return (
     <Card className="w-full">
       <CardHeader>
@@ -79,6 +77,7 @@ export default function CompletedReviewDetails() {
           <div className="rounded-md border p-4 my-4">
             <Radar data={data} options={options} />
           </div>
+          <ViewCompetencies competencies={reviewDetails.competencies} />
         </CardContent>
         <Separator />
         <ViewDevelopmentOutlook

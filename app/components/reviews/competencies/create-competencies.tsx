@@ -14,28 +14,12 @@ import { CardDescription } from "../../ui/card";
 import AlertFormError from "../../ui/alert-form-error";
 import clsx from "clsx";
 import { UseFormRegister, FieldValues, FieldErrors } from "react-hook-form";
+import { cardDescription, competencyLevels } from "~/utils/constants";
 
 type CompetenciesProps = {
   competencies: Competency[];
   register: UseFormRegister<FieldValues>;
   errors: FieldErrors<FieldValues>;
-};
-
-const cardDescription = [
-  "Please evaluate yourself / your employee based on:",
-  "(1) the seniority level and",
-  "(2) the current role / job description.",
-  'If the rating differs from "Meets the expectations for current position", please include remarks on:',
-  "(+) what is going well and",
-  "(!) where you see room for improvement.",
-];
-
-const competencyLevels = {
-  1: "Does not meet expectations for current position",
-  2: "Improvement required to meet expectations for current position.",
-  3: "Meets expectations for current position.",
-  4: "Sometimes exceeds expectations for current position.",
-  5: "Consistently exceeds expectations for current position.",
 };
 
 export default function Competencies({
