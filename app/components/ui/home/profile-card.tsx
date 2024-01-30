@@ -24,6 +24,10 @@ export default function ProfileCard({ data }: ProfileCardProps): JSX.Element {
     setIsOpen(true);
   };
 
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
   const handleSave = () => {};
 
   return (
@@ -43,7 +47,7 @@ export default function ProfileCard({ data }: ProfileCardProps): JSX.Element {
       </Card>
 
       {isOpen && (
-        <Dialog open={isOpen}>
+        <Dialog open={isOpen} onOpenChange={handleClose}>
           <DialogTrigger asChild>
             <Button variant="outline">Edit Profile</Button>
           </DialogTrigger>
