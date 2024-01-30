@@ -1,5 +1,5 @@
-import { Label } from "../ui/label";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { Label } from "../../ui/label";
+import { RadioGroup, RadioGroupItem } from "../../ui/radio-group";
 import { Competency } from "@prisma/client";
 import { Question } from "phosphor-react";
 import {
@@ -7,11 +7,11 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../ui/tooltip";
-import { Separator } from "../ui/separator";
-import { Textarea } from "../ui/textarea";
-import { CardDescription } from "../ui/card";
-import AlertFormError from "../ui/alert-form-error";
+} from "../../ui/tooltip";
+import { Separator } from "../../ui/separator";
+import { Textarea } from "../../ui/textarea";
+import { CardDescription } from "../../ui/card";
+import AlertFormError from "../../ui/alert-form-error";
 import clsx from "clsx";
 import { UseFormRegister, FieldValues, FieldErrors } from "react-hook-form";
 

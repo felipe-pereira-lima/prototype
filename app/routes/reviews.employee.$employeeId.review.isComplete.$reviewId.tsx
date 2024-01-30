@@ -1,5 +1,3 @@
-// app/routes/reviews/completed/$reviewId.tsx
-
 import { useLoaderData } from "@remix-run/react";
 import { getReviewById } from "~/services/reviews/get-review-by-id.server";
 import { Radar } from "react-chartjs-2";
@@ -8,7 +6,16 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
+  CardTitle,
+  CardDescription,
 } from "~/components/ui/card";
+import { Separator } from "~/components/ui/separator";
+import { Label } from "~/components/ui/label";
+import Reflections from "~/components/reviews/reflections/create-reflections-section";
+import { Textarea } from "~/components/ui/textarea";
+import ViewReflections from "~/components/reviews/reflections/view-reflections-section";
+import DevelopmentOutlook from "~/components/reviews/development-outlook/create-development-outlook-section";
+import ViewDevelopmentOutlook from "~/components/reviews/development-outlook/view-development-outlook-section";
 
 export const loader = getReviewById;
 
@@ -42,33 +49,42 @@ export default function CompletedReviewDetails() {
     aspectRatio: 3,
   };
 
+  console.log(reviewDetails);
+
   return (
-    <Card className="max-w-4xl mx-auto my-8 p-4">
+    <Card className="w-full">
       <CardHeader>
-        <h1 className="text-2xl font-semibold">
-          Completed Review for {reviewDetails?.employee?.fullName}
-        </h1>
+        <CardTitle>
+          Completed {reviewDetails.employee.fullName}'s Assessment
+        </CardTitle>
+        <CardDescription className="mt-4">
+          <div className="flex flex-col space-y-2">
+            <Label className="text-lg font-medium">
+              Review's name: {reviewDetails.name}
+            </Label>
+            <Label className="pt-2 text-black">
+              Seniority level -{" "}
+              {reviewDetails.employee.employeeLevel.toLowerCase()}
+            </Label>
+          </div>
+        </CardDescription>
       </CardHeader>
+
       <CardContent>
-        <p className="mb-4">Review name: {reviewDetails.name}</p>
-        <div className=" flex items-center space-x-4 rounded-md border p-4">
-          <div className="flex-1 space-y-1">
+        <ViewReflections
+          managerValue={reviewDetails?.reflection?.managerReflection}
+          supervisorName={reviewDetails?.supervisor?.fullName}
+        />
+        <CardContent>
+          <div className="rounded-md border p-4 my-4">
             <Radar data={data} options={options} />
           </div>
-        </div>
-
-        <ul className="list-disc pl-5 mt-4">
-          {reviewDetails?.competencies.map(
-            ({ competency, score, feedbackText }: any) => (
-              <li key={competency.id} className="mt-2">
-                <h2 className="font-semibold">
-                  {competency.name}: {score}
-                </h2>
-                <p>Feedback: {feedbackText}</p>
-              </li>
-            )
-          )}
-        </ul>
+        </CardContent>
+        <Separator />
+        <ViewDevelopmentOutlook
+          managerValue={reviewDetails?.reflection?.managerReflection}
+          supervisorName={reviewDetails?.supervisor?.fullName}
+        />
       </CardContent>
       <CardFooter></CardFooter>
     </Card>

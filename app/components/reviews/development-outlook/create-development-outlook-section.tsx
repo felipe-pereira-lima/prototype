@@ -3,24 +3,24 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../ui/accordion";
+} from "../../ui/accordion";
 
-import { Label } from "../ui/label";
-import { Textarea } from "../ui/textarea";
-import { CardDescription } from "../ui/card";
-import AlertFormError from "../ui/alert-form-error";
+import { Label } from "../../ui/label";
+import { Textarea } from "../../ui/textarea";
+import { CardDescription } from "../../ui/card";
+import AlertFormError from "../../ui/alert-form-error";
 import clsx from "clsx";
 import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
 
-type DevelopmentOutlookProps = {
+type CreateDevelopmentOutlookProps = {
   register: UseFormRegister<FieldValues>;
   errors: FieldErrors<FieldValues>;
 };
 
-export default function DevelopmentOutlook({
+export default function CreateDevelopmentOutlook({
   register,
   errors,
-}: DevelopmentOutlookProps): JSX.Element {
+}: CreateDevelopmentOutlookProps): JSX.Element {
   const hasError = Boolean(errors.managerDevelopment);
 
   return (

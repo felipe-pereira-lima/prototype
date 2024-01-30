@@ -9,13 +9,12 @@ import {
 } from "../ui/card";
 import { Button } from "../ui/button";
 
-import Competencies from "./competencies-section";
+import Competencies from "./competencies/competencies-section";
 import { Separator } from "../ui/separator";
-import Reflections from "./reflections-section";
 import { Form, useLoaderData, useNavigate } from "@remix-run/react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import DevelopmentOutlook from "./development-outlook-section";
+import DevelopmentOutlook from "./development-outlook/create-development-outlook-section";
 
 import { useForm } from "react-hook-form";
 import clsx from "clsx";
@@ -23,6 +22,7 @@ import { useSnackbar } from "notistack";
 import AlertFormError from "../ui/alert-form-error";
 import { useState } from "react";
 import ConfirmationDialog from "../ui/review/confirmation-dialog";
+import CreateReflections from "./reflections/create-reflections-section";
 
 export function CreateReview() {
   const data = useLoaderData() as any;
@@ -88,7 +88,7 @@ export function CreateReview() {
         </CardHeader>
         <CardContent>
           <Separator />
-          <Reflections register={register} errors={errors} />
+          <CreateReflections register={register} errors={errors} />
           <Competencies
             competencies={data.competencies}
             register={register}

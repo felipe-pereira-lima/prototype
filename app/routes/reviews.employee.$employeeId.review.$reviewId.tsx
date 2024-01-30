@@ -64,8 +64,8 @@ export const action: ActionFunction = async ({ request, params }) => {
   const reviewNameString =
     typeof reviewName === "string" ? reviewName : "Default Review Name";
 
-  const reflectionText = formData.get("reflection");
-  const developmentOutlookText = formData.get("developmentOutlook");
+  const reflectionText = formData.get("managerReflection");
+  const developmentOutlookText = formData.get("managerDevelopment");
 
   const createdReview = await prisma.review.create({
     data: {

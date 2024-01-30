@@ -3,22 +3,22 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../ui/accordion";
-import { Label } from "../ui/label";
-import { Textarea } from "../ui/textarea";
+} from "../../ui/accordion";
+import { Label } from "../../ui/label";
+import { Textarea } from "../../ui/textarea";
 import clsx from "clsx";
-import AlertFormError from "../ui/alert-form-error";
+import AlertFormError from "../../ui/alert-form-error";
 import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
 
-type ReflectionsProps = {
+type CreateReflectionsProps = {
   register: UseFormRegister<FieldValues>;
   errors: FieldErrors<FieldValues>;
 };
 
-export default function Reflections({
+export default function CreateReflections({
   register,
   errors,
-}: ReflectionsProps): JSX.Element {
+}: CreateReflectionsProps): JSX.Element {
   const hasError = Boolean(errors.managerReflection);
 
   return (
