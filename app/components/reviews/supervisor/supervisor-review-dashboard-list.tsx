@@ -5,6 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { Review } from "@prisma/client";
 import { CardContent } from "../../ui/card";
 import Avatar from "../../ui/avatar";
+import { useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
 
 export interface SupervisorReviewDashboardCardProps {
   isReviewComplete: boolean;
@@ -16,6 +24,14 @@ export function SupervisorReviewDashboardCard({
   managedEmployees,
 }: SupervisorReviewDashboardCardProps) {
   const navigate = useNavigate();
+
+  const [selectedReviews, setSelectedReviews] = useState<{
+    [key: string]: string;
+  }>({});
+
+  const handleReviewChange = (employeeId: string, reviewId: string) => {
+    setSelectedReviews((prev) => ({ ...prev, [employeeId]: reviewId }));
+  };
 
   const navigateToReview = (
     employeeId: string,
@@ -45,25 +61,43 @@ export function SupervisorReviewDashboardCard({
     );
   };
 
+  const renderReviewSelect = (employee: any) => {
+    return (
+      <Select
+        value={selectedReviews[employee.id] || ""}
+        onValueChange={(value) => handleReviewChange(employee.id, value)}
+      >
+        <SelectTrigger aria-label="Review selection">
+          <SelectValue placeholder="Select a review" />
+        </SelectTrigger>
+        <SelectContent>
+          {employee.reviews.map((review: any) => (
+            <SelectItem key={review.id} value={review.id}>
+              {review.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    );
+  };
+
   const renderEmployeeReview = (employee: any) => {
-    if (isReviewComplete) {
-      return employee.reviews
-        .filter((review: Review) => review.isComplete)
-        .map((completedReview: any) => (
-          <div key={completedReview.id} className="flex space-x-4 items-center">
-            <p className="text-xs">{formatDate(completedReview.updatedAt)}</p>
-            <Button
-              onClick={() =>
-                navigateToReview(employee.id, completedReview.id, true)
-              }
-            >
-              View Details
-            </Button>
-          </div>
-        ));
-    } else {
-      return renderOngoingReviewButton(employee);
-    }
+    return (
+      <div className="flex space-x-4 items-center">
+        {renderReviewSelect(employee)}
+        <Button
+          onClick={() =>
+            navigateToReview(
+              employee.id,
+              selectedReviews[employee.id],
+              isReviewComplete
+            )
+          }
+        >
+          View Details
+        </Button>
+      </div>
+    );
   };
 
   const renderEmployeeCard = (employee: any) => {
