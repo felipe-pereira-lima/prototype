@@ -73,7 +73,7 @@ export function SupervisorReviewDashboardCard({
         <SelectContent>
           {employee.reviews.map((review: any) => (
             <SelectItem key={review.id} value={review.id}>
-              {review.name}
+              {review.name} - {formatDate(review.updatedAt)}
             </SelectItem>
           ))}
         </SelectContent>
@@ -82,22 +82,22 @@ export function SupervisorReviewDashboardCard({
   };
 
   const renderEmployeeReview = (employee: any) => {
-    return (
-      <div className="flex space-x-4 items-center">
-        {renderReviewSelect(employee)}
-        <Button
-          onClick={() =>
-            navigateToReview(
-              employee.id,
-              selectedReviews[employee.id],
-              isReviewComplete
-            )
-          }
-        >
-          View Details
-        </Button>
-      </div>
-    );
+    if (isReviewComplete) {
+      return (
+        <div className="flex space-x-4 items-center">
+          {renderReviewSelect(employee)}
+          <Button
+            onClick={() =>
+              navigateToReview(employee.id, selectedReviews[employee.id], true)
+            }
+          >
+            View Details
+          </Button>
+        </div>
+      );
+    } else {
+      return renderOngoingReviewButton(employee);
+    }
   };
 
   const renderEmployeeCard = (employee: any) => {
@@ -109,10 +109,9 @@ export function SupervisorReviewDashboardCard({
       return null;
     }
 
-    const reviewName =
-      finishedReviewsOfSupervisor.length > 0
-        ? finishedReviewsOfSupervisor[0].name
-        : "Submit a new review";
+    const selectedReview = employee.reviews.find((review: any) =>
+      console.log(review)
+    );
 
     return (
       <li key={employee.id} className="!pt-6">
@@ -123,7 +122,6 @@ export function SupervisorReviewDashboardCard({
               <p className="text-sm font-medium leading-none">
                 {employee.fullName}
               </p>
-              <p className="text-sm text-muted-foreground">{reviewName}</p>
             </div>
             {renderEmployeeReview(employee)}
           </div>
