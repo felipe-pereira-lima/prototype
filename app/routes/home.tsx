@@ -1,5 +1,6 @@
 import { User } from "@prisma/client";
 import { MetaFunction } from "@remix-run/node";
+import LatestReviewCard from "~/components/ui/home/latest-reviews-card";
 import ProfileCard from "~/components/ui/home/profile-card";
 import UpcomingMeetingsCard from "~/components/ui/home/upcoming-meetings-card";
 import WelcomeCard from "~/components/ui/home/welcome-card";
@@ -25,6 +26,9 @@ export default function Home({ data }: HomeProps) {
           </div>
           {/* TODO: add position to data model, e.g, web developer */}
           <ProfileCard data={data} />
+          <div className="col-span-4">
+            <LatestReviewCard />
+          </div>
         </div>
       </div>
     </div>

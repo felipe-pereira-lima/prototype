@@ -115,6 +115,10 @@ model Review {
   supervisor         User                @relation("supervisorReviews", fields: [supervisorId], references: [id])
   supervisorId       Int
   updatedAt          DateTime            @updatedAt
+  // link self-assessment to supervisor's review, give it a try...
+  linkedSupervisorReviewId  Int?
+  linkedSupervisorReview    Review?   @relation("LinkedSupervisorReview", fields: [linkedSupervisorReviewId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  linkedSelfAssessments     Review[]  @relation("LinkedSupervisorReview")
 }
 
 model ReviewCompetency {

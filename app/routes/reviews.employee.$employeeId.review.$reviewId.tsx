@@ -1,5 +1,4 @@
 import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
-import { useLoaderData, useParams } from "@remix-run/react";
 import { CreateReview } from "~/components/reviews/create-review";
 import { prisma } from "~/db.server";
 import { getAllCompetenciesFromDepartmentByTeamId } from "~/services/competencies/get-all-competencies-of-department-by-team-id.server";
