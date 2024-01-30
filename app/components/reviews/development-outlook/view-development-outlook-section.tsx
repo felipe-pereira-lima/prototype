@@ -37,7 +37,10 @@ export default function ViewDevelopmentOutlook({
           </AccordionTrigger>
 
           <AccordionContent>
-            <div className="flex gap-x-4 items-center">{managerValue}</div>
+            <div className="flex gap-x-4 items-center">
+              <Avatar string={supervisorName} />
+              {managerValue}
+            </div>
           </AccordionContent>
         </AccordionItem>
       </Accordion>
