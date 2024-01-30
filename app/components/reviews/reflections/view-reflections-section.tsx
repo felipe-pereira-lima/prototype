@@ -37,15 +37,7 @@ export default function ViewReflections({
           </AccordionTrigger>
 
           <AccordionContent>
-            <div className="flex gap-x-4 items-center">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipContent>{supervisorName}</TooltipContent>
-                  <Avatar string={supervisorName} />
-                </Tooltip>
-              </TooltipProvider>
-              {managerValue}
-            </div>
+            <div className="flex gap-x-4 items-center">{managerValue}</div>
           </AccordionContent>
         </AccordionItem>
       </Accordion>
