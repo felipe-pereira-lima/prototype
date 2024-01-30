@@ -67,7 +67,6 @@ export const action: ActionFunction = async ({ request, params }) => {
   const reflectionText = formData.get("reflection");
   const developmentOutlookText = formData.get("developmentOutlook");
 
-  // Create a new Review record
   const createdReview = await prisma.review.create({
     data: {
       name: reviewNameString,
@@ -116,14 +115,11 @@ export const action: ActionFunction = async ({ request, params }) => {
     }
   }
 
-  // Run the ReviewCompetency creation in a transaction
   await prisma.$transaction(reviewCompetencyPromises);
 
   return redirect("/reviews/dashboard");
 };
 
-// Component
 export default function ReviewCreateDetails() {
-  const data = useLoaderData<typeof loader>();
   return <CreateReview />;
 }
