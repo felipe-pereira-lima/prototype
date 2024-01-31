@@ -1,6 +1,6 @@
 import { Review, User } from "@prisma/client";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { formatDate } from "~/helpers/format-date";
 import { CardContent } from "~/components/ui/card";
 import {
@@ -12,6 +12,14 @@ import {
 } from "~/components/ui/select";
 import { Button } from "~/components/ui/button";
 import Avatar from "~/components/ui/avatar";
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
+import { Question, Warning } from "phosphor-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
 
 export interface EmployeePastReviewsCardProps {
   pastReviews: Review[];
@@ -24,10 +32,24 @@ export function EmployeePastReviewsCard({
 }: EmployeePastReviewsCardProps) {
   const navigate = useNavigate();
   const [selectedReviewId, setSelectedReviewId] = useState<string>("");
+  const [isReviewVisibleToEmployee, setIsReviewVisibleToEmployee] =
+    useState(false);
 
   const handleReviewChange = (reviewId: string) => {
     setSelectedReviewId(reviewId);
+    const selectedReview = pastReviews.find(
+      (review) => review.id.toString() === reviewId
+    );
+    if (selectedReview) {
+      setIsReviewVisibleToEmployee(selectedReview.isVisibleToEmployee);
+    }
   };
+
+  useEffect(() => {
+    if (selectedReviewId) {
+      handleReviewChange(selectedReviewId);
+    }
+  }, [selectedReviewId, pastReviews]);
 
   const navigateToReview = () => {
     if (selectedReviewId) {
@@ -52,7 +74,27 @@ export function EmployeePastReviewsCard({
             ))}
           </SelectContent>
         </Select>
-        <Button onClick={navigateToReview}>View Details</Button>
+
+        <Button
+          onClick={navigateToReview}
+          disabled={!isReviewVisibleToEmployee}
+        >
+          View Details
+        </Button>
+        {!isReviewVisibleToEmployee && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="cursor-pointer">
+                  <Question color="red" size={16} />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Your supervisor has not shared this review with you.</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
       </div>
     );
   };

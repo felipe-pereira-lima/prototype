@@ -42,7 +42,6 @@ export default function ReviewDashboard() {
   const { managedEmployees, employeePastReviews } =
     useLoaderData<typeof loader>();
   const user = useUser();
-  const employeeId = user.id;
 
   // @ts-ignore
   const isUserEmployee = user.roles.includes(UserRole.EMPLOYEE);
@@ -69,7 +68,9 @@ export default function ReviewDashboard() {
         />
       </div>
     );
+
   <Separator />;
+
   if (isUserEmployee)
     return (
       <div className="space-y-2">
