@@ -19,6 +19,8 @@ interface ConfirmationDialogProps {
   onCancel: () => void;
   title: string;
   description: string;
+  isVisibleToEmployee: boolean;
+  setIsVisibleToEmployee: (value: boolean) => void;
 }
 
 export default function ConfirmationDialog({
@@ -27,6 +29,8 @@ export default function ConfirmationDialog({
   onCancel,
   title,
   description,
+  isVisibleToEmployee,
+  setIsVisibleToEmployee,
 }: ConfirmationDialogProps) {
   if (!isOpen) return null;
 
@@ -42,10 +46,11 @@ export default function ConfirmationDialog({
             this setting for individual reviews once they are completed.
           </AlertDescription>
           <div className="flex items-center space-x-2">
-            <Switch id="isVisibleToEmployee" name="isVisibleToEmployee" />
-            <input type="checkbox" name="isVisibleToEmployee" />
-
-            <Label htmlFor="isVisibleToEmployee">Make review visible</Label>
+            <Switch
+              checked={isVisibleToEmployee}
+              onCheckedChange={setIsVisibleToEmployee}
+            />
+            <Label>Make review visible</Label>
           </div>
         </Alert>
 

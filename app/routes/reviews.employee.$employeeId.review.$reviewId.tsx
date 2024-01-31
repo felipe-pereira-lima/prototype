@@ -60,6 +60,11 @@ export const action: ActionFunction = async ({ request, params }) => {
   const employeeId = params.employeeId;
   const reviewName = formData.get("name");
 
+  const employee = await getUserById(employeeId ?? "");
+  if (!employee) {
+    throw new Error("Employee not found");
+  }
+
   const reviewNameString =
     typeof reviewName === "string" ? reviewName : "Default Review Name";
 
@@ -67,14 +72,14 @@ export const action: ActionFunction = async ({ request, params }) => {
   const developmentOutlookText = formData.get("managerDevelopment");
 
   const isReviewVisibleToEmployee =
-    formData.get("isVisibleToEmployee") === "on";
+    formData.get("isVisibleToEmployee") === "true";
 
   const createdReview = await prisma.review.create({
     data: {
       name: reviewNameString,
       employeeId: Number(employeeId),
-      companyId: 1,
-      supervisorId: 2,
+      companyId: employee.companyId,
+      supervisorId: employee.id,
       reviewType: "REVIEW",
       isComplete: true,
       isVisibleToEmployee: isReviewVisibleToEmployee,

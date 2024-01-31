@@ -59,6 +59,12 @@ export function CreateReview() {
     setIsDialogOpen(false);
   };
 
+  const [isVisibleToEmployee, setIsVisibleToEmployee] = useState(false);
+
+  const handleSwitchChange = (newValue: boolean) => {
+    setIsVisibleToEmployee(newValue);
+  };
+
   return (
     <Card className="w-full">
       <Form id="create-form" method="post" onSubmit={handleSubmit(onSubmit)}>
@@ -109,8 +115,17 @@ export function CreateReview() {
             onCancel={handleDialogCancel}
             title="Confirm Submission"
             description="Are you sure you want to submit this form?"
+            isVisibleToEmployee={isVisibleToEmployee}
+            setIsVisibleToEmployee={handleSwitchChange}
           />
         )}
+
+        {/* Hidden input to hold the actual value to be submitted */}
+        <input
+          type="hidden"
+          name="isVisibleToEmployee"
+          value={isVisibleToEmployee ? "true" : "false"}
+        />
       </Form>
     </Card>
   );
