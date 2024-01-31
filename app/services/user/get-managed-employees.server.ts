@@ -1,45 +1,10 @@
-import { LoaderFunction, json } from "@remix-run/node";
+// get-managed-employees.server.ts
 import { prisma } from "~/db.server";
-import { getSession } from "~/services/session.server";
 
-export const getManagedEmployees: LoaderFunction = async ({ request }) => {
-  const session = await getSession(request.headers.get("Cookie"));
-  const sessionUser = session.get("sessionKey");
-
-  if (!sessionUser) {
-    return new Response("Unauthorized", { status: 401 });
-  }
-
-  // Fetch the user's roles
-  const userWithRoles = await prisma.user.findUnique({
+export async function getManagedEmployees(userId: number, companyId: number) {
+  return await prisma.user.findMany({
     where: {
-      id: sessionUser.id,
-    },
-    include: {
-      roles: {
-        include: {
-          role: true,
-        },
-      },
-    },
-  });
-
-  if (!userWithRoles) {
-    return new Response("User not found", { status: 404 });
-  }
-
-  // Check if the user is a supervisor or an admin
-  const isAuthorized = userWithRoles.roles.some((role) =>
-    ["SUPERVISOR", "ADMIN"].includes(role.role.name)
-  );
-
-  if (!isAuthorized) {
-    return json({ managedEmployees: [] });
-  }
-
-  const managedEmployees = await prisma.user.findMany({
-    where: {
-      companyId: sessionUser.companyId,
+      companyId: companyId,
       roles: {
         none: {
           role: {
@@ -53,7 +18,7 @@ export const getManagedEmployees: LoaderFunction = async ({ request }) => {
     include: {
       reviews: {
         where: {
-          supervisorId: sessionUser.id,
+          supervisorId: userId,
         },
         include: {
           competencies: true,
@@ -61,6 +26,4 @@ export const getManagedEmployees: LoaderFunction = async ({ request }) => {
       },
     },
   });
-
-  return json({ managedEmployees });
-};
+}
