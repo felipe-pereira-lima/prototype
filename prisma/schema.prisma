@@ -17,13 +17,12 @@ model User {
   employeeLevel     EmployeeLevel     @default(INTERN)
   firstName         String
   fullName          String
-  givenPeerReviews  PeerReview[]      @relation("reviewer")
   givenReviews      Review[]          @relation("supervisorReviews")
   lastName          String
   meetingAttendance MeetingAttendee[]
   meetings          Meeting[]
   password          String
-  peerReviews       PeerReview[]      @relation("reviewedBy")
+  position          String?         
   reviews           Review[]          @relation("employeeReviews")
   roles             UserRoleRelation[]
   team              Team?             @relation(fields: [teamId], references: [id])
@@ -115,10 +114,7 @@ model Review {
   supervisor         User                @relation("supervisorReviews", fields: [supervisorId], references: [id])
   supervisorId       Int
   updatedAt          DateTime            @updatedAt
-  // link self-assessment to supervisor's review, give it a try...
-  linkedSupervisorReviewId  Int?
-  linkedSupervisorReview    Review?   @relation("LinkedSupervisorReview", fields: [linkedSupervisorReviewId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  linkedSelfAssessments     Review[]  @relation("LinkedSupervisorReview")
+  isVisibleToEmployee     Boolean            @default(false)
 }
 
 model ReviewCompetency {
@@ -157,17 +153,6 @@ model CareerDevelopment {
   review                  Review @relation(fields: [reviewId], references: [id])
 }
 
-model PeerReview {
-  id              Int      @id @default(autoincrement())
-  appreciatedText String
-  improvementText String
-  createdAt       DateTime @default(now())
-  reviewedById    Int
-  reviewerId      Int
-  reviewer        User     @relation("reviewer", fields: [reviewerId], references: [id])
-  reviewedBy      User     @relation("reviewedBy", fields: [reviewedById], references: [id])
-}
-
 model Meeting {
   id          Int               @id @default(autoincrement())
   title       String
@@ -189,7 +174,6 @@ enum UserRole {
 enum ReviewType {
   SELF_ASSESSMENT
   REVIEW
-  PEER_REVIEW
 }
 
 enum EmployeeLevel {

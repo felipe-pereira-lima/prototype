@@ -22,9 +22,6 @@ export default function ReviewDashboard() {
   // @ts-ignore
   const isUserSupervisor = user.roles.includes(UserRole.SUPERVISOR);
 
-  console.log(isUserEmployee);
-  console.log(isUserSupervisor);
-
   if (isUserSupervisor)
     return (
       <div className="space-y-2">

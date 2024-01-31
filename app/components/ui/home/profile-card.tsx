@@ -17,7 +17,6 @@ export interface ProfileCardProps {
   data: any;
 }
 export default function ProfileCard({ data }: ProfileCardProps): JSX.Element {
-  console.log(data);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => {
@@ -72,6 +71,16 @@ export default function ProfileCard({ data }: ProfileCardProps): JSX.Element {
                 <Input
                   id="username"
                   value={data.username}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="position" className="text-right">
+                  Position
+                </Label>
+                <Input
+                  id="position"
+                  value={data.position}
                   className="col-span-3"
                 />
               </div>

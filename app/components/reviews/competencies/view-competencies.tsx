@@ -36,7 +36,7 @@ export default function ViewCompetencies({
                       <TooltipTrigger>
                         <Question />
                       </TooltipTrigger>
-                      <TooltipContent>
+                      <TooltipContent className="bg-black text-white">
                         {competency.competency.description}
                       </TooltipContent>
                     </Tooltip>

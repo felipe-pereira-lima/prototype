@@ -102,16 +102,16 @@ export function CreateReview() {
           </Button>
           <Button>Submit</Button>
         </CardFooter>
+        {isDialogOpen && (
+          <ConfirmationDialog
+            isOpen={isDialogOpen}
+            onConfirm={handleDialogConfirm}
+            onCancel={handleDialogCancel}
+            title="Confirm Submission"
+            description="Are you sure you want to submit this form?"
+          />
+        )}
       </Form>
-      {isDialogOpen && (
-        <ConfirmationDialog
-          isOpen={isDialogOpen}
-          onConfirm={handleDialogConfirm}
-          onCancel={handleDialogCancel}
-          title="Confirm Submission"
-          description="Are you sure you want to submit this form?"
-        />
-      )}
     </Card>
   );
 }

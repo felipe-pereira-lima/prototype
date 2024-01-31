@@ -66,6 +66,9 @@ export const action: ActionFunction = async ({ request, params }) => {
   const reflectionText = formData.get("managerReflection");
   const developmentOutlookText = formData.get("managerDevelopment");
 
+  const isReviewVisibleToEmployee =
+    formData.get("isVisibleToEmployee") === "on";
+
   const createdReview = await prisma.review.create({
     data: {
       name: reviewNameString,
@@ -74,6 +77,8 @@ export const action: ActionFunction = async ({ request, params }) => {
       supervisorId: 2,
       reviewType: "REVIEW",
       isComplete: true,
+      isVisibleToEmployee: isReviewVisibleToEmployee,
+
       reflection: {
         create: {
           managerReflection:

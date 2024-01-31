@@ -48,7 +48,6 @@ export default function CompletedReviewDetails() {
     aspectRatio: 3,
   };
 
-  console.log(reviewDetails);
   return (
     <Card className="w-full">
       <CardHeader>
