@@ -19,8 +19,8 @@ interface ConfirmationDialogProps {
   onCancel: () => void;
   title: string;
   description: string;
-  isVisibleToEmployee: boolean;
-  setIsVisibleToEmployee: (value: boolean) => void;
+  isEmployeeAllowedToStart: boolean;
+  setisEmployeeAllowedToStart: (value: boolean) => void;
 }
 
 export default function ConfirmationDialog({
@@ -29,8 +29,8 @@ export default function ConfirmationDialog({
   onCancel,
   title,
   description,
-  isVisibleToEmployee,
-  setIsVisibleToEmployee,
+  isEmployeeAllowedToStart,
+  setisEmployeeAllowedToStart,
 }: ConfirmationDialogProps) {
   if (!isOpen) return null;
 
@@ -41,16 +41,16 @@ export default function ConfirmationDialog({
           <FileWarningIcon className="h-4 w-4" />
           <AlertTitle>Heads up!</AlertTitle>
           <AlertDescription className="my-2">
-            Would you like to enable the visibility of your review for this
-            employee at this time? Alternatively, you have the option to adjust
-            this setting for individual reviews once they are completed.
+            Would you like to allow this employee to start their
+            self-assessment? Alternatively, you have the option to adjust this
+            setting for individual reviews once they are completed.
           </AlertDescription>
           <div className="flex items-center space-x-2">
             <Switch
-              checked={isVisibleToEmployee}
-              onCheckedChange={setIsVisibleToEmployee}
+              checked={isEmployeeAllowedToStart}
+              onCheckedChange={setisEmployeeAllowedToStart}
             />
-            <Label>Make review visible</Label>
+            <Label>Allow Employee to Start a Self-assessment</Label>
           </div>
         </Alert>
 

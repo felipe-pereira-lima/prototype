@@ -36,12 +36,14 @@ export function SupervisorReviewDashboardCard({
   const navigateToReview = (
     employeeId: string,
     reviewId: string,
-    isComplete: boolean
+    isCompleteBySupervisor: boolean
   ) => {
-    if (isComplete)
-      navigate(`/reviews/employee/${employeeId}/review/isComplete/${reviewId}`);
+    if (isCompleteBySupervisor)
+      navigate(
+        `/reviews/employee/${employeeId}/review/isCompleteBySupervisor/${reviewId}`
+      );
 
-    if (!isComplete) {
+    if (!isCompleteBySupervisor) {
       if (reviewId)
         navigate(`/reviews/employee/${employeeId}/review/${reviewId}`);
       else navigate(`/reviews/employee/${employeeId}/review/latest`);
@@ -50,7 +52,7 @@ export function SupervisorReviewDashboardCard({
 
   const renderOngoingReviewButton = (employee: any) => {
     const ongoingReview = employee.reviews.find(
-      (review: Review) => !review.isComplete
+      (review: Review) => !review.isCompleteBySupervisor
     );
     return (
       <Button
@@ -102,7 +104,7 @@ export function SupervisorReviewDashboardCard({
 
   const renderEmployeeCard = (employee: any) => {
     const finishedReviewsOfSupervisor = employee.reviews.filter(
-      (review: Review) => review.isComplete === isReviewComplete
+      (review: Review) => review.isCompleteBySupervisor === isReviewComplete
     );
 
     if (isReviewComplete && finishedReviewsOfSupervisor.length === 0) {

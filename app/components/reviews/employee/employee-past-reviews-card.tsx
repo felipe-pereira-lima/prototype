@@ -41,7 +41,7 @@ export function EmployeePastReviewsCard({
       (review) => review.id.toString() === reviewId
     );
     if (selectedReview) {
-      setIsReviewVisibleToEmployee(selectedReview.isVisibleToEmployee);
+      setIsReviewVisibleToEmployee(selectedReview.isEmployeeAllowedToStart);
     }
   };
 
@@ -54,6 +54,7 @@ export function EmployeePastReviewsCard({
   const navigateToReview = () => {
     if (selectedReviewId) {
       navigate(
+        // keeping it a general isComplete for now
         `/reviews/employee/${employee?.id}/review/isComplete/${selectedReviewId}`
       );
     }

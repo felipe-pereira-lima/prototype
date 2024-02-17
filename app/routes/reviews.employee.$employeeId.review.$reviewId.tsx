@@ -72,7 +72,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   const developmentOutlookText = formData.get("managerDevelopment");
 
   const isReviewVisibleToEmployee =
-    formData.get("isVisibleToEmployee") === "true";
+    formData.get("isEmployeeAllowedToStart") === "true";
 
   const createdReview = await prisma.review.create({
     data: {
@@ -81,8 +81,10 @@ export const action: ActionFunction = async ({ request, params }) => {
       companyId: employee.companyId,
       supervisorId: employee.id,
       reviewType: "REVIEW",
-      isComplete: true,
-      isVisibleToEmployee: isReviewVisibleToEmployee,
+      // changes stuff here, if it breaks check here
+      isCompleteBySupervisor: true,
+      isCompleteByEmployee: false,
+      isEmployeeAllowedToStart: isReviewVisibleToEmployee,
 
       reflection: {
         create: {
