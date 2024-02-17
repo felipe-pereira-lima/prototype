@@ -9,30 +9,29 @@ generator client {
 }
 
 model User {
-  id                Int               @id @default(autoincrement())
-  company           Company           @relation(fields: [companyId], references: [id])
+  id                Int                @id @default(autoincrement())
+  company           Company            @relation(fields: [companyId], references: [id])
   companyId         Int
-  competencies      Competency[]      @relation("userCompetencies")
-  email             String            @unique
-  employeeLevel     EmployeeLevel     @default(INTERN)
+  competencies      Competency[]       @relation("userCompetencies")
+  email             String             @unique
+  employeeLevel     EmployeeLevel      @default(INTERN)
   firstName         String
   fullName          String
-  givenReviews      Review[]          @relation("supervisorReviews")
+  givenReviews      Review[]           @relation("supervisorReviews")
   lastName          String
   meetingAttendance MeetingAttendee[]
   meetings          Meeting[]
   password          String
-  position          String?         
-  reviews           Review[]          @relation("employeeReviews")
+  position          String?
+  reviews           Review[]           @relation("employeeReviews")
   roles             UserRoleRelation[]
-  team              Team?             @relation(fields: [teamId], references: [id])
+  team              Team?              @relation(fields: [teamId], references: [id])
   teamId            Int
-  username          String            @unique @db.VarChar(255)
-  
+  username          String             @unique @db.VarChar(255)
 }
 
 model Role {
-  id    Int    @id @default(autoincrement())
+  id    Int                @id @default(autoincrement())
   name  UserRole
   users UserRoleRelation[]
 }
@@ -40,8 +39,8 @@ model Role {
 model UserRoleRelation {
   userId Int
   roleId Int
-  user   User   @relation(fields: [userId], references: [id])
-  role   Role   @relation(fields: [roleId], references: [id])
+  user   User @relation(fields: [userId], references: [id])
+  role   Role @relation(fields: [roleId], references: [id])
 
   @@id([userId, roleId])
 }
@@ -98,23 +97,24 @@ model CompetencyLevel {
 }
 
 model Review {
-  id                 Int                 @id @default(autoincrement())
-  careerDevelopment  CareerDevelopment?
-  company            Company             @relation(fields: [companyId], references: [id])
-  companyId          Int
-  competencies       ReviewCompetency[]
-  createdAt          DateTime            @default(now())
-  developmentOutlook DevelopmentOutlook?
-  employee           User                @relation("employeeReviews", fields: [employeeId], references: [id])
-  employeeId         Int
-  isComplete         Boolean             @default(false)
-  name               String?
-  reflection         Reflection?
-  reviewType         ReviewType
-  supervisor         User                @relation("supervisorReviews", fields: [supervisorId], references: [id])
-  supervisorId       Int
-  updatedAt          DateTime            @updatedAt
-  isVisibleToEmployee     Boolean            @default(false)
+  id                       Int                 @id @default(autoincrement())
+  careerDevelopment        CareerDevelopment?
+  company                  Company             @relation(fields: [companyId], references: [id])
+  companyId                Int
+  competencies             ReviewCompetency[]
+  createdAt                DateTime            @default(now())
+  developmentOutlook       DevelopmentOutlook?
+  employee                 User                @relation("employeeReviews", fields: [employeeId], references: [id])
+  employeeId               Int
+  isCompleteBySupervisor   Boolean             @default(false)
+  isCompleteByEmployee     Boolean             @default(false)
+  name                     String?
+  reflection               Reflection?
+  reviewType               ReviewType
+  supervisor               User                @relation("supervisorReviews", fields: [supervisorId], references: [id])
+  supervisorId             Int
+  updatedAt                DateTime            @updatedAt
+  isEmployeeAllowedToStart Boolean             @default(false)
 }
 
 model ReviewCompetency {
