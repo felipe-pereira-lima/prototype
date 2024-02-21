@@ -46,11 +46,11 @@ export default function ViewCompetencies({
             </AccordionTrigger>
             <AccordionContent>
               <p>
-                {/* @ts-expect-error */}
-                <strong>Score:</strong> {competencyLevels[competency.score]}{" "}
+                <strong>Score:</strong>{" "}
+                {competencyLevels[competency.supervisorScore]}{" "}
               </p>
               <p>
-                <strong>Feedback:</strong> {competency.feedbackText}
+                <strong>Feedback:</strong> {competency.supervisorFeedbackText}
               </p>
             </AccordionContent>
           </AccordionItem>

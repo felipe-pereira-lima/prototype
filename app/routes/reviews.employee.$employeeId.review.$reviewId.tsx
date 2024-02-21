@@ -120,7 +120,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   for (const [key, value] of formData.entries()) {
     if (key.startsWith("competency-") && !key.includes("feedbackText")) {
       const competencyId = parseInt(key.split("-")[1], 10);
-      const score = parseInt(value.toString(), 10); // This is now assumed to be the supervisor's score
+      const supervisorScore = parseInt(value.toString(), 10); // This is now assumed to be the supervisor's score
       const feedbackTextKey = `competency-feedbackText-${competencyId}`;
       const feedbackText = formData.get(feedbackTextKey) || "";
 
@@ -129,7 +129,7 @@ export const action: ActionFunction = async ({ request, params }) => {
         data: {
           reviewId: createdReview.id,
           competencyId: competencyId,
-          supervisorScore: score,
+          supervisorScore: supervisorScore,
           supervisorFeedbackText:
             typeof feedbackText === "string" ? feedbackText : "",
         },
@@ -140,9 +140,6 @@ export const action: ActionFunction = async ({ request, params }) => {
   }
 
   await prisma.$transaction(reviewCompetencyPromises);
-
-  await prisma.$transaction(reviewCompetencyPromises);
-
   return redirect("/reviews/dashboard");
 };
 

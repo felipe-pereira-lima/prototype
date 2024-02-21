@@ -21,8 +21,10 @@ export const loader = getReviewById;
 export default function CompletedReviewDetails() {
   const reviewDetails = useLoaderData<typeof loader>();
 
+  console.log(reviewDetails);
+
   const labels = reviewDetails.competencies.map((c: any) => c.competency.name);
-  const scores = reviewDetails.competencies.map((c: any) => c.score);
+  const scores = reviewDetails.competencies.map((c: any) => c.supervisorScore);
 
   const data = {
     labels: labels,
@@ -40,8 +42,12 @@ export default function CompletedReviewDetails() {
   const options = {
     scales: {
       r: {
-        beginAtZero: true,
+        beginAtZero: false,
+        suggestedMin: 1,
         suggestedMax: 5,
+        ticks: {
+          stepSize: 1,
+        },
       },
     },
     maintainAspectRatio: true,
