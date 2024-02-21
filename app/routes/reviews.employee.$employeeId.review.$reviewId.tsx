@@ -2,6 +2,7 @@ import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
 import { CreateReview } from "~/components/reviews/create-review";
 import { prisma } from "~/db.server";
 import { getAllCompetenciesFromDepartmentByTeamId } from "~/services/competencies/get-all-competencies-of-department-by-team-id.server";
+import { getSession } from "~/services/session.server";
 import { getUserById } from "~/services/user/get-user-by-id.server";
 import { getEmployeeLevel } from "~/services/user/get-user-level";
 
@@ -57,12 +58,22 @@ export const loader: LoaderFunction = async ({ params }) => {
 
 export const action: ActionFunction = async ({ request, params }) => {
   const formData = await request.formData();
-  const employeeId = params.employeeId;
+  const employeeId = params.employeeId; // The ID of the employee being reviewed
   const reviewName = formData.get("name");
+
+  // Assuming you can fetch the logged-in supervisor's ID from the session
+  const session = await getSession(request.headers.get("Cookie"));
+  const sessionUser = session.get("sessionKey"); // or however you store this
+  const supervisorId = sessionUser.id; // The actual supervisor's ID
 
   const employee = await getUserById(employeeId ?? "");
   if (!employee) {
     throw new Error("Employee not found");
+  }
+
+  // Ensure the supervisor is reviewing someone else, not themselves
+  if (Number(employeeId) === supervisorId) {
+    throw new Error("A supervisor cannot review themselves in this context.");
   }
 
   const reviewNameString =
@@ -79,7 +90,7 @@ export const action: ActionFunction = async ({ request, params }) => {
       name: reviewNameString,
       employeeId: Number(employeeId),
       companyId: employee.companyId,
-      supervisorId: employee.id,
+      supervisorId: supervisorId, // Use the actual supervisor's ID
       reviewType: "REVIEW",
       // changes stuff here, if it breaks check here
       isCompleteBySupervisor: true,

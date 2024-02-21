@@ -40,7 +40,7 @@ export function SupervisorReviewDashboardCard({
   ) => {
     if (isCompleteBySupervisor)
       navigate(
-        `/reviews/employee/${employeeId}/review/isCompleteBySupervisor/${reviewId}`
+        `/reviews/employee/${employeeId}/review/is-complete-by-supervisor/${reviewId}`
       );
 
     if (!isCompleteBySupervisor) {
@@ -70,7 +70,7 @@ export function SupervisorReviewDashboardCard({
         onValueChange={(value) => handleReviewChange(employee.id, value)}
       >
         <SelectTrigger aria-label="Review selection">
-          <SelectValue placeholder="Select a review" />
+          <SelectValue placeholder="Select an employee review" />
         </SelectTrigger>
         <SelectContent>
           {employee.reviews.map((review: any) => (

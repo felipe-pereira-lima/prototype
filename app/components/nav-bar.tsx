@@ -9,7 +9,7 @@ import Avatar from "./ui/avatar";
 export default function Navbar(): JSX.Element {
   const user = useUser();
 
-  console.log(user);
+  // console.log(user);
   return (
     <Disclosure as="nav" className="bg-transparent">
       {({ open }) => (

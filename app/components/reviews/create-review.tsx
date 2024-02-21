@@ -27,6 +27,8 @@ import CreateReflections from "./reflection/create-reflection";
 export function CreateReview() {
   const data = useLoaderData() as any;
 
+  console.log(data);
+
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
