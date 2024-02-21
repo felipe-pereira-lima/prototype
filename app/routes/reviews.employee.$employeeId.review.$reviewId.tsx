@@ -120,22 +120,26 @@ export const action: ActionFunction = async ({ request, params }) => {
   for (const [key, value] of formData.entries()) {
     if (key.startsWith("competency-") && !key.includes("feedbackText")) {
       const competencyId = parseInt(key.split("-")[1], 10);
-      const score = parseInt(value.toString(), 10);
+      const score = parseInt(value.toString(), 10); // This is now assumed to be the supervisor's score
       const feedbackTextKey = `competency-feedbackText-${competencyId}`;
       const feedbackText = formData.get(feedbackTextKey) || "";
 
+      // Create ReviewCompetency with supervisor-specific fields
       const reviewCompetencyPromise = prisma.reviewCompetency.create({
         data: {
           reviewId: createdReview.id,
           competencyId: competencyId,
-          score: score,
-          feedbackText: typeof feedbackText === "string" ? feedbackText : "",
+          supervisorScore: score,
+          supervisorFeedbackText:
+            typeof feedbackText === "string" ? feedbackText : "",
         },
       });
 
       reviewCompetencyPromises.push(reviewCompetencyPromise);
     }
   }
+
+  await prisma.$transaction(reviewCompetencyPromises);
 
   await prisma.$transaction(reviewCompetencyPromises);
 

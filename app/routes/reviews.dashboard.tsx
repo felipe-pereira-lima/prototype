@@ -4,7 +4,7 @@ import { Separator } from "@radix-ui/react-separator";
 import { LoaderFunction, json } from "@remix-run/node";
 import { MetaFunction, useLoaderData } from "@remix-run/react";
 import { EmployeePastReviewsCard } from "~/components/reviews/employee/employee-past-reviews-card";
-import EmployeeSelfAssessmentCard from "~/components/reviews/employee/employee-self-assessment-card";
+import { EmployeeSelfAssessmentDashboardCard } from "~/components/reviews/employee/employee-self-assessment-card";
 import { SupervisorReviewDashboardCard } from "~/components/reviews/supervisor/supervisor-review-dashboard-list";
 import { CardDescription, CardTitle } from "~/components/ui/card";
 import { useUser } from "~/context/user-context";
@@ -43,7 +43,7 @@ export default function ReviewDashboard() {
     useLoaderData<typeof loader>();
   const user = useUser();
 
-  console.log(managedEmployees);
+  console.log(employeePastReviews);
 
   // @ts-ignore
   const isUserEmployee = user.roles.includes(UserRole.EMPLOYEE);
@@ -59,7 +59,9 @@ export default function ReviewDashboard() {
           managedEmployees={managedEmployees}
           isReviewComplete={false}
         />
+
         <div className="pt-4"></div>
+
         <CardTitle>Past Assessments</CardTitle>
         <CardDescription>
           Check previous reviews from your managed employees.
@@ -76,22 +78,16 @@ export default function ReviewDashboard() {
   if (isUserEmployee)
     return (
       <div className="space-y-2">
-        <CardTitle>Start your self-assessment</CardTitle>
-        <CardTitle>Pending manager approval - can be a select list </CardTitle>
-        <CardTitle>
-          Your past reviews - rule: if is complete by manager and is complete by
-          emploee
-        </CardTitle>
+        <CardTitle>Current self-assessments</CardTitle>
+        <CardDescription>Your reviews to be done</CardDescription>
+        <EmployeeSelfAssessmentDashboardCard
+          employee={user}
+          reviews={employeePastReviews}
+          // isReviewComplete={false}
+        />
 
-        <p>
-          Regarding navigation: Starting a self-assessment leads to another URL
-          - the self-assessment itself is exactly like the create view, though
-          On completion, can be redirected right away to the isComplete page,
-          where employee will be able to see the results instantly
-        </p>
-        <CardDescription>Submit a review of yourself.</CardDescription>
-        <EmployeeSelfAssessmentCard />
         <div className="pt-4"></div>
+
         <CardTitle>Past Reviews</CardTitle>
         <CardDescription>Check previous reviews results.</CardDescription>
         <EmployeePastReviewsCard
