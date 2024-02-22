@@ -26,9 +26,15 @@ model User {
   reviews           Review[]           @relation("employeeReviews")
   roles             UserRoleRelation[]
   team              Team?              @relation(fields: [teamId], references: [id])
-  teamId            Int
+  teamId            Int?
   username          String             @unique @db.VarChar(255)
+  supervisorId      Int?               @db.Int
+  supervisees       User[]             @relation("SupervisorToSupervisee")
+  supervisor        User?              @relation(name: "SupervisorToSupervisee", fields: [supervisorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([email, username])
 }
+
 
 model Role {
   id    Int                @id @default(autoincrement())
@@ -98,7 +104,6 @@ model CompetencyLevel {
 
 model Review {
   id                       Int                 @id @default(autoincrement())
-  careerDevelopment        CareerDevelopment?
   company                  Company             @relation(fields: [companyId], references: [id])
   companyId                Int
   competencies             ReviewCompetency[]
@@ -134,26 +139,18 @@ model ReviewCompetency {
 
 model Reflection {
   id                 Int    @id @default(autoincrement())
-  employeeReflection String
-  managerReflection  String
+  employeeReflection String?
+  managerReflection  String?
   reviewId           Int    @unique
   review             Review @relation(fields: [reviewId], references: [id])
 }
 
 model DevelopmentOutlook {
   id                  Int    @id @default(autoincrement())
-  employeeDevelopment String
-  managerDevelopment  String
+  employeeDevelopment String?
+  managerDevelopment  String?
   reviewId            Int    @unique
   review              Review @relation(fields: [reviewId], references: [id])
-}
-
-model CareerDevelopment {
-  id                      Int    @id @default(autoincrement())
-  employeeCareerGoals     String
-  managerCareerAssessment String
-  reviewId                Int    @unique
-  review                  Review @relation(fields: [reviewId], references: [id])
 }
 
 model Meeting {

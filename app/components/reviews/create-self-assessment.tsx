@@ -12,15 +12,14 @@ import { Button } from "../ui/button";
 import Competencies from "./competencies/create-competencies";
 import { Separator } from "../ui/separator";
 import { Form, useLoaderData, useNavigate } from "@remix-run/react";
-import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import DevelopmentOutlook from "./development-outlook/create-development-outlook";
 
 import { useForm } from "react-hook-form";
-import clsx from "clsx";
 import { useSnackbar } from "notistack";
-import AlertFormError from "../ui/alert-form-error";
-import CreateReflections from "./reflection/create-reflection";
+import CreateSelfReflections from "./reflection/create-reflection-employee";
+import CreateSelfDevelopmentOutlook from "./development-outlook/create-development-outlook-employee";
+import { useState } from "react";
+import SelfAssessmentDialog from "../ui/review/self-assessment-dialog";
 
 export function CreateSelfAssessment() {
   const data = useLoaderData() as any;
@@ -34,15 +33,31 @@ export function CreateSelfAssessment() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data: any) => {
-    // Client-side actions, if needed
-    console.log(data);
-    // No need to call event.preventDefault() or manually submit the form
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const onSubmit = (formData: any, event: any) => {
+    event.preventDefault();
+    setIsDialogOpen(true);
+  };
+
+  const handleDialogConfirm = () => {
+    setIsDialogOpen(false);
+
+    const form = document.getElementById("update-form") as HTMLFormElement;
+    form?.submit();
+
+    enqueueSnackbar("Review submitted successfully.", {
+      variant: "success",
+    });
+  };
+
+  const handleDialogCancel = () => {
+    setIsDialogOpen(false);
   };
 
   return (
     <Card className="w-full">
-      <Form method="post" onSubmit={handleSubmit(onSubmit)}>
+      <Form id="update-form" method="post" onSubmit={handleSubmit(onSubmit)}>
         <CardHeader>
           <CardTitle>Your Self-Assessment</CardTitle>
           <CardDescription className="mt-4">
@@ -50,26 +65,19 @@ export function CreateSelfAssessment() {
               <Label className="text-lg font-medium">
                 Seniority level - {data.employeeLevel.toLowerCase()}
               </Label>
-              <Label className="pt-2 text-black">Review's name</Label>
-              <Input
-                id="managerReflection"
-                className={clsx(
-                  "p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                )}
-                {...register("name", { required: true })}
-              />
+              <Label className="pt-2 text-black">{"review name"}</Label>
             </div>
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Separator />
-          <CreateReflections register={register} errors={errors} />
+          <CreateSelfReflections register={register} errors={errors} />
           <Competencies
             competencies={data.competencies}
             register={register}
             errors={errors}
           />
-          <DevelopmentOutlook register={register} errors={errors} />
+          <CreateSelfDevelopmentOutlook register={register} errors={errors} />
         </CardContent>
         <CardFooter className="flex justify-between">
           <Button variant="outline" onClick={() => navigate(-1)}>
@@ -77,6 +85,15 @@ export function CreateSelfAssessment() {
           </Button>
           <Button>Submit</Button>
         </CardFooter>
+        {isDialogOpen && (
+          <SelfAssessmentDialog
+            isOpen={isDialogOpen}
+            onConfirm={handleDialogConfirm}
+            onCancel={handleDialogCancel}
+            title="Confirm Submission"
+            description="Are you sure you want to submit this form?"
+          />
+        )}
       </Form>
     </Card>
   );

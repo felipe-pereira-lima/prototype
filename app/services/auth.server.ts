@@ -2,8 +2,8 @@ import { Authenticator, AuthorizationError } from "remix-auth";
 import { FormStrategy } from "remix-auth-form";
 import { sessionStorage } from "../services/session.server";
 
-import { User } from "@prisma/client";
 import { prisma } from "../db.server";
+import { User } from "@prisma/client";
 
 export const authenticator = new Authenticator<User | Error | null>(
   sessionStorage,
@@ -25,9 +25,10 @@ authenticator.use(
       include: {
         roles: {
           include: {
-            role: true, // This includes the Role data in the query
+            role: true,
           },
         },
+        supervisor: true,
       },
     });
 
@@ -50,6 +51,7 @@ authenticator.use(
         teamId: user.teamId ?? null,
         username: user.username,
         position: user.position,
+        supervisorId: user.supervisorId,
       };
     } else {
       throw new AuthorizationError("Bad Credentials");

@@ -32,7 +32,7 @@ export function EmployeePastReviewsCard({
 }: EmployeePastReviewsCardProps) {
   const navigate = useNavigate();
   const [selectedReviewId, setSelectedReviewId] = useState<string>("");
-  const [isReviewVisibleToEmployee, setIsReviewVisibleToEmployee] =
+  const [isReviewCompleteToEmployee, setIsReviewCompleteToEmployee] =
     useState(false);
 
   const handleReviewChange = (reviewId: string) => {
@@ -41,7 +41,7 @@ export function EmployeePastReviewsCard({
       (review) => review.id.toString() === reviewId
     );
     if (selectedReview) {
-      setIsReviewVisibleToEmployee(selectedReview.isEmployeeAllowedToStart);
+      setIsReviewCompleteToEmployee(selectedReview.isCompleteByEmployee);
     }
   };
 
@@ -54,8 +54,7 @@ export function EmployeePastReviewsCard({
   const navigateToReview = () => {
     if (selectedReviewId) {
       navigate(
-        // keeping it a general isComplete for now
-        `/reviews/employee/${employee?.id}/review/isComplete/${selectedReviewId}`
+        `/reviews/employee/review/is-complete-by-supervisor/${selectedReviewId}`
       );
     }
   };
@@ -78,11 +77,11 @@ export function EmployeePastReviewsCard({
 
         <Button
           onClick={navigateToReview}
-          disabled={!isReviewVisibleToEmployee}
+          disabled={!isReviewCompleteToEmployee}
         >
           View Details
         </Button>
-        {!isReviewVisibleToEmployee && (
+        {!isReviewCompleteToEmployee && (
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -91,7 +90,7 @@ export function EmployeePastReviewsCard({
                 </div>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Your supervisor has not shared this review with you.</p>
+                <p>You need to complete the review to access the results.</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

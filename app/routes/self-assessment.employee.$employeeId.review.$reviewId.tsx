@@ -1,10 +1,7 @@
 import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
-import { CreateReview } from "~/components/reviews/create-review";
 import { CreateSelfAssessment } from "~/components/reviews/create-self-assessment";
 import { prisma } from "~/db.server";
 import { getAllCompetenciesFromDepartmentByTeamId } from "~/services/competencies/get-all-competencies-of-department-by-team-id.server";
-import { getSession } from "~/services/session.server";
-import { findSupervisorIdForEmployee } from "~/services/user/get-supervisor-by-id.server";
 import { getUserById } from "~/services/user/get-user-by-id.server";
 import { getEmployeeLevel } from "~/services/user/get-user-level";
 
@@ -17,12 +14,12 @@ export const loader: LoaderFunction = async ({ params }) => {
     throw new Error("Employee not found");
   }
 
-  // Fetch competencies based on the employee's companyId
   let competencies;
-  if (employee?.teamId)
+  if (employee?.teamId) {
     competencies = await getAllCompetenciesFromDepartmentByTeamId(
       employee.teamId
     );
+  }
 
   if (!competencies) {
     throw new Error("User is not assigned to a department");
@@ -34,85 +31,84 @@ export const loader: LoaderFunction = async ({ params }) => {
     throw new Error("User has no skill level");
   }
 
-  let review = null;
-
-  // Ensure reviewId is 'latest' or a valid number for existing reviews
-  if (reviewId === "latest") {
-    review = { isComplete: false };
-  } else if (!isNaN(Number(reviewId))) {
-    // Fetch the review for an existing review ID
-    review = await prisma.review.findUnique({
-      where: {
-        id: Number(reviewId),
-      },
-      include: {
-        competencies: {
-          include: {
-            competency: true,
-          },
-        },
-      },
-    });
-  }
-
-  return { review, employee, competencies, employeeLevel };
+  return { employee, competencies, employeeLevel, reviewId };
 };
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({ request, params }) => {
   const formData = await request.formData();
-  const session = await getSession(request.headers.get("Cookie"));
-  const employeeId = session.get("userId");
+  const reviewId = params.reviewId;
 
-  // Basic validation (ensure employeeId exists)
-  if (!employeeId) {
-    throw new Error("Session is invalid or expired.");
+  if (!reviewId) {
+    console.error("Review ID is not provided");
+    throw new Response("Review ID is not provided", { status: 400 });
   }
 
-  const reviewName = formData.get("name")?.toString() || "Self Assessment";
-  const reflectionText = formData.get("reflection")?.toString() || "";
-  const developmentGoals = formData.get("developmentGoals")?.toString() || "";
+  // Reflection and Development Outlook Updates
+  const reflectionText = formData.get("employeeReflection")?.toString();
+  const developmentOutlookText = formData
+    .get("employeeDevelopment")
+    ?.toString();
 
-  // Fetch employee details
-  const employee = await prisma.user.findUnique({
-    where: { id: Number(employeeId) },
-  });
+  // Prepare updates for competencies
+  const competencyUpdates = [];
 
-  if (!employee) {
-    throw new Error("Employee not found");
+  for (const [key, value] of formData.entries()) {
+    if (key.startsWith("competency-score-")) {
+      const competencyId = parseInt(key.split("-")[2], 10);
+      const employeeScore = parseInt(value.toString(), 10);
+
+      competencyUpdates.push({
+        competencyId,
+        employeeScore,
+      });
+    }
   }
 
-  // Await the resolution of findSupervisorIdForEmployee
-  const supervisorId = await findSupervisorIdForEmployee(employee.id);
-
-  // Create the self-assessment review with reflection and development outlook
-  const createdReview = await prisma.review.create({
-    data: {
-      name: reviewName,
-      employeeId: Number(employeeId),
-      companyId: employee.companyId,
-      supervisorId, // Now correctly awaiting the Promise
-      reviewType: "SELF_ASSESSMENT",
-      isCompleteBySupervisor: true,
-      isCompleteByEmployee: true, // Set true as the employee completes it upon submission
-      isEmployeeAllowedToStart: true,
-      reflection: {
-        create: {
-          employeeReflection: reflectionText,
-          managerReflection: "",
-        },
+  try {
+    // Update reflection and development outlook
+    await prisma.review.update({
+      where: { id: Number(reviewId) },
+      data: {
+        reflection: reflectionText
+          ? {
+              upsert: {
+                create: { employeeReflection: reflectionText },
+                update: { employeeReflection: reflectionText },
+              },
+            }
+          : undefined,
+        developmentOutlook: developmentOutlookText
+          ? {
+              upsert: {
+                create: { employeeDevelopment: developmentOutlookText },
+                update: { employeeDevelopment: developmentOutlookText },
+              },
+            }
+          : undefined,
+        isCompleteByEmployee: true,
       },
-      developmentOutlook: {
-        create: {
-          employeeDevelopment: developmentGoals,
-          managerDevelopment: "",
-        },
-      },
-      // Include competencies if applicable
-    },
-  });
+    });
 
-  // Redirect or return success response
-  return redirect(`/review/${createdReview.id}`);
+    // Update competencies scores
+    await Promise.all(
+      competencyUpdates.map(({ competencyId, employeeScore }) =>
+        prisma.reviewCompetency.updateMany({
+          where: {
+            reviewId: Number(reviewId),
+            competencyId,
+          },
+          data: {
+            employeeScore,
+          },
+        })
+      )
+    );
+
+    return redirect("/reviews/dashboard");
+  } catch (error) {
+    console.error("Failed to update review and competencies", error);
+    return new Response("Failed to update the review", { status: 500 });
+  }
 };
 
 export default function SelfAssessmentCreateDetails() {

@@ -1,5 +1,5 @@
 // app/routes/reviews.dashboard.tsx
-import { UserRole } from "@prisma/client";
+import { EmployeeLevel, UserRole } from "@prisma/client";
 import { Separator } from "@radix-ui/react-separator";
 import { LoaderFunction, json } from "@remix-run/node";
 import { MetaFunction, useLoaderData } from "@remix-run/react";
@@ -24,7 +24,9 @@ export const loader: LoaderFunction = async ({ request }) => {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  const isSupervisorOrAdmin = sessionUser.roles.includes(UserRole.SUPERVISOR);
+  const isSupervisorOrAdmin = ["MANAGER", "EXECUTIVE", "CEO"].includes(
+    sessionUser.employeeLevel
+  );
 
   if (isSupervisorOrAdmin) {
     const managedEmployees = await getManagedEmployees(
@@ -43,12 +45,13 @@ export default function ReviewDashboard() {
     useLoaderData<typeof loader>();
   const user = useUser();
 
-  console.log(employeePastReviews);
+  const isUserSupervisor = ["MANAGER", "EXECUTIVE", "CEO"].includes(
+    user.employeeLevel
+  );
 
-  // @ts-ignore
-  const isUserEmployee = user.roles.includes(UserRole.EMPLOYEE);
-  // @ts-ignore
-  const isUserSupervisor = user.roles.includes(UserRole.SUPERVISOR);
+  const isUserEmployee = ["INTERN", "JUNIOR", "SENIOR"].includes(
+    user.employeeLevel
+  );
 
   if (isUserSupervisor)
     return (
@@ -83,7 +86,6 @@ export default function ReviewDashboard() {
         <EmployeeSelfAssessmentDashboardCard
           employee={user}
           reviews={employeePastReviews}
-          // isReviewComplete={false}
         />
 
         <div className="pt-4"></div>

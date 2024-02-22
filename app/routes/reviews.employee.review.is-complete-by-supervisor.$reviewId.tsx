@@ -24,16 +24,32 @@ export default function CompletedReviewDetails() {
   console.log(reviewDetails);
 
   const labels = reviewDetails.competencies.map((c: any) => c.competency.name);
-  const scores = reviewDetails.competencies.map((c: any) => c.supervisorScore);
+
+  // Mapping supervisor scores
+  const supervisorScores = reviewDetails.competencies.map(
+    (c: any) => c.supervisorScore ?? 0
+  );
+
+  // Mapping employee scores
+  const employeeScores = reviewDetails.competencies.map(
+    (c: any) => c.employeeScore ?? 0
+  );
 
   const data = {
     labels: labels,
     datasets: [
       {
-        label: `${reviewDetails.employee.fullName}'s Competencies`,
-        data: scores,
+        label: `${reviewDetails.employee.fullName}'s Supervisor Competencies`,
+        data: supervisorScores,
         backgroundColor: "rgba(54, 162, 235, 0.2)",
         borderColor: "rgba(54, 162, 235, 1)",
+        borderWidth: 1,
+      },
+      {
+        label: `${reviewDetails.employee.fullName}'s Employee Competencies`,
+        data: employeeScores,
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderColor: "rgba(255, 99, 132, 1)",
         borderWidth: 1,
       },
     ],
@@ -42,12 +58,8 @@ export default function CompletedReviewDetails() {
   const options = {
     scales: {
       r: {
-        beginAtZero: false,
-        suggestedMin: 1,
+        beginAtZero: true,
         suggestedMax: 5,
-        ticks: {
-          stepSize: 1,
-        },
       },
     },
     maintainAspectRatio: true,
@@ -77,6 +89,8 @@ export default function CompletedReviewDetails() {
         <ViewReflections
           managerValue={reviewDetails?.reflection?.managerReflection}
           supervisorName={reviewDetails?.supervisor?.fullName}
+          employeeName={reviewDetails?.employee?.fullName}
+          employeeValue={reviewDetails?.reflection?.employeeReflection}
         />
         <CardContent>
           <div className="rounded-md border p-4 my-4">
@@ -86,8 +100,10 @@ export default function CompletedReviewDetails() {
         </CardContent>
         <Separator />
         <ViewDevelopmentOutlook
-          managerValue={reviewDetails?.reflection?.managerReflection}
+          managerValue={reviewDetails?.developmentOutlook?.managerDevelopment}
           supervisorName={reviewDetails?.supervisor?.fullName}
+          employeeName={reviewDetails?.employee?.fullName}
+          employeeValue={reviewDetails?.developmentOutlook?.employeeDevelopment}
         />
       </CardContent>
       <CardFooter></CardFooter>

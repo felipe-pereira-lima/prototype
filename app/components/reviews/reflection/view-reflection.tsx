@@ -1,9 +1,4 @@
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-} from "~/components/ui/tooltip";
-import {
   Accordion,
   AccordionContent,
   AccordionItem,
@@ -14,11 +9,15 @@ import Avatar from "~/components/ui/avatar";
 type ViewReflectionsProps = {
   managerValue: string;
   supervisorName: string;
+  employeeName: string;
+  employeeValue: string;
 };
 
 export default function ViewReflections({
   managerValue,
   supervisorName,
+  employeeName,
+  employeeValue,
 }: ViewReflectionsProps): JSX.Element {
   return (
     <div className="my-4">
@@ -35,6 +34,10 @@ export default function ViewReflections({
             <div className="flex gap-x-4 items-center">
               <Avatar string={supervisorName} />
               {managerValue}
+            </div>
+            <div className="flex pt-4 gap-x-4 items-center">
+              <Avatar string={employeeName} />
+              {employeeValue ?? "TBD: Waiting for employee"}
             </div>
           </AccordionContent>
         </AccordionItem>

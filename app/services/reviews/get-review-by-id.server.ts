@@ -16,7 +16,6 @@ export const getReviewById: LoaderFunction = async ({ params }) => {
         },
       },
       developmentOutlook: true,
-      careerDevelopment: true,
       reflection: true,
       employee: true,
       supervisor: true,

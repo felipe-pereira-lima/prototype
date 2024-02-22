@@ -14,7 +14,6 @@ import { Separator } from "../ui/separator";
 import { Form, useLoaderData, useNavigate } from "@remix-run/react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import DevelopmentOutlook from "./development-outlook/create-development-outlook";
 
 import { useForm } from "react-hook-form";
 import clsx from "clsx";
@@ -22,12 +21,11 @@ import { useSnackbar } from "notistack";
 import AlertFormError from "../ui/alert-form-error";
 import { useState } from "react";
 import ConfirmationDialog from "../ui/review/confirmation-dialog";
-import CreateReflections from "./reflection/create-reflection";
+import CreateReflections from "./reflection/create-reflection-supervisor";
+import CreateDevelopmentOutlook from "./development-outlook/create-development-outlook-supervisor";
 
 export function CreateReview() {
   const data = useLoaderData() as any;
-
-  console.log(data);
 
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
@@ -103,7 +101,7 @@ export function CreateReview() {
             register={register}
             errors={errors}
           />
-          <DevelopmentOutlook register={register} errors={errors} />
+          <CreateDevelopmentOutlook register={register} errors={errors} />
         </CardContent>
         <CardFooter className="flex justify-between">
           <Button variant="outline" onClick={() => navigate(-1)}>

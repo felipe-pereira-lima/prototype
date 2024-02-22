@@ -9,9 +9,13 @@ import Avatar from "~/components/ui/avatar";
 type ViewDevelopmentOutlookProps = {
   managerValue: string;
   supervisorName: string;
+  employeeValue: string;
+  employeeName: string;
 };
 
 export default function ViewDevelopmentOutlook({
+  employeeValue,
+  employeeName,
   managerValue,
   supervisorName,
 }: ViewDevelopmentOutlookProps): JSX.Element {
@@ -30,6 +34,10 @@ export default function ViewDevelopmentOutlook({
             <div className="flex gap-x-4 items-center">
               <Avatar string={supervisorName} />
               {managerValue}
+            </div>
+            <div className="flex pt-4 gap-x-4 items-center">
+              <Avatar string={employeeName} />
+              {employeeValue ?? "TBD: Waiting for employee"}
             </div>
           </AccordionContent>
         </AccordionItem>

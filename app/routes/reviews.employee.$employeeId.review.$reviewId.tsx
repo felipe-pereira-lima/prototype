@@ -34,7 +34,6 @@ export const loader: LoaderFunction = async ({ params }) => {
 
   let review = null;
 
-  // Ensure reviewId is 'latest' or a valid number for existing reviews
   if (reviewId === "latest") {
     review = { isComplete: false };
   } else if (!isNaN(Number(reviewId))) {
@@ -58,20 +57,18 @@ export const loader: LoaderFunction = async ({ params }) => {
 
 export const action: ActionFunction = async ({ request, params }) => {
   const formData = await request.formData();
-  const employeeId = params.employeeId; // The ID of the employee being reviewed
+  const employeeId = params.employeeId;
   const reviewName = formData.get("name");
 
-  // Assuming you can fetch the logged-in supervisor's ID from the session
   const session = await getSession(request.headers.get("Cookie"));
-  const sessionUser = session.get("sessionKey"); // or however you store this
-  const supervisorId = sessionUser.id; // The actual supervisor's ID
+  const sessionUser = session.get("sessionKey");
+  const supervisorId = sessionUser.id;
 
   const employee = await getUserById(employeeId ?? "");
   if (!employee) {
     throw new Error("Employee not found");
   }
 
-  // Ensure the supervisor is reviewing someone else, not themselves
   if (Number(employeeId) === supervisorId) {
     throw new Error("A supervisor cannot review themselves in this context.");
   }
@@ -90,9 +87,8 @@ export const action: ActionFunction = async ({ request, params }) => {
       name: reviewNameString,
       employeeId: Number(employeeId),
       companyId: employee.companyId,
-      supervisorId: supervisorId, // Use the actual supervisor's ID
+      supervisorId: supervisorId,
       reviewType: "REVIEW",
-      // changes stuff here, if it breaks check here
       isCompleteBySupervisor: true,
       isCompleteByEmployee: false,
       isEmployeeAllowedToStart: isReviewVisibleToEmployee,
@@ -101,7 +97,6 @@ export const action: ActionFunction = async ({ request, params }) => {
         create: {
           managerReflection:
             typeof reflectionText === "string" ? reflectionText : "",
-          employeeReflection: "",
         },
       },
       developmentOutlook: {
@@ -110,7 +105,6 @@ export const action: ActionFunction = async ({ request, params }) => {
             typeof developmentOutlookText === "string"
               ? developmentOutlookText
               : "",
-          employeeDevelopment: "",
         },
       },
     },

@@ -40,7 +40,7 @@ export function SupervisorReviewDashboardCard({
   ) => {
     if (isCompleteBySupervisor)
       navigate(
-        `/reviews/employee/${employeeId}/review/is-complete-by-supervisor/${reviewId}`
+        `/reviews/employee/review/is-complete-by-supervisor/${reviewId}`
       );
 
     if (!isCompleteBySupervisor) {
