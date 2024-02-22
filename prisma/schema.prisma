@@ -85,7 +85,7 @@ model Competency {
   id                 Int                @id @default(autoincrement())
   department         Department         @relation(fields: [departmentId], references: [id])
   departmentId       Int
-  description        String
+  description        String @db.Text
   levels             CompetencyLevel[]
   name               String
   reviewCompetencies ReviewCompetency[]
@@ -97,7 +97,7 @@ model CompetencyLevel {
   id                 Int                @id @default(autoincrement())
   competency         Competency         @relation(fields: [competencyId], references: [id])
   competencyId       Int
-  description        String
+  description        String @db.Text
   level              EmployeeLevel
   reviewCompetencies ReviewCompetency[]
 }
@@ -128,8 +128,8 @@ model ReviewCompetency {
   competencyId          Int
   competencyLevel       CompetencyLevel? @relation(fields: [competencyLevelId], references: [id])
   competencyLevelId     Int?
-  supervisorFeedbackText String?         
-  employeeFeedbackText  String?         
+  supervisorFeedbackText String? @db.Text          
+  employeeFeedbackText  String? @db.Text        
   review                Review           @relation(fields: [reviewId], references: [id])
   reviewId              Int
   supervisorScore       Int?            
@@ -139,16 +139,16 @@ model ReviewCompetency {
 
 model Reflection {
   id                 Int    @id @default(autoincrement())
-  employeeReflection String?
-  managerReflection  String?
+  employeeReflection String? @db.Text
+  managerReflection  String? @db.Text
   reviewId           Int    @unique
   review             Review @relation(fields: [reviewId], references: [id])
 }
 
 model DevelopmentOutlook {
   id                  Int    @id @default(autoincrement())
-  employeeDevelopment String?
-  managerDevelopment  String?
+  employeeDevelopment String? @db.Text
+  managerDevelopment  String? @db.Text
   reviewId            Int    @unique
   review              Review @relation(fields: [reviewId], references: [id])
 }
