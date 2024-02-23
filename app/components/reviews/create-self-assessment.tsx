@@ -20,6 +20,7 @@ import CreateSelfReflections from "./reflection/create-reflection-employee";
 import CreateSelfDevelopmentOutlook from "./development-outlook/create-development-outlook-employee";
 import { useState } from "react";
 import SelfAssessmentDialog from "../ui/review/self-assessment-dialog";
+import EmployeeCompetencies from "./competencies/employee-create-competencies";
 
 export function CreateSelfAssessment() {
   const data = useLoaderData() as any;
@@ -72,7 +73,7 @@ export function CreateSelfAssessment() {
         <CardContent>
           <Separator />
           <CreateSelfReflections register={register} errors={errors} />
-          <Competencies
+          <EmployeeCompetencies
             competencies={data.competencies}
             register={register}
             errors={errors}

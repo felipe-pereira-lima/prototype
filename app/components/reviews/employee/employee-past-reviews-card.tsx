@@ -90,7 +90,10 @@ export function EmployeePastReviewsCard({
                 </div>
               </TooltipTrigger>
               <TooltipContent>
-                <p>You need to complete the review to access the results.</p>
+                <p>
+                  You will only be able to access reviews completed by your
+                  supervisor.
+                </p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

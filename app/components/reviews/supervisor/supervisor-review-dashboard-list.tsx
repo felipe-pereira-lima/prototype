@@ -108,7 +108,7 @@ export function SupervisorReviewDashboardCard({
     );
 
     if (isReviewComplete && finishedReviewsOfSupervisor.length === 0) {
-      return "No reviews yet";
+      return "-";
     }
 
     return (

@@ -35,18 +35,20 @@ export default function CompletedReviewDetails() {
     (c: any) => c.employeeScore ?? 0
   );
 
+  console.log(reviewDetails);
+
   const data = {
     labels: labels,
     datasets: [
       {
-        label: `${reviewDetails.employee.fullName}'s Supervisor Competencies`,
+        label: `Supervisor score`,
         data: supervisorScores,
         backgroundColor: "rgba(54, 162, 235, 0.2)",
         borderColor: "rgba(54, 162, 235, 1)",
         borderWidth: 1,
       },
       {
-        label: `${reviewDetails.employee.fullName}'s Employee Competencies`,
+        label: `Employee self-assessment score`,
         data: employeeScores,
         backgroundColor: "rgba(255, 99, 132, 0.2)",
         borderColor: "rgba(255, 99, 132, 1)",

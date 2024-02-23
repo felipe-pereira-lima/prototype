@@ -46,11 +46,22 @@ export default function ViewCompetencies({
             </AccordionTrigger>
             <AccordionContent>
               <p>
-                <strong>Score:</strong>{" "}
-                {competencyLevels[competency.supervisorScore]}{" "}
+                <strong>Supervisor Score: </strong>
+                {competencyLevels[competency.supervisorScore]}
               </p>
               <p>
-                <strong>Feedback:</strong> {competency.supervisorFeedbackText}
+                <strong>Supervisor feedback: </strong>
+                {competency.supervisorFeedbackText}
+              </p>
+              <div className="pt-4 w-full "></div>
+              <p>
+                <strong>Employee Score: </strong>
+                {competencyLevels[competency.employeeScore] ??
+                  " TBD by employee"}
+              </p>
+              <p>
+                <strong>Employee feedback: </strong>
+                {competency.employeeFeedbackText ?? " TBD by employee"}
               </p>
             </AccordionContent>
           </AccordionItem>

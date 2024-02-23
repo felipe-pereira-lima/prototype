@@ -8,7 +8,6 @@ import { getEmployeeLevel } from "~/services/user/get-user-level";
 export const loader: LoaderFunction = async ({ params }) => {
   const { reviewId, employeeId } = params;
 
-  // Handle invalid employeeId
   const employee = await getUserById(employeeId ?? "");
   if (!employee) {
     throw new Error("Employee not found");
@@ -26,7 +25,6 @@ export const loader: LoaderFunction = async ({ params }) => {
   }
 
   const employeeLevel = await getEmployeeLevel(employee.id);
-
   if (!employeeLevel) {
     throw new Error("User has no skill level");
   }
@@ -43,55 +41,25 @@ export const action: ActionFunction = async ({ request, params }) => {
     throw new Response("Review ID is not provided", { status: 400 });
   }
 
-  // Reflection and Development Outlook Updates
+  // Extract reflection and development outlook text from the form data
   const reflectionText = formData.get("employeeReflection")?.toString();
   const developmentOutlookText = formData
     .get("employeeDevelopment")
     ?.toString();
 
-  // Prepare updates for competencies
-  const competencyUpdates = [];
+  // Initialize an array to store promises for updating competencies, reflections, and development outlook
+  const updates = [];
 
+  // Iterate through formData to find employee competencies scores and feedback
   for (const [key, value] of formData.entries()) {
-    if (key.startsWith("competency-score-")) {
+    if (key.startsWith("employee-competency-") && !key.includes("-feedback")) {
       const competencyId = parseInt(key.split("-")[2], 10);
       const employeeScore = parseInt(value.toString(), 10);
+      const feedbackTextKey = `employee-competency-${competencyId}-feedback`;
+      const employeeFeedbackText = formData.get(feedbackTextKey)?.toString();
 
-      competencyUpdates.push({
-        competencyId,
-        employeeScore,
-      });
-    }
-  }
-
-  try {
-    // Update reflection and development outlook
-    await prisma.review.update({
-      where: { id: Number(reviewId) },
-      data: {
-        reflection: reflectionText
-          ? {
-              upsert: {
-                create: { employeeReflection: reflectionText },
-                update: { employeeReflection: reflectionText },
-              },
-            }
-          : undefined,
-        developmentOutlook: developmentOutlookText
-          ? {
-              upsert: {
-                create: { employeeDevelopment: developmentOutlookText },
-                update: { employeeDevelopment: developmentOutlookText },
-              },
-            }
-          : undefined,
-        isCompleteByEmployee: true,
-      },
-    });
-
-    // Update competencies scores
-    await Promise.all(
-      competencyUpdates.map(({ competencyId, employeeScore }) =>
+      // Push the update promise for each competency to the updates array
+      updates.push(
         prisma.reviewCompetency.updateMany({
           where: {
             reviewId: Number(reviewId),
@@ -99,11 +67,38 @@ export const action: ActionFunction = async ({ request, params }) => {
           },
           data: {
             employeeScore,
+            employeeFeedbackText,
           },
         })
-      )
-    );
+      );
+    }
+  }
 
+  // Add the update promise for reflection, development outlook, and marking the review as complete
+  updates.push(
+    prisma.review.update({
+      where: { id: Number(reviewId) },
+      data: {
+        reflection: {
+          upsert: {
+            create: { employeeReflection: reflectionText || "" },
+            update: { employeeReflection: reflectionText || "" },
+          },
+        },
+        developmentOutlook: {
+          upsert: {
+            create: { employeeDevelopment: developmentOutlookText || "" },
+            update: { employeeDevelopment: developmentOutlookText || "" },
+          },
+        },
+        isCompleteByEmployee: true,
+      },
+    })
+  );
+
+  try {
+    // Execute all updates in a single transaction
+    await prisma.$transaction(updates);
     return redirect("/reviews/dashboard");
   } catch (error) {
     console.error("Failed to update review and competencies", error);

@@ -94,7 +94,7 @@ export default function LoginPage() {
         </div>
       </CardContent>
       <CardFooter>
-        <p>Forgot your password?</p>
+        <p className="cursor-pointer text-blue-500">Forgot your password?</p>
       </CardFooter>
     </Card>
   );
