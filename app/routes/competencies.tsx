@@ -5,6 +5,7 @@ import { getDepartmentsOfCompany } from "~/services/departments/get-departments-
 
 import { useState, useEffect } from "react";
 import { ComboBox } from "~/components/ui/combo-box";
+import { Card, CardDescription, CardTitle } from "~/components/ui/card";
 
 export const loader = getDepartmentsOfCompany;
 
@@ -23,18 +24,30 @@ export default function Competencies() {
   }, [selectedDepartmentId, departments]);
 
   return (
-    <div>
-      <ComboBox
-        options={departments.map((department: Department) => ({
-          value: department.id.toString(),
-          label: department.name,
-        }))}
-        onSelect={(value: string) => setSelectedDepartmentId(parseInt(value))}
-        selectedValue={selectedDepartmentId.toString()}
-        placeholder="Select a department"
-      />
+    <div className="space-y-2">
+      <CardTitle>Competences criteria</CardTitle>
+      <CardDescription>
+        Know more about the expected skills by department and seniority level
+      </CardDescription>
       <div className="mt-4">
-        <CompetenciesGrid competencies={filteredCompetencies} />
+        <Card className="space-y-4">
+          <div className="p-4">
+            <div className="mb-4">
+              <ComboBox
+                options={departments.map((department: Department) => ({
+                  value: department.id.toString(),
+                  label: department.name,
+                }))}
+                onSelect={(value: string) =>
+                  setSelectedDepartmentId(parseInt(value))
+                }
+                selectedValue={selectedDepartmentId.toString()}
+                placeholder="Select a department"
+              />
+            </div>
+            <CompetenciesGrid competencies={filteredCompetencies} />
+          </div>
+        </Card>
       </div>
     </div>
   );

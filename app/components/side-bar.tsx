@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Compass } from "phosphor-react";
-import { Link, useLocation } from "@remix-run/react";
+import { Link } from "@remix-run/react";
 import clsx from "clsx";
 import { navigationList } from "./ui/utils/side-bar-navigation-list";
 import { NavigationItem } from "~/utils/types";
 
 export default function ApplicationSidebar(): JSX.Element {
-  const location = useLocation();
   const [activeMainItem, setActiveMainItem] = useState<string>("Home");
   const [activeItem, setActiveItem] = useState<string>("Home");
   const [openedMenu, setOpenedMenu] = useState<string>("");
@@ -17,38 +16,9 @@ export default function ApplicationSidebar(): JSX.Element {
     } else {
       setOpenedMenu("");
     }
-    setActiveMainItem(item.name); // Set the active main menu item
+    setActiveMainItem(item.name);
     setActiveItem(item.name);
   };
-
-  // useEffect(() => {
-  //   const findActiveItem = (navItems: NavigationItem[]) => {
-  //     for (let item of navItems) {
-  //       // Check if the current location matches the main menu item
-  //       if (item.href === location.pathname) {
-  //         // If it has a submenu, return the name of the first submenu item
-  //         if (item.submenu && item.submenu.length > 0) {
-  //           return item.submenu[0].name;
-  //         }
-  //         // Otherwise, return the name of the main menu item
-  //         return item.name;
-  //       }
-
-  //       // Check the submenu items
-  //       if (item.submenu) {
-  //         const submenuMatch = item.submenu.find(
-  //           (subItem) => subItem.href === location.pathname
-  //         );
-  //         if (submenuMatch) {
-  //           return submenuMatch.name;
-  //         }
-  //       }
-  //     }
-  //     return "Home"; // Default if no match is found
-  //   };
-
-  //   setActiveItem(findActiveItem(navigationList));
-  // }, [location]);
 
   return (
     <>

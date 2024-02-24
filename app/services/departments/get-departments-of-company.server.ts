@@ -16,7 +16,13 @@ export const getDepartmentsOfCompany: LoaderFunction = async ({ request }) => {
 
     const departments = await prisma.department.findMany({
       where: { companyId: companyId },
-      include: { competencies: true },
+      include: {
+        competencies: {
+          include: {
+            levels: true, // Include this to fetch levels for each competency
+          },
+        },
+      },
     });
 
     return json(departments);

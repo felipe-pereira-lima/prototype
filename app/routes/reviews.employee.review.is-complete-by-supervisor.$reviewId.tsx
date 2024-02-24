@@ -21,8 +21,6 @@ export const loader = getReviewById;
 export default function CompletedReviewDetails() {
   const reviewDetails = useLoaderData<typeof loader>();
 
-  console.log(reviewDetails);
-
   const labels = reviewDetails.competencies.map((c: any) => c.competency.name);
 
   // Mapping supervisor scores
@@ -35,23 +33,21 @@ export default function CompletedReviewDetails() {
     (c: any) => c.employeeScore ?? 0
   );
 
-  console.log(reviewDetails);
-
   const data = {
     labels: labels,
     datasets: [
       {
         label: `Supervisor score`,
         data: supervisorScores,
-        backgroundColor: "rgba(54, 162, 235, 0.2)",
-        borderColor: "rgba(54, 162, 235, 1)",
+        backgroundColor: "rgba(172, 171, 239, 0.2)",
+        borderColor: "rgba(128, 0, 128, 1)",
         borderWidth: 1,
       },
       {
         label: `Employee self-assessment score`,
         data: employeeScores,
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        borderColor: "rgba(255, 99, 132, 1)",
+        backgroundColor: "rgba(162, 210, 182, 0.2)",
+        borderColor: "rgba(34, 139, 34, 1)",
         borderWidth: 1,
       },
     ],
