@@ -60,13 +60,13 @@ export function CreateSelfAssessment() {
     <Card className="w-full">
       <Form id="update-form" method="post" onSubmit={handleSubmit(onSubmit)}>
         <CardHeader>
-          <CardTitle>Your Self-Assessment</CardTitle>
+          <CardTitle>Review Title: {data.reviewName}</CardTitle>
           <CardDescription className="mt-4">
             <div className="flex flex-col space-y-2">
               <Label className="text-lg font-medium">
                 Seniority level - {data.employeeLevel.toLowerCase()}
               </Label>
-              <Label className="pt-2 text-black">{"review name"}</Label>
+              <Label className=" text-black">Start your Self-Assessment</Label>
             </div>
           </CardDescription>
         </CardHeader>

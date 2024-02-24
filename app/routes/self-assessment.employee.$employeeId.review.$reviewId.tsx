@@ -29,7 +29,21 @@ export const loader: LoaderFunction = async ({ params }) => {
     throw new Error("User has no skill level");
   }
 
-  return { employee, competencies, employeeLevel, reviewId };
+  const review = await prisma.review.findUnique({
+    where: { id: Number(reviewId) },
+    select: { name: true },
+  });
+
+  if (!review) {
+    throw new Error("Review not found");
+  }
+  return {
+    employee,
+    competencies,
+    employeeLevel,
+    reviewId,
+    reviewName: review.name,
+  };
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
