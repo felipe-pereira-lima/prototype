@@ -21,34 +21,34 @@ export default function ApplicationSidebar(): JSX.Element {
     setActiveItem(item.name);
   };
 
-  useEffect(() => {
-    const findActiveItem = (navItems: NavigationItem[]) => {
-      for (let item of navItems) {
-        // Check if the current location matches the main menu item
-        if (item.href === location.pathname) {
-          // If it has a submenu, return the name of the first submenu item
-          if (item.submenu && item.submenu.length > 0) {
-            return item.submenu[0].name;
-          }
-          // Otherwise, return the name of the main menu item
-          return item.name;
-        }
+  // useEffect(() => {
+  //   const findActiveItem = (navItems: NavigationItem[]) => {
+  //     for (let item of navItems) {
+  //       // Check if the current location matches the main menu item
+  //       if (item.href === location.pathname) {
+  //         // If it has a submenu, return the name of the first submenu item
+  //         if (item.submenu && item.submenu.length > 0) {
+  //           return item.submenu[0].name;
+  //         }
+  //         // Otherwise, return the name of the main menu item
+  //         return item.name;
+  //       }
 
-        // Check the submenu items
-        if (item.submenu) {
-          const submenuMatch = item.submenu.find(
-            (subItem) => subItem.href === location.pathname
-          );
-          if (submenuMatch) {
-            return submenuMatch.name;
-          }
-        }
-      }
-      return "Home"; // Default if no match is found
-    };
+  //       // Check the submenu items
+  //       if (item.submenu) {
+  //         const submenuMatch = item.submenu.find(
+  //           (subItem) => subItem.href === location.pathname
+  //         );
+  //         if (submenuMatch) {
+  //           return submenuMatch.name;
+  //         }
+  //       }
+  //     }
+  //     return "Home"; // Default if no match is found
+  //   };
 
-    setActiveItem(findActiveItem(navigationList));
-  }, [location]);
+  //   setActiveItem(findActiveItem(navigationList));
+  // }, [location]);
 
   return (
     <>

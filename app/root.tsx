@@ -1,5 +1,6 @@
 import stylesheet from "./tailwind.css";
 import globals from "./globals.css";
+import calendar from "./react-calendar.css";
 import type {
   ActionFunction,
   LinksFunction,
@@ -41,11 +42,12 @@ ChartJS.register(
 );
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: stylesheet },
-  { rel: "stylesheet", href: globals },
   { rel: "stylesheet", href: agGridCSS },
   { rel: "stylesheet", href: agThemeMaterialCSS },
   { rel: "stylesheet", href: agThemeQuartzCSS },
+  { rel: "stylesheet", href: calendar },
+  { rel: "stylesheet", href: globals },
+  { rel: "stylesheet", href: stylesheet },
 ];
 
 export const loader: LoaderFunction = async ({ request }) => {
