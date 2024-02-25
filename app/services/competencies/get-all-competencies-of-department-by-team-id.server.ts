@@ -1,10 +1,5 @@
 import { prisma } from "~/db.server";
 
-/**
- * Fetches all competencies for the department associated with a given team ID.
- * @param teamId The ID of the team.
- * @returns An array of competencies associated with the department of the team.
- */
 export async function getAllCompetenciesFromDepartmentByTeamId(teamId: number) {
   // Find the department linked to the team
   const teamWithDepartment = await prisma.team.findUnique({

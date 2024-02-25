@@ -19,7 +19,7 @@ export const getDepartmentsOfCompany: LoaderFunction = async ({ request }) => {
       include: {
         competencies: {
           include: {
-            levels: true, // Include this to fetch levels for each competency
+            levels: true,
           },
         },
       },
@@ -27,7 +27,6 @@ export const getDepartmentsOfCompany: LoaderFunction = async ({ request }) => {
 
     return json(departments);
   } catch (error) {
-    // Handle the error appropriately, maybe return a 404 or 500 error page
     console.error(error);
     return json(
       { message: "An error occurred while fetching departments." },
