@@ -18,6 +18,9 @@ import { findUsersByIds } from "~/services/user/get-users-by-id.server";
 import { deleteMeeting } from "~/services/meetings/delete-meeting.server";
 import { getSession } from "~/services/session.server";
 import { formatDate } from "~/helpers/format-date";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Trash } from "lucide-react";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
@@ -89,30 +92,42 @@ export default function Meetings() {
   console.log(meetings);
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 !w-full ">
       <CardTitle>Your meetings</CardTitle>
       <CardDescription>Check your calendar</CardDescription>
-      {meetings.map((meeting) => (
-        <div key={meeting.id}>
-          <h2>
-            {meeting.title} - {formatDate(meeting.scheduledAt)}
-          </h2>
-          <ul>
-            {meeting.attendees.map((attendee) => (
-              <li className="flex" key={attendee.id}>
-                {attendee.name}
-              </li>
-            ))}
-          </ul>
-          <form method="post">
-            <input type="hidden" name="_action" value="delete" />
-            <input type="hidden" name="meetingId" value={meeting.id} />
-            <button type="submit">Delete Meeting</button>
-          </form>
-        </div>
-      ))}
-      1
-      <MeetingForm companyUsers={companyUsers} />{" "}
+      <div className="flex">
+        <Card>
+          {meetings.map((meeting) => (
+            <div key={meeting.id} className="flex flex-row">
+              <h2>
+                {meeting.title} - {formatDate(meeting.scheduledAt)}
+              </h2>
+              <ul>
+                {meeting.attendees.map((attendee) => (
+                  <li className="flex" key={attendee.id}>
+                    {attendee.name}
+                  </li>
+                ))}
+              </ul>
+              <form method="post">
+                <Input type="hidden" name="_action" value="delete" />
+                <Input type="hidden" name="meetingId" value={meeting.id} />
+                <Button
+                  className="p-4"
+                  size={"sm"}
+                  variant={"destructive"}
+                  type="submit"
+                >
+                  <Trash />
+                </Button>
+              </form>
+            </div>
+          ))}
+        </Card>
+        <Card>
+          <MeetingForm companyUsers={companyUsers} />
+        </Card>
+      </div>
       <Card title="Meetings">
         <div className="p-8">
           <Calendar

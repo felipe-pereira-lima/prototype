@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { useFetcher } from "@remix-run/react";
 import { useUser } from "~/context/user-context";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Button } from "../ui/button";
 
 const MeetingForm = ({ companyUsers }) => {
   const fetcher = useFetcher();
@@ -69,9 +72,10 @@ const MeetingForm = ({ companyUsers }) => {
       <fieldset>
         <legend>Select Attendees</legend>
         {companyUsers.map((user) => (
-          <div key={user.id}>
-            <label>
-              <input
+          <div key={user.id} className="flex items-center mb-4">
+            <Label className="flex text-sm font-medium text-gray-900 dark:text-gray-300">
+              <Input
+                className='class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"'
                 type="checkbox"
                 name="attendeeIds"
                 value={user.id}
@@ -79,16 +83,16 @@ const MeetingForm = ({ companyUsers }) => {
                 onChange={() => handleCheckboxChange(user.id)}
               />
               {user.fullName}
-            </label>
+            </Label>
           </div>
         ))}
       </fieldset>
       <input type="hidden" name="companyId" value={currentUserCompanyId} />
       <input type="hidden" name="createdById" value={currentUserId} />
 
-      <button type="submit" name="_action" value="create">
+      <Button type="submit" name="_action" value="create">
         Create Meeting
-      </button>
+      </Button>
     </fetcher.Form>
   );
 };

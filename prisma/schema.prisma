@@ -161,8 +161,10 @@ model Meeting {
   company     Company  @relation(fields: [companyId], references: [id])
   createdById Int
   createdBy   User     @relation(fields: [createdById], references: [id])
-  attendeeIds String   @default("[]") 
+  attendeeIds String   @default("[]")
+  meetLink    String? 
 }
+
 
 
 enum UserRole {
