@@ -95,7 +95,10 @@ export default function Meetings() {
     <div className="space-y-2 !w-full ">
       <CardTitle>Your meetings</CardTitle>
       <CardDescription>Check your calendar</CardDescription>
-      <div className="flex">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card>
+          <MeetingForm companyUsers={companyUsers} />
+        </Card>
         <Card>
           {meetings.map((meeting) => (
             <div key={meeting.id} className="flex flex-row">
@@ -123,9 +126,6 @@ export default function Meetings() {
               </form>
             </div>
           ))}
-        </Card>
-        <Card>
-          <MeetingForm companyUsers={companyUsers} />
         </Card>
       </div>
       <Card title="Meetings">

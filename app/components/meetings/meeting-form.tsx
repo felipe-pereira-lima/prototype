@@ -6,6 +6,7 @@ import { useUser } from "~/context/user-context";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
+import { Card } from "../ui/card";
 
 const MeetingForm = ({ companyUsers }) => {
   const fetcher = useFetcher();
@@ -47,52 +48,63 @@ const MeetingForm = ({ companyUsers }) => {
   };
 
   const user = useUser();
-
-  // TODO:
   const currentUserId = user.id;
   const currentUserCompanyId = user.companyId;
 
   return (
     <fetcher.Form method="post" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        name="title"
-        placeholder="Meeting Title"
-        value={meeting.title}
-        onChange={(e) => setMeeting({ ...meeting, title: e.target.value })}
-      />
-      <input
-        type="datetime-local"
-        name="scheduledAt"
-        value={meeting.scheduledAt}
-        onChange={(e) =>
-          setMeeting({ ...meeting, scheduledAt: e.target.value })
-        }
-      />
-      <fieldset>
-        <legend>Select Attendees</legend>
-        {companyUsers.map((user) => (
-          <div key={user.id} className="flex items-center mb-4">
-            <Label className="flex text-sm font-medium text-gray-900 dark:text-gray-300">
-              <Input
-                className='class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"'
-                type="checkbox"
-                name="attendeeIds"
-                value={user.id}
-                checked={meeting.attendeeIds.includes(user.id)}
-                onChange={() => handleCheckboxChange(user.id)}
-              />
-              {user.fullName}
-            </Label>
+      <Card>
+        <div className="p-2">
+          <div className="flex">
+            <Input
+              type="text"
+              name="title"
+              placeholder="Meeting Title"
+              value={meeting.title}
+              onChange={(e) =>
+                setMeeting({ ...meeting, title: e.target.value })
+              }
+            />
+            <Input
+              type="datetime-local"
+              name="scheduledAt"
+              value={meeting.scheduledAt}
+              onChange={(e) =>
+                setMeeting({ ...meeting, scheduledAt: e.target.value })
+              }
+            />
           </div>
-        ))}
-      </fieldset>
-      <input type="hidden" name="companyId" value={currentUserCompanyId} />
-      <input type="hidden" name="createdById" value={currentUserId} />
+          <fieldset>
+            <legend>Select Attendees</legend>
+            {companyUsers.map((user) => (
+              <div key={user.id} className="flex items-center mb-4">
+                <Label className="flex text-sm font-medium text-gray-900 dark:text-gray-300">
+                  <Input
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    type="checkbox"
+                    name="attendeeIds"
+                    value={user.id}
+                    checked={meeting.attendeeIds.includes(user.id)}
+                    onChange={() => handleCheckboxChange(user.id)}
+                  />
+                  {user.fullName}
+                </Label>
+              </div>
+            ))}
+          </fieldset>
+          <input type="hidden" name="companyId" value={currentUserCompanyId} />
+          <input type="hidden" name="createdById" value={currentUserId} />
 
-      <Button type="submit" name="_action" value="create">
-        Create Meeting
-      </Button>
+          <Button
+            className=" justify-end"
+            type="submit"
+            name="_action"
+            value="create"
+          >
+            Create Meeting
+          </Button>
+        </div>
+      </Card>
     </fetcher.Form>
   );
 };
