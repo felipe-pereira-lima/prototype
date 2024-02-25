@@ -67,7 +67,7 @@ export default function CompetenciesGrid({ competencies }) {
   };
 
   return (
-    <div className="ag-theme-quartz" style={{ height: "80vh", width: "100%" }}>
+    <div className="ag-theme-quartz" style={{ height: "70vh", width: "100%" }}>
       <AgGridReact
         gridOptions={gridOptions}
         rowData={transformedCompetencies}
