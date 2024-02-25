@@ -56,8 +56,10 @@ export default function ReviewDashboard() {
   if (isUserSupervisor)
     return (
       <div className="space-y-2">
-        <CardTitle>Ongoing Assessments</CardTitle>
-        <CardDescription>Submit a new review.</CardDescription>
+        <CardTitle>Start a review</CardTitle>
+        <CardDescription>
+          Submit a new review for the employees you manage.
+        </CardDescription>
         <SupervisorReviewDashboardCard
           managedEmployees={managedEmployees}
           isReviewComplete={false}
