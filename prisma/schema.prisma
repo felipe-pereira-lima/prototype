@@ -1,8 +1,9 @@
 datasource db {
-  provider     = "mysql"
+  provider     = "postgresql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
+
 
 generator client {
   provider = "prisma-client-js"
@@ -27,9 +28,10 @@ model User {
   team              Team?              @relation(fields: [teamId], references: [id])
   teamId            Int?
   username          String             @unique @db.VarChar(255)
-  supervisorId      Int?               @db.Int
+  supervisorId      Int?               @db.Integer
   supervisees       User[]             @relation("SupervisorToSupervisee")
-  supervisor        User?              @relation(name: "SupervisorToSupervisee", fields: [supervisorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    supervisor        User?              @relation(name: "SupervisorToSupervisee", fields: [supervisorId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
 
   @@unique([email, username])
 }
