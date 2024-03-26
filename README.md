@@ -1,5 +1,9 @@
 # UOL Final Project - Web Development Template
 
+## To the reviewer:
+
+- Please run the project locally, the deployed version needs a fix due to Planetscale's deprecation of their free tier plan.
+
 ## Welcome to Remix!
 
 - [Remix Docs](https://remix.run/docs)
@@ -7,6 +11,10 @@
 ## Development
 
 From your terminal:
+
+```sh
+npm i
+```
 
 ```sh
 npm run dev
